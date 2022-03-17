@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(templatedb_lib
     src/templatedb/db.cpp
     src/templatedb/operation.cpp
-)
+        src/LSMTree/level.cpp src/LSMTree/level.h src/LSMTree/Run/run.cpp src/LSMTree/Run/run.h)
 
 set(bloomfilter_lib
     src/BloomFilter/BloomFilter.cpp
