@@ -2,6 +2,8 @@
 #include <string>
 #include <math.h>
 
+#include "const.h"
+
 using namespace std;
 
 class Value {
@@ -9,7 +11,7 @@ public:
 	std::vector<int> items;
 	bool visible = true;
 
-	value(){}
+	Value(){}
 
 	Value(std::vector<int> items) {
 		this->items = items;
@@ -17,7 +19,7 @@ public:
 
 	Value(const Value& v) {
 		visible = v.visible;
-		items.insert(items.end(), v.items.begin(), v.items.end())''
+		items.insert(items.end(), v.items.begin(), v.items.end());
 	}
 
 	bool IsDelMarker() const {
