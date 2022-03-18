@@ -27,6 +27,18 @@ public:
         return false;
     }
 
+    bool operator==(const Value& v) {
+    	if(v.items.size() != items.size()) {
+    		return false;
+    	}
+    	for(int i = 0; i < items.size(); i++) {
+    		if(items[i] != v.items[i]) {
+    			return false;
+    		}
+    	}
+    	return true;
+    } 
+
 }
 
 class Tuple{
@@ -55,6 +67,7 @@ public:
 		return value.isDeleteMarker();
 	}
 
+	
 
 
 
