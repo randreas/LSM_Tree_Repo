@@ -5,7 +5,7 @@
 #ifndef TEMPLATEDB_RUN_H
 #define TEMPLATEDB_RUN_H
 
-#include "../Tuple.h"
+#include "../tuple.h"
 
 class Run {
 
@@ -15,14 +15,19 @@ private:
 
 public:
     //Maximum size of this run
-    const int MAX_TUPLE_NUM;
+    const size_t MAX_TUPLE_NUM;
 
     //Constructor
-    explicit Run(int size);
+    explicit Run(size_t size);
 
     //If this run is full
     bool isFull();
 
+    Run* merge(Run* anotherRun);
+
+    void addTuple(Tuple* newTuple);
+
+    ~Run();
 };
 
 

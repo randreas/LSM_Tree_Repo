@@ -13,16 +13,24 @@ class Level {
 private:
     std::vector<Run*> runs;
 
+    //Clear all the runs in the level
+    void clear();
+
 public:
     //Maximum number of runs per level
-    const int MAX_RUN_NUM;
+    const size_t MAX_RUN_NUM;
 
-    explicit Level(int max_run_num) : MAX_RUN_NUM(max_run_num) {
+    const size_t MAX_TUPLE_NUM_IN_RUN;
+
+    explicit Level(int max_run_num, int max_tuple_num_in_run) : MAX_RUN_NUM(max_run_num), MAX_TUPLE_NUM_IN_RUN(max_tuple_num_in_run) {
         runs = std::vector<Run*>(MAX_RUN_NUM);
     }
 
     //If this level is full
     bool isFull();
+
+    //If this level is empty
+    bool isEmpty();
 
     //Get the run at idx
     Run* getRun(int idx);
@@ -36,8 +44,8 @@ public:
     //Add a tuple
     void addTuple(Tuple* tuple);
 
-    //Merges this level and a given level. Returns merged result, which is a new object
-    Level* merge(Level* anotherLevel);
+    //Merges the entire level, return pointer of a merged run
+    Run* merge();
 
 };
 

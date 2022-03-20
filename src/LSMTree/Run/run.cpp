@@ -4,10 +4,21 @@
 
 #include "run.h"
 
-Run::Run(int size) : MAX_TUPLE_NUM(size) {
+Run::Run(size_t size) : MAX_TUPLE_NUM(size) {
     tuples = vector<Tuple*>(size);
 }
 
 bool Run::isFull() {
     return tuples.size() == MAX_TUPLE_NUM;
 }
+
+Run *Run::merge(Run *anotherRun) {
+    //todo
+    return nullptr;
+}
+
+void Run::addTuple(Tuple *newTuple) {
+    //TODO
+}
+
+Run::~Run() = default;

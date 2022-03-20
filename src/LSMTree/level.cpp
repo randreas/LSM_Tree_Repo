@@ -18,14 +18,36 @@ size_t Level::getCurrentSize() {
 }
 
 void Level::addRun(Run *run) {
- //TODO
+    if (!isFull()) {
+        runs.push_back(run);
+    } else {
+        throw LevelFullException();
+    }
 }
 
 void Level::addTuple(Tuple *tuple) {
+    if (isEmpty()) {
+        Run* newRun = new Run(MAX_TUPLE_NUM_IN_RUN);
+        newRun->addTuple(tuple);
+        addRun(newRun);
+    } else {
+        //TODO: Cascade can happen here
+    }
+}
+
+Run *Level::merge() {
+    Run* initRun = new Run(MAX_RUN_NUM * MAX_TUPLE_NUM_IN_RUN);
+    for (Run* run : runs) {
+        initRun->merge(run);
+    }
+    clear();
+    return initRun;
+}
+
+void Level::clear() {
 //TODO
 }
 
-Level *Level::merge(Level *anotherLevel) {
-    //TODO
-    return nullptr;
+bool Level::isEmpty() {
+    return runs.empty();
 }
