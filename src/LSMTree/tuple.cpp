@@ -16,4 +16,6 @@ Tuple::Tuple() {
 	value = Value();
 }
 
+//ToString
+//Print
 
