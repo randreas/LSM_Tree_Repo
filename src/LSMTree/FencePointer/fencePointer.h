@@ -10,59 +10,59 @@
 #include <climits>
 #include <cmath>
 
-template <typename T>
+#include "../tuple.h"
+
 struct Zone
 {
-    Run* run;
-    T min;                   // minimum element in the zone
-    T max;                   // maximum element in the zone
-    uint size;               // no. of elements in current zone
+    *Run run;
+    int min;
+    int max;
+    int size;
 };
 
 
-template <typename T>
 class FencePointer
 {
-    std::vector<T> elements;
-    std::vector<zone<T>> zones;
-    uint num_zones;
-    uint num_elements_per_zone;
+    std::vector<Zone> zones;
+    int num_zones;
 
 public:
-    // constructor
-    fencePointer(std::vector<T> _elements, uint _num_elements_per_zone);
+    /**
+     * Constructor
+     * @param _zones
+     * @param _num_zones
+     */
+    FencePointer(std::vector<Zone> _zones, int _num_zones);
 
     /**
-     * Purpose: builds the zonemap using the elements array/list. Maintains invariant that no. of elements in every zone
-     *          is less than or equal to num_elements_per_zone
-     * Param: N/A
-     * returns: N/A
+     * Return the pointer of the run that contains the key, null if the key does not exist in this fence pointer
      */
-    void build();
+    *Run query(int key);
 
     /**
-     * Purpose: sorts the elements in the vector/list/array.
-     * Param: N/A
-     * returns: N/A
+     * Given a high and a low, return all runs that contains key in the range
+     * @param low
+     * @param high
+     * @return
      */
-    void sort_elements();
+    std::vector<*Run> query(T low, T high);
 
     /**
-     * Purpose: Query a key using the zonemap
-     * Param: Key to be queried
-     * returns: True if element is found, else returns false
+     * Insert a new tuple into the fence pointer.
      */
-    bool query(T key);
+    *Run addTuple(Tuple* newTuple);
 
     /**
-     * Purpose: Query a range of keys using the zonemap that are between a lower and higher limit
-     * Param: Lower and upper limit of range to be queried
-     * returns: list of elements found using the query
+     * Merge the runs on this level
      */
-    std::vector<T> query(T low, T high);
+    *Run merge();
 
-    T getGlobalMax();
+    /**
+     * Move the run to the next level
+     * @return
+     */
+    move();
 
-    T getGlobalMin();
+
 };
 #endif

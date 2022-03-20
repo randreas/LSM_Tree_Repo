@@ -4,21 +4,12 @@
 
 #include "fencePointer.h"
 
-Run::Run(size_t size) : MAX_TUPLE_NUM(size) {
-    tuples = vector<Tuple*>(size);
+FencePointer::FencePointer(std::vector<Zone> _zones, int _num_zones)  {
+    zones = _zones;
+    num_zones = _num_zones;
 }
 
-bool Run::isFull() {
-    return tuples.size() == MAX_TUPLE_NUM;
+*Run FencePointer::query(int key)  {
+    zones = _zones;
+    num_zones = _num_zones;
 }
-
-Run *Run::merge(Run *anotherRun) {
-    //todo
-    return nullptr;
-}
-
-void Run::addTuple(Tuple *newTuple) {
-    //TODO
-}
-
-Run::~Run() = default;
