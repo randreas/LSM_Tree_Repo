@@ -55,11 +55,10 @@ public:
     /**
      * Merge the runs on this level
      */
-    *Run merge();
+    merge();
 
     /**
      * Move the run to the next level
-     * @return
      */
     move();
 
