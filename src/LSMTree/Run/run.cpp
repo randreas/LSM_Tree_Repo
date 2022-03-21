@@ -21,4 +21,10 @@ void Run::addTuple(Tuple *newTuple) {
     //TODO
 }
 
+
+FileMeta *Run::createFileMetaFromRun() {
+    //TODO
+    return nullptr;
+}
+
 Run::~Run() = default;

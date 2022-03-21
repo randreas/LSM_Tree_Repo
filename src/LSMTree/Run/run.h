@@ -6,6 +6,7 @@
 #define TEMPLATEDB_RUN_H
 
 #include "../tuple.h"
+#include "LSMTree/FileMeta/FileMeta.h"
 
 class Run {
 
@@ -26,6 +27,9 @@ public:
     Run* merge(Run* anotherRun);
 
     void addTuple(Tuple* newTuple);
+
+    //Create a filemeta corresponding to this run
+    FileMeta* createFileMetaFromRun();
 
     ~Run();
 };
