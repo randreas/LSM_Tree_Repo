@@ -7,7 +7,7 @@
 
 #include <string>
 #include <utility>
-#include "LSMTree/Run/run.h"
+#include "../Run/run.h"
 
 using namespace std;
 
@@ -23,7 +23,7 @@ public:
         this->filePath = std::move(filePath);
         this->size = 0;
         this->minKey = INT32_MIN;
-        this->maxKey = INT32_MAX
+        this->maxKey = INT32_MAX;
     }
 
     string getFilePath() {

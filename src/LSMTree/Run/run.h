@@ -6,7 +6,8 @@
 #define TEMPLATEDB_RUN_H
 
 #include "../tuple.h"
-#include "LSMTree/FileMeta/FileMeta.h"
+
+class FileMeta;
 
 class Run {
 
