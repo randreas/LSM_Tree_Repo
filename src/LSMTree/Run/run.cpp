@@ -27,4 +27,10 @@ FileMeta *Run::createFileMetaFromRun() {
     return nullptr;
 }
 
-Run::~Run() = default;
+Run::~Run() {
+    while (!tuples.empty()) {
+        Tuple* tuple = tuples.back();
+        tuples.pop_back();
+        delete tuple;
+    }
+}
