@@ -14,5 +14,7 @@ public:
 	bool Append(int key, Value v);
 	bool isFull();
 
+    FileMeta* merge();
+
 	//bool Scan(userAskedRange, searchRange, ) 
 }
