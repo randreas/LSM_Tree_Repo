@@ -7,6 +7,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <sstream>
+#include <fstream>
 
 bool Level::isFull() {
     return dataBlocks.size() == MAX_RUN_NUM && dataBlocks[MAX_RUN_NUM - 1]->isFull();
@@ -35,13 +36,13 @@ void Level::addTuple(Tuple *tuple) {
     }
 }
 
-FileMeta *Level::merge() {
+FileMeta *Level::merge(size_t newLvlID, size_t newBlockIdx) {
     Run* initRun = new Run(MAX_RUN_NUM * MAX_TUPLE_NUM_IN_RUN);
     for (FileMeta* fm : dataBlocks) {
         initRun->merge(fm->getRun());
     }
     clear();
-    return initRun->createFileMetaFromRun();
+    return initRun->createFileMetaFromRun(newLvlID, newBlockIdx);
 }
 
 void Level::clear() {
@@ -74,11 +75,14 @@ Run *Level::getRunByFileMetaAtIndex(int idx) {
 
 void Level::createAndInsertNewFileMeta() {
     stringstream ss;
+    ss << "../";
     ss << "level-";
     ss << lvlID;
     ss << "-block-";
     ss << dataBlocks.size();
     ss << ".txt";
     string newFilePath = ss.str();
+    ofstream newFile(newFilePath);
+    newFile.close();
     addRunFileMeta(new FileMeta(newFilePath, MAX_TUPLE_NUM_IN_RUN));
 }

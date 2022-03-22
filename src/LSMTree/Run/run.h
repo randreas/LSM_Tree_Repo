@@ -15,6 +15,9 @@ private:
     //tuples in this run
     vector<Tuple*> tuples;
 
+    //Replaces current tuples vector with a provided vector
+    void replaceTuplesWithInput(vector<Tuple*> newTuples);
+
 public:
     //Maximum size of this run
     const size_t MAX_TUPLE_NUM;
@@ -25,12 +28,15 @@ public:
     //If this run is full
     bool isFull();
 
-    Run* merge(Run* anotherRun);
+    //Merge this run with input run
+    void merge(Run* anotherRun);
 
+    //Create a filemeta corresponding to this run. Use this only when merge
+    FileMeta* createFileMetaFromRun(size_t lvlID, size_t newBlockIdx);
+
+
+    //add tuple to the run, used only in instantiation.
     void addTuple(Tuple* newTuple);
-
-    //Create a filemeta corresponding to this run
-    FileMeta* createFileMetaFromRun();
 
     ~Run();
 };

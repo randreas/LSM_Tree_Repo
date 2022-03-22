@@ -22,8 +22,8 @@ public:
     explicit FileMeta(string filePath, size_t max_tuple_num) : MAX_TUPLE_NUM(max_tuple_num) {
         this->filePath = std::move(filePath);
         this->size = 0;
-        this->minKey = INT32_MIN;
-        this->maxKey = INT32_MAX;
+        this->minKey = INT32_MAX;
+        this->maxKey = INT32_MIN;
     }
 
     string getFilePath() {

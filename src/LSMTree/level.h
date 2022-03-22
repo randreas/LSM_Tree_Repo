@@ -65,7 +65,7 @@ public:
     Run* getRunByFileMetaAtIndex(int idx);
 
     //Merges the entire level, return pointer of a merged run
-    FileMeta* merge();
+    FileMeta* merge(size_t newLvlID, size_t newBlockIdx);
 
 };
 

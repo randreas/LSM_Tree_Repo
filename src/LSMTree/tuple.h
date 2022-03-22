@@ -39,7 +39,7 @@ public:
     	return true;
     } 
 
-}
+};
 
 class Tuple{
 public:
@@ -47,7 +47,7 @@ public:
 	Value value;
 
 public:
-	tuple(int key, Value v);
+	Tuple(int key, Value v);
 
 	inline void setValue(Value v) {
 		this->value = v;
@@ -71,4 +71,4 @@ public:
 
 
 
-}
+};
