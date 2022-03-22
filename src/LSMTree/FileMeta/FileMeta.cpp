@@ -42,6 +42,7 @@ bool FileMeta::isFull() const {
 }
 
 void FileMeta::appendTupleToFile(Tuple *tuple) {
+    //TODO: change this
     if (isFull()) {
         throw RunFullException();
     } else {
