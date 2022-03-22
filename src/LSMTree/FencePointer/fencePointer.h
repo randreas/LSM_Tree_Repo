@@ -14,10 +14,9 @@
 
 struct Zone
 {
-    *Run run;
+    int index;
     int min;
     int max;
-    int size;
 };
 
 
@@ -27,6 +26,9 @@ class FencePointer
     int num_zones;
 
 public:
+
+    FencePointer(int _num_zones);
+
     /**
      * Constructor
      * @param _zones
@@ -35,33 +37,32 @@ public:
     FencePointer(std::vector<Zone> _zones, int _num_zones);
 
     /**
-     * Return the pointer of the run that contains the key, null if the key does not exist in this fence pointer
+     * Return all index of file meta that contains the key, null if the key does not exist in this fence pointer
      */
-    *Run query(int key);
+    std::vector<int> query(int key);
 
     /**
-     * Given a high and a low, return all runs that contains key in the range
+     * Given a high and a low, return all index of file meta that contains key in the range
      * @param low
      * @param high
      * @return
      */
-    std::vector<*Run> query(T low, T high);
+    std::vector<int> query(int low, int high);
+
+    void addNewZone(FileMeta *fm);
 
     /**
      * Insert a new tuple into the fence pointer.
      */
-    *Run addTuple(Tuple* newTuple);
+    void addTuple(int index, Tuple* tuple);
 
     /**
-     * Merge the runs on this level
+     * clear runs of the levl
      */
-    merge();
-
-    /**
-     * Move the run to the next level
-     */
-    move();
-
+    void clear();
 
 };
+
+class FencePointerException : public exception {};
+
 #endif
