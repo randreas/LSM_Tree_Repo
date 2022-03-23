@@ -17,5 +17,6 @@ Tuple::Tuple() {
 }
 
 //ToString
+
 //Print
 
