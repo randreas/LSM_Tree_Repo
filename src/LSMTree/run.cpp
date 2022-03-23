@@ -49,8 +49,14 @@ void Run::merge(Run *anotherRun) {
 void Run::addTuple(Tuple *newTuple) {
     if (!isFull()) {
         auto it = tuples.begin();
-        while (it != tuples.end() && (*it)->key < newTuple->key) {
+        int pos = 0;
+        while (it != tuples.end() && (*it)->key <= newTuple->key) {
+            if ((*it)->key == newTuple->key) {
+                newTuple->erase(newTuple->begin()+pos);
+                break;
+            }
             it++;
+            pos++;
         }
         tuples.insert(it, newTuple);
     } else {
