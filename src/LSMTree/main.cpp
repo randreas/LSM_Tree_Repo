@@ -11,6 +11,12 @@
 
 using namespace std;
 
+void printIntVector(vector<int> v) {
+    for (int e : v) {
+        cout << e << " ";
+    }
+}
+
 void executeCommand(string command) {
     stringstream iss(command);
     vector<string> elements;
@@ -32,10 +38,12 @@ void executeCommand(string command) {
     key = stoi(elements[1]);
     if (elements[0] == "I") {
         vector<int> values;
-        for (string cur_e : vector<string>(elements.begin() + 1, elements.end())) {
+        for (string cur_e : vector<string>(elements.begin() + 2, elements.end())) {
             values.push_back(stoi(cur_e));
         }
-        cout << "Insert " << "key: " << key << " values: " << "\n";
+        cout << "Insert " << "key: " << key << " values: ";
+        printIntVector(values);
+        cout << "\n";
         // TODO execute
     } else if (elements[0] == "Q") {
         if (elements.size() != 2) {
