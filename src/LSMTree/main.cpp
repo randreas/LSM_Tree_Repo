@@ -51,9 +51,6 @@ void executeCommand(string command) {
             return;
         }
         cout << "Point query " << "key: " << key << "\n";
-
-
-
         // TODO execute
     } else if (elements[0] == "S") {
         if (elements.size() != 3) {
@@ -70,7 +67,6 @@ void executeCommand(string command) {
             return;
         }
         cout << "Delete " << "key: " << key << "\n";
-
         // TODO execute
     }
 }
