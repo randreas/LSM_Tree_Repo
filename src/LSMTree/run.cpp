@@ -68,6 +68,24 @@ void Run::addTuple(Tuple *newTuple) {
     }
 }
 
+bool Run::containsKey(int key) {
+    for (Tuple* tuple : tuples) {
+        if (tuple->key == key) {
+            return true;
+        }
+    }
+    return false;
+}
+
+Tuple* Run::query(int key) {
+    for (Tuple* tuple : tuples) {
+        if (tuple->key == key) {
+            return tuple;
+        }
+    }
+    throw RunFException();
+}
+
 
 FileMeta *Run::createFileMetaFromRun(size_t lvlID, size_t newBlockIdx) {
     //TODO

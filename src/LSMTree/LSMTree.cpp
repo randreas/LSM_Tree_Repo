@@ -22,3 +22,9 @@ LSMTree::addTuple(Tuple* tuple) {
     // add tuple
     buffer.addTuple(tuple);
 }
+
+Tuple* LSMTree::query(int key) {
+
+    // if not found, return a tuple with delete flag
+    return Tuple(key, Value(false));
+}

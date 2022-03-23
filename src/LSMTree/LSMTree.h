@@ -8,6 +8,7 @@
 
 #include "run.h"
 #include "level.h"
+#include "tuple.h"
 
 class LSMTree
 {
@@ -22,7 +23,7 @@ public:
     /**
      * Return all index of file meta that contains the key, null if the key does not exist in this fence pointer
      */
-    std::vector<int> query(int key);
+    Tuple* query(int key);
 
     /**
      * Given a high and a low, return all index of file meta that contains key in the range
@@ -30,7 +31,7 @@ public:
      * @param high
      * @return
      */
-    std::vector<int> query(int low, int high);
+    Tuple* query(int low, int high);
 
     void addTuple(Tuple* tuple);
 

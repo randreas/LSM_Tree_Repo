@@ -13,6 +13,10 @@ public:
 
 	Value(){}
 
+	Value(bool delete) {
+		items = {TERMINATE};
+	}
+
 	Value(std::vector<int> items) {
 		this->items = items;
 	}
