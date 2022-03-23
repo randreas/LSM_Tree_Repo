@@ -10,17 +10,26 @@
 
 using namespace std;
 
-void executeQueryFile(string filePath){
+void executeCommand(string command) {
+
+}
+
+void executeQueryFile(string filePath) {
     ifstream fs;
     fs.open(filePath);
 
     string line;
     if (fs.is_open()) {
         cout << "In executeQueryFile(), file string is open.\n";
-        while (fs.good()) {
-            fs >> line;
+        while (getline(fs, line)) {
+            // fs >> line;
             cout << line << "\n";
+            executeCommand(line);
         }
+        // while (fs.good()) {
+        //     fs >> line;
+        //     cout << line << "\n";
+        // }
     } else {
         cout << "In executeQueryFile(), file string is close.\n";
     }
