@@ -10,10 +10,19 @@
 
 using namespace std;
 
-void executeQueryFile(ifstream* fs){
+void executeQueryFile(string filePath){
+    ifstream fs;
+    fs.open(filePath);
+
     string line;
-    while (getline(*fs, line)) {
-        cout << line;
+    if (fs.is_open()) {
+        cout << "In executeQueryFile(), file string is open.\n";
+        while (fs.good()) {
+            fs >> line;
+            cout << line << "\n";
+        }
+    } else {
+        cout << "In executeQueryFile(), file string is close.\n";
     }
 }
 
@@ -30,18 +39,12 @@ int main(int argc, char *argv[])
     char* workloadFilePath = argv[3];
 
     // read and execute data file
-    ifstream dataFile;
-    dataFile.open(dataFilePath);
-    executeQueryFile(&dataFile);
-    dataFile.close();
-
-    cout << "Hello World";
+    cout << "Start reading and executing data file\n";
+    executeQueryFile(dataFilePath);
 
     // read and execute workload file
-    ifstream workloadFile;
-    workloadFile.open(workloadFilePath);
-    executeQueryFile(&workloadFile);
-    workloadFile.close();
+    cout << "Start reading and executing workload file\n";
+    executeQueryFile(workloadFilePath);
 
     return 0;
 }
