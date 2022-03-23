@@ -28,6 +28,8 @@ public:
     //If this run is full
     bool isFull();
 
+    void clear();
+
     //Merge this run with input run, input run(another run) should always be more update than the current run.
     void merge(Run* anotherRun);
 

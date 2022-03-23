@@ -19,6 +19,10 @@ bool Run::isFull() {
     return tuples.size() == MAX_TUPLE_NUM;
 }
 
+void Run::clear() {
+    tuples.clear();
+}
+
 void Run::merge(Run *anotherRun) {
     vector<Tuple*> newTuples;
     while (!(anotherRun->tuples.empty() && this->tuples.empty())) {
