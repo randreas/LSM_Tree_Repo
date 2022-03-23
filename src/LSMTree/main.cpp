@@ -9,7 +9,6 @@
 #include <fstream>
 #include <vector>
 
-#include "./level.h"
 #include "./LSMTree.h"
 
 using namespace std;
@@ -96,7 +95,7 @@ void executeQueryFile(LSMTree* lsmTree, string filePath) {
 
 int main(int argc, char *argv[])
 {
-    if (argc !=  4) {
+    if (argc !=  5) {
         cout << "USAGE: ./main <initial run size> <number of runs per level> <data file path> <workload file path>\n";
         return 1;
     }

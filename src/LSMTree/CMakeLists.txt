@@ -1,2 +1,3 @@
+add_library(LSMTree LSMTree.cpp)
 add_executable(main main.cpp)
-add_executable(LSMTree LSMTree.cpp)
+target_link_libraries(main LSMTree)
