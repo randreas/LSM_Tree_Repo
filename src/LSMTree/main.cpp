@@ -9,6 +9,9 @@
 #include <fstream>
 #include <vector>
 
+#include "./level.h"
+#include "./LSMTree.h"
+
 using namespace std;
 
 void printIntVector(vector<int> v) {
@@ -17,7 +20,7 @@ void printIntVector(vector<int> v) {
     }
 }
 
-void executeCommand(string command) {
+void executeCommand(LSMTree* lsmTree, string command) {
     stringstream iss(command);
     vector<string> elements;
     string e;
@@ -71,7 +74,7 @@ void executeCommand(string command) {
     }
 }
 
-void executeQueryFile(string filePath) {
+void executeQueryFile(LSMTree* lsmTree, string filePath) {
     ifstream fs;
     fs.open(filePath);
 
@@ -80,7 +83,7 @@ void executeQueryFile(string filePath) {
         // cout << "In executeQueryFile(), file string is open.\n";
         while (getline(fs, line)) {
             // fs >> line;
-            executeCommand(line);
+            executeCommand(lsmTree, line);
         }
         // while (fs.good()) {
         //     fs >> line;
@@ -104,13 +107,16 @@ int main(int argc, char *argv[])
     char* dataFilePath = argv[3];
     char* workloadFilePath = argv[4];
 
+    // create levels for this tree
+    LSMTree* lsmTree = new LSMTree(initial_run_size, num_run_per_level);
+
     // read and execute data file
     cout << "Start reading and executing data file\n";
-    executeQueryFile(dataFilePath);
+    executeQueryFile(lsmTree, dataFilePath);
 
     // read and execute workload file
     cout << "Start reading and executing workload file\n";
-    executeQueryFile(workloadFilePath);
+    executeQueryFile(lsmTree, workloadFilePath);
 
     return 0;
 }
