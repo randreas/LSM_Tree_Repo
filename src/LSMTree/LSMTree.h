@@ -34,6 +34,9 @@ public:
 
     void addTuple(Tuple* tuple);
 
+    void delete(int key);
+
+    void mergeNMove(int sourceLevel);
 };
 
 class FencePointerException : public exception {};
