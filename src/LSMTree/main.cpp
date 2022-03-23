@@ -7,11 +7,29 @@
 #include <cstdlib>
 #include <sstream>
 #include <fstream>
+#include <vector>
 
 using namespace std;
 
 void executeCommand(string command) {
+    cout << command << "\n";
 
+    stringstream iss(command);
+    vector<string> elements;
+    string e;
+    
+    int counter = 0;
+    cout << "++++++++++\n";
+    while(getline(iss, e, ' '))
+    {
+        cout << e << "\n";
+        elements.push_back(e);
+    }
+    // while (iss.good()) {
+    //     iss >> e;
+    //     cout << e << "\n";
+    // }
+    cout << "----------\n";
 }
 
 void executeQueryFile(string filePath) {
@@ -23,7 +41,6 @@ void executeQueryFile(string filePath) {
         cout << "In executeQueryFile(), file string is open.\n";
         while (getline(fs, line)) {
             // fs >> line;
-            cout << line << "\n";
             executeCommand(line);
         }
         // while (fs.good()) {
