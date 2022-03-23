@@ -12,24 +12,59 @@
 using namespace std;
 
 void executeCommand(string command) {
-    cout << command << "\n";
-
     stringstream iss(command);
     vector<string> elements;
     string e;
     
+    // read all elements into a vector of strings
     int counter = 0;
-    cout << "++++++++++\n";
     while(getline(iss, e, ' '))
     {
-        cout << e << "\n";
         elements.push_back(e);
     }
-    // while (iss.good()) {
-    //     iss >> e;
-    //     cout << e << "\n";
-    // }
-    cout << "----------\n";
+
+    // start execute the command
+    if (elements.size() < 2) {
+        return;
+    }
+    
+    int key;
+    key = stoi(elements[1]);
+    if (elements[0] == "I") {
+        vector<int> values;
+        for (string cur_e : vector<string>(elements.begin() + 1, elements.end())) {
+            values.push_back(stoi(cur_e));
+        }
+        cout << "Insert " << "key: " << key << " values: " << "\n";
+        // TODO execute
+    } else if (elements[0] == "Q") {
+        if (elements.size() != 2) {
+            cout << "Q with incorrect size\n";
+            return;
+        }
+        cout << "Point query " << "key: " << key << "\n";
+
+
+
+        // TODO execute
+    } else if (elements[0] == "S") {
+        if (elements.size() != 3) {
+            cout << "D with incorrect size\n";
+            return;
+        }
+        int key_low = stoi(elements[1]);
+        int key_high = stoi(elements[2]);
+        cout << "Range query " << "low key: " << key_low << " high key: " << key_high << "\n";
+        // TODO execute
+    } else if (elements[0] == "D") {
+        if (elements.size() != 2) {
+            cout << "D with incorrect size\n";
+            return;
+        }
+        cout << "Delete " << "key: " << key << "\n";
+
+        // TODO execute
+    }
 }
 
 void executeQueryFile(string filePath) {
@@ -38,7 +73,7 @@ void executeQueryFile(string filePath) {
 
     string line;
     if (fs.is_open()) {
-        cout << "In executeQueryFile(), file string is open.\n";
+        // cout << "In executeQueryFile(), file string is open.\n";
         while (getline(fs, line)) {
             // fs >> line;
             executeCommand(line);

@@ -7,4 +7,4 @@ cmake ..
 cmake --build .
 
 # cd build/src/LSMTree
-# ./main 3 ../../../test_3_3_3.wl ../../../test_3_3_3.wl
+# ./main 3 ../../../test.wl ../../../test.wl
