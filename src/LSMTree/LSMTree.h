@@ -30,7 +30,7 @@ public:
      */
     std::vector<int> query(int low, int high);
 
-    void addTuple(int index, Tuple* tuple);
+    void addTuple(Tuple* tuple);
 
 };
 
