@@ -47,5 +47,9 @@ public:
     ~Run();
 };
 
+class RunFException : public exception {
+
+};
+
 
 #endif //TEMPLATEDB_RUN_H
