@@ -13,7 +13,9 @@ LSMTree::addTuple(Tuple* tuple) {
     // check if buffer is full
     // full, move run to level 1, clear buffer
     if (buffer.isFull()) {
-        buffer.createFileMetaFromRun(0, 0);  // level 0, index 0
+        FileMeta* bufferFile = buffer.createFileMetaFromRun(0, 0);  // level 0, index 0
+        mergeNMove(0);
+        remove(bufferFile->filePath);
         buffer.clear();
     }
 

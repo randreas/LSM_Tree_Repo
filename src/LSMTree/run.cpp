@@ -79,7 +79,7 @@ FileMeta *Run::createFileMetaFromRun(size_t lvlID, size_t newBlockIdx) {
     ss << ".txt";
     string newFilePath = ss.str();
 
-    if (FILE *file = fopen(newFilePath.c_str(), "r")) {
+    if (FILE *file = fopen(newFilePath, "r")) {
         fclose(file);
         remove(newFilePath);
     }
