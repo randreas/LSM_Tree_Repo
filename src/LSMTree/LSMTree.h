@@ -6,11 +6,13 @@
 #include <climits>
 #include <cmath>
 
+#include "run.h"
 #include "level.h"
 
 class LSMTree
 {
     int initial_run_size, num_run_per_level;
+    Run buffer;
     vector<Level> levels;
 
 public:
