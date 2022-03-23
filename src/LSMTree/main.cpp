@@ -10,10 +10,10 @@
 
 using namespace std;
 
-void executeQueryFile(ffstream* fs){
+void executeQueryFile(ifstream* fs){
     string line;
     while (getline(*fs, line)) {
-        coutn << line;
+        cout << line;
     }
 }
 
@@ -35,10 +35,10 @@ int main(int argc, char *argv[])
     executeQueryFile(&dataFile);
     dataFile.close();
 
-    cout<<"Hello World";
+    cout << "Hello World";
 
     // read and execute workload file
-    ffstream workloadFile;
+    ifstream workloadFile;
     workloadFile.open(workloadFilePath);
     executeQueryFile(&workloadFile);
     workloadFile.close();

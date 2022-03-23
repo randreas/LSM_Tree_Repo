@@ -64,7 +64,7 @@ public:
 	std::string toString() const;
 
 	inline bool isDeleteMarker() const {
-		return value.isDeleteMarker();
+		return value.IsDelMarker();
 	}
 
 	
