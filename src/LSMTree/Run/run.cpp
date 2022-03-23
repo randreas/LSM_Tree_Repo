@@ -23,11 +23,24 @@ void Run::merge(Run *anotherRun) {
     vector<Tuple*> newTuples;
     while (!(anotherRun->tuples.empty() && this->tuples.empty())) {
         if (this->tuples.empty() || anotherRun->tuples[0]->key < this->tuples[0]->key) {
-            newTuples.push_back(anotherRun->tuples.front());
+            newTuples.push_back(anotherRun->tuples[0]);
             anotherRun->tuples.erase(anotherRun->tuples.begin());
         } else if (anotherRun->tuples.empty() || this->tuples[0]->key < anotherRun->tuples[0]->key) {
-            newTuples.push_back(this->tuples.front());
+            newTuples.push_back(this->tuples[0]);
             this->tuples.erase(this->tuples.begin());
+        } else if (this->tuples[0]->key == anotherRun->tuples[0]->key) {
+            //deletion
+            if (anotherRun->tuples[0]->isDeleteMarker()) {
+                delete this->tuples[0];
+                this->tuples.erase(this->tuples.begin());
+                delete anotherRun->tuples[0];
+                anotherRun->tuples.erase(this->tuples.begin());
+            } else { //update
+                delete this->tuples[0];
+                this->tuples.erase(this->tuples.begin());
+                newTuples.push_back(anotherRun->tuples[0]);
+                anotherRun->tuples.erase(anotherRun->tuples.begin());
+            }
         }
     }
     replaceTuplesWithInput(newTuples);
@@ -47,6 +60,7 @@ void Run::addTuple(Tuple *newTuple) {
 
 
 FileMeta *Run::createFileMetaFromRun(size_t lvlID, size_t newBlockIdx) {
+    //TODO
     stringstream ss;
     ss << "level-";
     ss << lvlID;

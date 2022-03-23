@@ -28,7 +28,7 @@ public:
     //If this run is full
     bool isFull();
 
-    //Merge this run with input run
+    //Merge this run with input run, input run(another run) should always be more update than the current run.
     void merge(Run* anotherRun);
 
     //Create a filemeta corresponding to this run. Use this only when merge
