@@ -1,7 +1,3 @@
-//
-// Created by jingyusu on 3/16/22.
-//
-
 #include "fencePointer.h"
 
 FencePointer::FencePointer(int _num_zones)  {

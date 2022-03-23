@@ -94,14 +94,15 @@ void executeQueryFile(string filePath) {
 int main(int argc, char *argv[])
 {
     if (argc !=  4) {
-        cout << "USAGE: ./main <t> <data file path> <workload file path>\n";
+        cout << "USAGE: ./main <initial run size> <number of runs per level> <data file path> <workload file path>\n";
         return 1;
     }
 
     // constant, hyper parameter
-    int t = stoi(argv[1]);  // t stands for the amplifier
-    char* dataFilePath = argv[2];
-    char* workloadFilePath = argv[3];
+    int initial_run_size = stoi(argv[1]);
+    int num_run_per_level = stoi(argv[2]);
+    char* dataFilePath = argv[3];
+    char* workloadFilePath = argv[4];
 
     // read and execute data file
     cout << "Start reading and executing data file\n";

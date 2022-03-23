@@ -75,7 +75,7 @@ Run *Level::getRunByFileMetaAtIndex(int idx) {
 
 void Level::createAndInsertNewFileMeta() {
     stringstream ss;
-    ss << "../";
+    ss << "./";
     ss << "level-";
     ss << lvlID;
     ss << "-block-";

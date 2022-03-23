@@ -1,7 +1,3 @@
-//
-// Created by jingyusu on 3/16/22.
-//
-
 #ifndef ZONEMAPS_H
 #define ZONEMAPS_H
 #include <iostream>
