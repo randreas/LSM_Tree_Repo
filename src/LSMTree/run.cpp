@@ -78,6 +78,12 @@ FileMeta *Run::createFileMetaFromRun(size_t lvlID, size_t newBlockIdx) {
     ss << newBlockIdx;
     ss << ".txt";
     string newFilePath = ss.str();
+
+    if (FILE *file = fopen(newFilePath.c_str(), "r")) {
+        fclose(file);
+        remove(newFilePath);
+    }
+
     ofstream newFile(newFilePath);
     for (Tuple* tuple : tuples) {
         string str = itoa(tuple->key) + " ";

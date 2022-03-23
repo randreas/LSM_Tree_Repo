@@ -1,8 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "LSMTree.h"
-
 using namespace std;
 
 LSMTree::LSMTree(int _initial_run_size, int _num_run_per_level) {
@@ -14,9 +12,11 @@ LSMTree::LSMTree(int _initial_run_size, int _num_run_per_level) {
 LSMTree::addTuple(Tuple* tuple) {
     // check if buffer is full
     // full, move run to level 1, clear buffer
+    if (buffer.isFull()) {
+        buffer.createFileMetaFromRun(0, 0);  // level 0, index 0
+        buffer.clear();
+    }
 
     // add tuple
-
-    initial_run_size = _initial_run_size;
-    num_run_per_level = _num_run_per_level;
+    buffer.addTuple(tuple);
 }
