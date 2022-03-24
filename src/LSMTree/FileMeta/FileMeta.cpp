@@ -7,6 +7,8 @@
 #include <fstream>
 #include <sstream>
 #include "../itoa.h"
+#include "LSMTree/tuple.h"
+#include "LSMTree/run.h"
 
 Run *FileMeta::getRun() {
     ifstream inFile;
