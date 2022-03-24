@@ -40,6 +40,8 @@ public:
     void appendTupleToFile(Tuple* tuple);
 
     string filePath;
+
+    ~FileMeta();
 };
 
 class RunFullException : public exception {

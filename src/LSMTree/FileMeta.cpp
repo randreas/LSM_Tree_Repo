@@ -64,3 +64,10 @@ void FileMeta::appendTupleToFile(Tuple *tuple) {
         }
     }
 }
+
+FileMeta::~FileMeta() {
+    if (FILE *file = fopen(const_cast<char*>(filePath.c_str()), "r")) {
+        fclose(file);
+        remove(filePath.c_str());
+    }
+}
