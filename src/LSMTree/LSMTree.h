@@ -37,11 +37,11 @@ public:
 
     void deleteKey(int key);
 
-    void mergeNMove(int sourceLevel);
-
 
 private:
-    void addTupleToLevelAtIdxRecurse(int idx, Tuple* tuple);
+    void mergeNMove(int sourceLevel, Run* newRun);
+
+    void moveToLevelAtIdxRecurse(int idx, Run *newRun);
 };
 
 class FencePointerException : public exception {};
