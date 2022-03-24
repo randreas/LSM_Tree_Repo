@@ -10,7 +10,7 @@
 
 
 \begin{document}
-\title{CS561 : Implementation of LSM Tree}
+\title{CS561 : Performance Comparison between LSM-Trees and B+-Trees}
 
 \author{Richard Andreas}
 \affiliation{%
@@ -18,11 +18,11 @@
 }
 \author{Jingyu Su}
 \affiliation{%
-    \institution{Boston University}
+    \institution{jingyusu@bu.edu}
 }
 \author{Xingkun Yin}
 \affiliation{%
-    \institution{Boston University}
+    \institution{yinxingk@bu.edu}
 }
 
 \begin{abstract}
@@ -36,6 +36,7 @@
 % =============================================================================
 
 \subsection{Motivation}
+
 
 Log-Structured merge-tree (LSM-trees) are one of the most commonly used data structures for persistent storage of key-value entries. LSM-tree based storages are in use in several modern key-value stores including RocksDB at
 Facebook, LevelDB and BigTable at Google, bLSM and cLSM at Yahoo!, Cassandra
@@ -124,9 +125,23 @@ Graphs are basically a requirement here!
 
 You can also reference your old figures (Figure \ref{fig:filler}) and tables 
 (Table \ref{tab:ex})
+
+% =============================================================================
+\section{Current Progress So Far}
+% =============================================================================
+
+We have finished coding the basic features of the LSM-Tree: Fence Pointers, Leveling, Buffers, Bloom Filters and basic operations such as Insert, Delete, Point Scan and Range Scan. Our prototype works with a basic workload and is able to run smoothly.
+
 % =============================================================================
 \section{Future work to be done}
 % =============================================================================
+
+We will start working on is testing the prototype with a bigger workload and various levels of unsorted-ness to measure the performance of our implementation.
+
+
+We will use a provided implementation of a B+ tree, and run the same the tests that we have run on the LSM tree, to ensure fair testing between both data structures.
+
+Setting up a Virtual Machine will be part of this process and we can run the experiments on it.
 
 % =============================================================================
 \section{Conclusion}
