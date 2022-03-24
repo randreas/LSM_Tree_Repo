@@ -10,6 +10,7 @@
 #include <vector>
 
 #include "./LSMTree.h"
+#include "./tuple.h"
 
 using namespace std;
 
