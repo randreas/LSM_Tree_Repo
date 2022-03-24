@@ -5,7 +5,7 @@
 #ifndef TEMPLATEDB_RUN_H
 #define TEMPLATEDB_RUN_H
 
-#include "../tuple.h"
+#include "tuple.h"
 
 class FileMeta;
 
@@ -23,12 +23,16 @@ public:
     const size_t MAX_TUPLE_NUM;
 
     //Constructor
-    explicit Run(size_t size);
+    Run(size_t size);
 
     //If this run is full
     bool isFull();
 
+    //Deep clear all tuple objects
     void clear();
+
+    //Simple empty tuples vector
+    void shallowClear();
 
     //Merge this run with input run, input run(another run) should always be more update than the current run.
     void merge(Run* anotherRun);

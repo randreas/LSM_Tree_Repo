@@ -3,13 +3,13 @@
 //
 
 #include "run.h"
-#include "../FileMeta/FileMeta.h"
+#include "FileMeta/FileMeta.h"
 
 #include <utility>
 #include <sstream>
 #include <fstream>
 #include <iostream>
-#include "../itoa.h"
+#include "itoa.h"
 
 Run::Run(size_t size) : MAX_TUPLE_NUM(size) {
     tuples = vector<Tuple*>(size);
@@ -20,7 +20,11 @@ bool Run::isFull() {
 }
 
 void Run::clear() {
-    tuples.clear();
+    while (!tuples.empty()) {
+        Tuple* tuple = tuples.back();
+        tuples.pop_back();
+        delete tuple;
+    }
 }
 
 void Run::merge(Run *anotherRun) {
@@ -56,7 +60,7 @@ void Run::addTuple(Tuple *newTuple) {
         int pos = 0;
         while (it != tuples.end() && (*it)->key <= newTuple->key) {
             if ((*it)->key == newTuple->key) {
-                newTuple->erase(newTuple->begin()+pos);
+                tuples.erase(tuples.begin()+pos);
                 break;
             }
             it++;
@@ -88,7 +92,7 @@ Tuple* Run::query(int key) {
 
 
 FileMeta *Run::createFileMetaFromRun(size_t lvlID, size_t newBlockIdx) {
-    //TODO
+    //TODO: Replace with binary file
     stringstream ss;
     ss << "level-";
     ss << lvlID;
@@ -96,10 +100,11 @@ FileMeta *Run::createFileMetaFromRun(size_t lvlID, size_t newBlockIdx) {
     ss << newBlockIdx;
     ss << ".txt";
     string newFilePath = ss.str();
+    char* path = const_cast<char*>(newFilePath.c_str());
 
-    if (FILE *file = fopen(newFilePath, "r")) {
+    if (FILE *file = fopen(path, "r")) {
         fclose(file);
-        remove(newFilePath);
+        remove(path);
     }
 
     ofstream newFile(newFilePath);
@@ -124,13 +129,13 @@ Run::printRun() {
 }
 
 Run::~Run() {
-    while (!tuples.empty()) {
-        Tuple* tuple = tuples.back();
-        tuples.pop_back();
-        delete tuple;
-    }
+    clear();
 }
 
 void Run::replaceTuplesWithInput(vector<Tuple *> newTuples) {
     this->tuples = std::move(newTuples);
+}
+
+void Run::shallowClear() {
+    tuples.clear();
 }

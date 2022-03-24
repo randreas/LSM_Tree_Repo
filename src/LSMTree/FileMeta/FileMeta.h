@@ -7,13 +7,13 @@
 
 #include <string>
 #include <utility>
-#include "../Run/run.h"
+#include "LSMTree/run.h"
 
 using namespace std;
 
 class FileMeta {
 private:
-    string filePath;    int size;
+    int size;
     int minKey, maxKey;
 
 public:
@@ -38,6 +38,8 @@ public:
 
     //Append tuple to the end of file
     void appendTupleToFile(Tuple* tuple);
+
+    string filePath;
 };
 
 class RunFullException : public exception {

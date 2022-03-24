@@ -5,7 +5,7 @@
 #ifndef TEMPLATEDB_LEVEL_H
 #define TEMPLATEDB_LEVEL_H
 
-#include "Run/run.h"
+#include "run.h"
 #include "FileMeta/FileMeta.h"
 #include <vector>
 
@@ -23,9 +23,6 @@ private:
     //Clear all the dataBlocks in the level
     void clear();
 
-    //Level ID: for file name generation
-    unsigned int lvlID;
-
     //Add a mew empty file meta
     void createAndInsertNewFileMeta();
 
@@ -34,6 +31,9 @@ public:
     const size_t MAX_RUN_NUM;
 
     const size_t MAX_TUPLE_NUM_IN_RUN;
+
+    //Level ID: for file name generation
+    unsigned int lvlID;
 
     explicit Level(int max_run_num, int max_tuple_num_in_run, int lvlID) : MAX_RUN_NUM(max_run_num), MAX_TUPLE_NUM_IN_RUN(max_tuple_num_in_run) {
         this->dataBlocks = std::vector<FileMeta*>(MAX_RUN_NUM);
@@ -68,7 +68,7 @@ public:
     Run* getRunByFileMetaAtIndex(int idx);
 
     //Merges the entire level, return pointer of a merged run
-    FileMeta* merge(size_t newLvlID, size_t newBlockIdx);
+    Run* merge();
 
 };
 
