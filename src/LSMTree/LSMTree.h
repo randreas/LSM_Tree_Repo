@@ -13,8 +13,8 @@
 class LSMTree
 {
     int initial_run_size, num_run_per_level;
-    Run buffer;
-    vector<Level> levels;
+    Run* buffer;
+    vector<Level*> levels;
 
 public:
 
@@ -35,9 +35,13 @@ public:
 
     void addTuple(Tuple* tuple);
 
-    void delete(int key);
+    void deleteKey(int key);
 
     void mergeNMove(int sourceLevel);
+
+
+private:
+    void addTupleToLevelAtIdxRecurse(int idx, Tuple* tuple);
 };
 
 class FencePointerException : public exception {};
