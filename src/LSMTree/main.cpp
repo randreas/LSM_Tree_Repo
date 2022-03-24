@@ -44,11 +44,17 @@ void executeCommand(LSMTree* lsmTree, string command) {
         for (string cur_e : vector<string>(elements.begin() + 2, elements.end())) {
             values.push_back(stoi(cur_e));
         }
+        cout << "---------------------------------------\n";
         cout << "Insert " << "key: " << key << " values: ";
         printIntVector(values);
         cout << "\n";
         // execute
         lsmTree->addTuple(new Tuple(key, Value(values)));
+        cout << "addtuple finished\n";
+        lsmTree->buffer->printRun();
+        if (lsmTree->buffer == nullptr) {
+            cout << "buffer is null\n";
+        }
     } else if (elements[0] == "Q") {
         if (elements.size() != 2) {
             cout << "Q with incorrect size\n";

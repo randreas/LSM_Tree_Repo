@@ -10,6 +10,9 @@
 #include <fstream>
 
 bool Level::isFull() {
+    cout << "in is full\n";
+    cout << dataBlocks.size() << "\n";
+    cout << MAX_RUN_NUM << "\n";
     return dataBlocks.size() == MAX_RUN_NUM && dataBlocks[MAX_RUN_NUM - 1]->isFull();
 }
 
@@ -74,9 +77,12 @@ FileMeta *Level::getDataMeta(int idx) {
 }
 
 void Level::addRunFileMeta(FileMeta *fm) {
+    cout << "in add run file meta\n";
     if (!isFull()) {
+        cout << "here1\n";
         dataBlocks.push_back(fm);
     } else {
+        cout << "here2\n";
         throw LevelFullException();
     }
 }
