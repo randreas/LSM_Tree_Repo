@@ -43,6 +43,17 @@ public:
     	return true;
     } 
 
+	void printValue() {
+		cout << "Value: ";
+		if (IsDelMarker()) {
+			cout << "deleted";
+			return;
+		}
+		for (int i : items) {
+			cout << i << " ";
+		}
+	}
+
 };
 
 class Tuple{
@@ -70,6 +81,8 @@ public:
 	inline bool isDeleteMarker() const {
 		return value.IsDelMarker();
 	}
+
+	void printTuple();
 
 	
 
