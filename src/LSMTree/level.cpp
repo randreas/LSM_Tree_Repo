@@ -36,6 +36,17 @@ void Level::addTuple(Tuple *tuple) {
     }
 }
 
+int Level::containsKey(int key) {
+    for (int i = dataBlocks.size()-1; i>=0; i--) {
+        Run* curRun = getRunByFileMetaAtIndex(i);
+        if (curRun->containsKey(key)) {
+            return i
+        }
+    }
+    return -1;
+}
+
+
 FileMeta *Level::merge(size_t newLvlID, size_t newBlockIdx) {
     Run* initRun = new Run(MAX_RUN_NUM * MAX_TUPLE_NUM_IN_RUN);
     for (FileMeta* fm : dataBlocks) {
