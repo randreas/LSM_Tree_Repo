@@ -40,20 +40,20 @@ int Level::containsKey(int key) {
     for (int i = dataBlocks.size()-1; i>=0; i--) {
         Run* curRun = getRunByFileMetaAtIndex(i);
         if (curRun->containsKey(key)) {
-            return i
+            return i;
         }
     }
     return -1;
 }
 
 
-FileMeta *Level::merge(size_t newLvlID, size_t newBlockIdx) {
-    Run* initRun = new Run(MAX_RUN_NUM * MAX_TUPLE_NUM_IN_RUN);
+Run *Level::merge() {
+    Run* initRun = new Run((MAX_RUN_NUM + 1) * MAX_TUPLE_NUM_IN_RUN);
     for (FileMeta* fm : dataBlocks) {
         initRun->merge(fm->getRun());
     }
     clear();
-    return initRun->createFileMetaFromRun(newLvlID, newBlockIdx);
+    return initRun;
 }
 
 void Level::clear() {
@@ -61,6 +61,7 @@ void Level::clear() {
         FileMeta* fmToDel = dataBlocks.back();
         dataBlocks.pop_back();
         delete fmToDel;
+        fmToDel = nullptr;
     }
 }
 

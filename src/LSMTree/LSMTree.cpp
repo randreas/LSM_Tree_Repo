@@ -51,16 +51,20 @@ void LSMTree::moveToLevelAtIdxRecurse(int idx, Run* newRun) {
         int lvlId = levels.size();
         levels.push_back(new Level(num_run_per_level, newRunSize, lvlId));
         levels[lvlId]->addRunFileMeta(newRun->createFileMetaFromRun(lvlId, 0));
+        //delete newRun;
     } else {
         Level *lvl = levels[idx];
         if (!lvl->isFull()) {
             lvl->addRunFileMeta(newRun->createFileMetaFromRun(idx, lvl->getCurrentSize()));
+            //delete newRun;
         } else {
             Run* mergedResult = lvl->merge();
             mergedResult->merge(newRun);
             moveToLevelAtIdxRecurse(idx + 1, mergedResult);
         }
     }
+    delete newRun;
+    newRun = nullptr;
 }
 
 void LSMTree::deleteKey(int key) {

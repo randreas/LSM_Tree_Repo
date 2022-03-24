@@ -24,6 +24,7 @@ void Run::clear() {
         Tuple* tuple = tuples.back();
         tuples.pop_back();
         delete tuple;
+        tuple = nullptr;
     }
 }
 
