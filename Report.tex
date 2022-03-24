@@ -10,23 +10,23 @@
 
 
 \begin{document}
-\title{CS561 : Data Systems Architectures, a Template}
+\title{CS561 : Implementation of LSM Tree}
 
-\author{Andy Huynh}
+\author{Richard Andreas}
+\affiliation{%
+    \institution{ra7296@bu.edu}
+}
+\author{Jingyu Su}
 \affiliation{%
     \institution{Boston University}
 }
-\author{Juhyoung Mun}
-\affiliation{%
-    \institution{Boston University}
-}
-\author{Manos Athanassoulis}
+\author{Xingkun Yin}
 \affiliation{%
     \institution{Boston University}
 }
 
 \begin{abstract}
-    Abstract here! 
+    In this paper, we explore the the design space of key-value stores that utilize the Log-Structured merge-tree (LSM-Tree) structure. More specifically, we have implemented a base version of the LSM-Tree that have been explored in previous work in order to get a better understanding of the basic knowledge of it. We decided to compare between performance of our design to another data structure (B+-tree), to see which data structure performs better based on different workloads and operations.
 \end{abstract}
 
 \maketitle
@@ -37,15 +37,15 @@
 
 \subsection{Motivation}
 
-Every paper always comes with a motivation. Explain why this research is of interest
-to the community.
+Log-Structured merge-tree (LSM-trees) are one of the most commonly used data structures for persistent storage of key-value entries. LSM-tree based storages are in use in several modern key-value stores including RocksDB at
+Facebook, LevelDB and BigTable at Google, bLSM and cLSM at Yahoo!, Cassandra
+and HBase at Apache. 
+
+In addition to LSM Trees, B+ trees is another common data structure for key-value entries. A B+-tree is an index data structure that stores data pointers only in leaf nodes, and only pivot pivot pointers in the internal nodes. Additiaonlly, the leaf nodes are also linked to provide ordered access to the records,
 
 \subsection{Problem Statement}
 
-You \textbf{must} define your problem statement. This can be boiled down to a 
-question you are answering or concept you are exploring. You don't need to go into
-the nitty gritty details of your problem like variable definitions, but this is a
-bit higher level.
+When choosing which data structure to use for indexing and searching, we typically would choose between these 2 data structures as they are widely known and have superior performance compared to the rest. However, this brings us to the next question, how do we pick between these two. In our paper, we will experiment on both data structures with various workloads and compare their performance in 4 operations: insert, delete, point scan, range scan. We believe our implementation of the LSM tree will be faster than that of B+ Trees.
 
 \subsection{Contributions}
 
@@ -83,12 +83,11 @@ your system architecture here. Additional features may also belong here. If
 you're benchmarking RocksDB you may end up explaining some of the experimental
 set ups (assuming you've defined the problem at hand!)
 
+\subsection{Fence Pointers}
 
-\subsection{Solution Design}
+\subsection{Range Scan}
 
-Maybe you're doing a research project that tackles on a particular problem. You
-may want to start introducing a design solution here that explains how you will
-tackle said problem.
+\subsection{Testing}
 
 \subsection{Benchmark Explanations}
 
@@ -109,22 +108,26 @@ Graphs are basically a requirement here!
 
 \begin{table}[H]
     \caption{An example table}
-	\label{tab:ex}
-	\centering
+    \label{tab:ex}
+    \centering
 
-	\begin{tabular}{c |c c c c c}
+    \begin{tabular}{c |c c c c c}
         \hline\hline
         & Col A & Col B \\
         \hline
         Row A & val 1 & val a \\
         Row B & val 2 & val b \\
         Row C & val 3 & val c \\
-	\hline
-	\end{tabular}
+    \hline
+    \end{tabular}
 \end{table}
 
 You can also reference your old figures (Figure \ref{fig:filler}) and tables 
 (Table \ref{tab:ex})
+% =============================================================================
+\section{Future work to be done}
+% =============================================================================
+
 % =============================================================================
 \section{Conclusion}
 % =============================================================================
@@ -135,6 +138,13 @@ Final thoughts here.
 {
     \bibliographystyle{ACM-Reference-Format}
     \bibliography{biblio}
+
+[1] Chen Luo, Michael J. Carey. LSM-based storage techniques: a survey. VLDB J.29(1): 393-418 (2020)
+
+[2] Niv Dayan, Manos Athanassoulis, Stratos Idreos. Monkey: Optimal Navigable
+Key-Value Store. SIGMOD Conference 2017: 79-94
+
+[3] Patrick E. O'Neil, Edward Cheng, Dieter Gawlick, Elizabeth J. O'Neil. The LogStructured Merge-Tree (LSM-Tree). Acta Inf. 33(4): 351-385 (1996)
 } 
 
 \end{document}
