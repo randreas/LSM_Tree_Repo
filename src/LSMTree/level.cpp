@@ -3,7 +3,7 @@
 //
 
 #include "level.h"
-#include "Run/run.h"
+#include "run.h"
 #include <cstdio>
 #include <cstdlib>
 #include <sstream>
@@ -36,16 +36,17 @@ void Level::addTuple(Tuple *tuple) {
     }
 }
 
-FileMeta *Level::merge(size_t newLvlID, size_t newBlockIdx) {
-    Run* initRun = new Run(MAX_RUN_NUM * MAX_TUPLE_NUM_IN_RUN);
+Run *Level::merge() {
+    Run* initRun = new Run((MAX_RUN_NUM + 1) * MAX_TUPLE_NUM_IN_RUN);
     for (FileMeta* fm : dataBlocks) {
         initRun->merge(fm->getRun());
     }
     clear();
-    return initRun->createFileMetaFromRun(newLvlID, newBlockIdx);
+    return initRun;
 }
 
 void Level::clear() {
+    //TODO REMOVE FILE
     while (!dataBlocks.empty()) {
         FileMeta* fmToDel = dataBlocks.back();
         dataBlocks.pop_back();
