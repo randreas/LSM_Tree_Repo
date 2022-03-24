@@ -13,10 +13,10 @@
 class LSMTree
 {
     int initial_run_size, num_run_per_level;
-    Run* buffer;
     vector<Level*> levels;
 
 public:
+    Run* buffer;
 
     LSMTree(int _initial_run_size, int _num_run_per_level);
 

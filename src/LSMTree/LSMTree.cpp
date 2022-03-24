@@ -24,6 +24,7 @@ void LSMTree::addTuple(Tuple* tuple) {
         //remove(const_cast<char*>(bufferFile->filePath.c_str()));
         buffer->shallowClear();
     }
+    buffer->addTuple(tuple);
 }
 
 Tuple* LSMTree::query(int key) {

@@ -112,8 +112,10 @@ int main(int argc, char *argv[])
     LSMTree* lsmTree = new LSMTree(initial_run_size, num_run_per_level);
 
     // read and execute data file
+    lsmTree->buffer->printRun();
     cout << "Start reading and executing data file\n";
     executeQueryFile(lsmTree, dataFilePath);
+    lsmTree->buffer->printRun();
 
     // read and execute workload file
     cout << "Start reading and executing workload file\n";

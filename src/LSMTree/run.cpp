@@ -12,7 +12,6 @@
 #include "itoa.h"
 
 Run::Run(size_t size) : MAX_TUPLE_NUM(size) {
-    tuples = vector<Tuple*>(size);
 }
 
 bool Run::isFull() {
@@ -93,9 +92,11 @@ Tuple* Run::query(int key) {
 
 void Run::printRun() {
     cout << "Run: \n";
+    cout << "tuple count: " << tuples.size() << "\n";
     for (Tuple* tuple: tuples) {
         tuple->printTuple();
     } 
+    cout << "done\n";
 }
 
 Run::~Run() {
