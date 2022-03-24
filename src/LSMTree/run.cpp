@@ -91,37 +91,6 @@ Tuple* Run::query(int key) {
     throw RunFException();
 }
 
-
-FileMeta *Run::createFileMetaFromRun(size_t lvlID, size_t newBlockIdx) {
-    //TODO: Replace with binary file
-    stringstream ss;
-    ss << "level-";
-    ss << lvlID;
-    ss << "-block-";
-    ss << newBlockIdx;
-    ss << ".txt";
-    string newFilePath = ss.str();
-    char* path = const_cast<char*>(newFilePath.c_str());
-
-    if (FILE *file = fopen(path, "r")) {
-        fclose(file);
-        remove(path);
-    }
-
-    ofstream newFile(newFilePath);
-    for (Tuple* tuple : tuples) {
-        string str = itoa(tuple->key) + " ";
-        for (int val : tuple->value.items) {
-            str += itoa(tuple->key) + " ";
-        }
-        str += "\n";
-        newFile << str;
-    }
-    auto* newFileMeta = new FileMeta(newFilePath, MAX_TUPLE_NUM);
-    newFile.close();
-    return newFileMeta;
-}
-
 void Run::printRun() {
     cout << "Run: \n";
     for (Tuple* tuple: tuples) {
@@ -139,4 +108,8 @@ void Run::replaceTuplesWithInput(vector<Tuple *> newTuples) {
 
 void Run::shallowClear() {
     tuples.clear();
+}
+
+vector<Tuple *> Run::getTuples() {
+    return tuples;
 }

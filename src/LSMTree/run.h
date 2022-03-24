@@ -7,8 +7,6 @@
 
 #include "tuple.h"
 
-class FileMeta;
-
 class Run {
 
 private:
@@ -37,10 +35,6 @@ public:
     //Merge this run with input run, input run(another run) should always be more update than the current run.
     void merge(Run* anotherRun);
 
-    //Create a filemeta corresponding to this run. Use this only when merge
-    FileMeta* createFileMetaFromRun(size_t lvlID, size_t newBlockIdx);
-
-
     //add tuple to the run, used only in instantiation.
     void addTuple(Tuple* newTuple);
 
@@ -49,6 +43,8 @@ public:
     Tuple* query(int key);
 
     void printRun();
+
+    vector<Tuple*> getTuples();
 
     ~Run();
 };

@@ -1,3 +1,6 @@
+#ifndef TEMPLATEDB_TUPLE_H
+#define TEMPLATEDB_TUPLE_H
+
 #include <vector>
 #include <string>
 #include <math.h>
@@ -63,6 +66,8 @@ public:
 	Value value;
 
 public:
+    Tuple();
+
 	Tuple(int key, Value v);
 
 	inline void setValue(Value v) {
@@ -85,8 +90,6 @@ public:
 
 	void printTuple();
 
-	
-
-
-
 };
+
+#endif //TEMPLATEDB_TUPLE_H

@@ -2,6 +2,8 @@
 #include <string.h>
 
 #include "LSMTree.h"
+#include "run.h"
+#include "Utils.h"
 
 using namespace std;
 
@@ -50,12 +52,12 @@ void LSMTree::moveToLevelAtIdxRecurse(int idx, Run* newRun) {
         int newRunSize = idx == 0 ? initial_run_size : (levels[levels.size() - 1]->MAX_TUPLE_NUM_IN_RUN + 1) * num_run_per_level;
         int lvlId = levels.size();
         levels.push_back(new Level(num_run_per_level, newRunSize, lvlId));
-        levels[lvlId]->addRunFileMeta(newRun->createFileMetaFromRun(lvlId, 0));
+        levels[lvlId]->addRunFileMeta(createFileMetaFromRun(lvlId, 0, newRun));
         //delete newRun;
     } else {
         Level *lvl = levels[idx];
         if (!lvl->isFull()) {
-            lvl->addRunFileMeta(newRun->createFileMetaFromRun(idx, lvl->getCurrentSize()));
+            lvl->addRunFileMeta(createFileMetaFromRun(idx, lvl->getCurrentSize(), newRun));
             //delete newRun;
         } else {
             Run* mergedResult = lvl->merge();

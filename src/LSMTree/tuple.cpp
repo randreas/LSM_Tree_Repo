@@ -20,7 +20,7 @@ Tuple::Tuple() {
 
 //Print
 
-Tuple::printTuple() {
+void Tuple::printTuple() {
     cout << "Key: " << key << " ";
     value.printValue();
     cout << "\n";

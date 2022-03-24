@@ -48,7 +48,7 @@ void executeCommand(LSMTree* lsmTree, string command) {
         printIntVector(values);
         cout << "\n";
         // execute
-        lsmTree->addTuple(Tuple(key, Value(values)));
+        lsmTree->addTuple(new Tuple(key, Value(values)));
     } else if (elements[0] == "Q") {
         if (elements.size() != 2) {
             cout << "Q with incorrect size\n";
