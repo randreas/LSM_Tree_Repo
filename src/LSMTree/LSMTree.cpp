@@ -24,7 +24,22 @@ LSMTree::addTuple(Tuple* tuple) {
 }
 
 Tuple* LSMTree::query(int key) {
+    if (buffer->containsKey(key)) {
+        return buffer->query(key);
+    }
+
+    int ind;
+    for (Level* curLevel : levels) {
+        ind = curLevel->containsKey(key);
+        if (ind >= 0) {
+            return curLevel->getRunByFileMetaAtIndex(ind)->query(key);
+        }
+    }
 
     // if not found, return a tuple with delete flag
     return Tuple(key, Value(false));
+}
+
+LSMTree::deleteKey(int key) {
+    addTuple(Tuple(key, Value(false)));
 }

@@ -36,17 +36,27 @@ void Level::addTuple(Tuple *tuple) {
     }
 }
 
-Run *Level::merge() {
-    Run* initRun = new Run((MAX_RUN_NUM + 1) * MAX_TUPLE_NUM_IN_RUN);
+int Level::containsKey(int key) {
+    for (int i = dataBlocks.size()-1; i>=0; i--) {
+        Run* curRun = getRunByFileMetaAtIndex(i);
+        if (curRun->containsKey(key)) {
+            return i
+        }
+    }
+    return -1;
+}
+
+
+FileMeta *Level::merge(size_t newLvlID, size_t newBlockIdx) {
+    Run* initRun = new Run(MAX_RUN_NUM * MAX_TUPLE_NUM_IN_RUN);
     for (FileMeta* fm : dataBlocks) {
         initRun->merge(fm->getRun());
     }
     clear();
-    return initRun;
+    return initRun->createFileMetaFromRun(newLvlID, newBlockIdx);
 }
 
 void Level::clear() {
-    //TODO REMOVE FILE
     while (!dataBlocks.empty()) {
         FileMeta* fmToDel = dataBlocks.back();
         dataBlocks.pop_back();

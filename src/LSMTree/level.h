@@ -55,6 +55,9 @@ public:
     //Get current size
     size_t getCurrentSize();
 
+    // return the index for the filepointer, -1 if not found
+    int containsKey(int key);
+
     //Add a file meta to the level. Happens when the upper level merges.
     void addRunFileMeta(FileMeta* fm);
 
