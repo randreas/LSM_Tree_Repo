@@ -48,6 +48,8 @@ public:
 
     Tuple* query(int key);
 
+    void printRun();
+
     ~Run();
 };
 
