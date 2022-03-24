@@ -1,6 +1,7 @@
 #include <vector>
 #include <string>
 #include <math.h>
+#include <iostream>
 
 #include "const.h"
 
@@ -13,7 +14,7 @@ public:
 
 	Value(){}
 
-	Value(bool delete) {
+	Value(bool del) {
 		items = {TERMINATE};
 	}
 

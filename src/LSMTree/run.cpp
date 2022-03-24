@@ -122,8 +122,8 @@ FileMeta *Run::createFileMetaFromRun(size_t lvlID, size_t newBlockIdx) {
     return newFileMeta;
 }
 
-Run::printRun() {
-    count << "Run: \n";
+void Run::printRun() {
+    cout << "Run: \n";
     for (Tuple* tuple: tuples) {
         tuple->printTuple();
     } 
