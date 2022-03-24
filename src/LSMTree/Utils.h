@@ -7,7 +7,7 @@
 
 #include <sstream>
 #include <fstream>
-#include "FileMeta/FileMeta.h"
+#include "FileMeta.h"
 #include "itoa.h"
 
 FileMeta *createFileMetaFromRun(size_t lvlID, size_t newBlockIdx, Run* run) {
