@@ -1,0 +1,18 @@
+Things guaranteed done:
+Inserting into Buffer, and Contains can be flushed to first level.
+Implemented tiering merge run
+
+
+Things to be done:
+Fix bugs and Testing the point query, range scan, delete
+Read and write files using binary files
+Fix Fence Pointers
+
+
+
+Performance testing to be done in Microsoft Azure 
+
+Report:
+Buffer
+Fence Pointer
+Store metadata in level
