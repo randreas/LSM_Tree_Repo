@@ -67,7 +67,7 @@
 
     In Tiering merge policy maintains up to T components per level. When level L is full, its T components are merged together into a new component at level L+1. If level L is already the configured maximum level, then the resulting component remains at level L. Two components at level L-1 are merged together to form a new component/data block at level L.
 
-    \includegraphics{images/MergingStrategies.PNG}
+    \includegraphics[scale=0.85]{images/MergingStrategies.PNG}
 
 % =============================================================================
     \section{Architecture}
@@ -83,10 +83,11 @@
     Levels are another important component in LSM trees as they contain actual data entries. Our implementation of levels contain "FileMeta" objects, each of the FileMeta objects contain information necessary to access the correct data file on disk. Upon query, the LSM tree deserializes the data file with the information in the corresponding FileMeta, instantiates an Run object accordingly, and either return the result of query or modify the file. Run objects are destructed when query finishes.
 
     \subsection{Testing}
+    We tested the correctness of our implementation using a dataset created by ourselves. Will test more intensively in the future.
 
     \subsection{Benchmark Explanations}
 
-    We have used the data.wl and workload.wl files to test the correctness of our program.
+    We used the data.wl and workload.wl files to test the correctness of our program. The data set covers the operation supported for now, and makes sure that the number of entries in the LSM tree is big enough to overflow the buffer, in order to trigger merge and tiering mechanism.
 
 
 % =============================================================================
