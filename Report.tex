@@ -4,6 +4,7 @@
 \renewcommand\footnotetextcopyrightpermission[1]{} % removes footnote with conference information in first column
 \renewcommand\footnotetextauthorsaddresses[1]{}
 \pagestyle{plain} % removes running headers
+\graphicspath{ {./images/} }
 % ================================
 
 \usepackage{graphicx}
@@ -48,45 +49,37 @@ In addition to LSM Trees, B+ trees is another common data structure for key-valu
 
 When choosing which data structure to use for indexing and searching, we typically would choose between these 2 data structures as they are widely known and have superior performance compared to the rest. However, this brings us to the next question, how do we pick between these two. In our paper, we will experiment on both data structures with various workloads and compare their performance in 4 operations: insert, delete, point scan, range scan. We believe our implementation of the LSM tree will be faster than that of B+ Trees.
 
-\subsection{Contributions}
-
-Give your reader a small summary of what exactly you 
-
-You been reviewing a lot of papers this semester, take a look at what separated
-the good ones from the great ones and analyze what how they introduced their
-problem.
-
 
 % =============================================================================
 \section{Background}
 % =============================================================================
-Recommended work belong here! Would highly suggest you add any time of relevant
-background information pertaining to your project (e.g. previous research)
 
-If you need to explain with equations, \ref{eq:bf_fp} is an example of false positive 
-rate of a Bloom filter~\cite{Bloom}.
-\begin{equation}
-    f_p = \Big(1-\Big(1-\frac{1}{m}\Big)^{kn}\Big)^{k} \approx \Big(1-e^{kn/m} \Big)^{k}
-    \label{eq:bf_fp}
- \end{equation}
+In this section, we will be presenting the background of LSM-trees, by discussing the basic structure of LSM-trees used in today's storage systems.
+
+\subsection{Basic Structure}
+Today's LSM-Tree implementation applies updates out-of-place to reduce Random I/Os. All incoming writes are appended into a memory buffer. An insert or update operation simply adds a new entry, while a delete operation adds a graveyard pointer indicating the entry has been deleted. 
+
+A query over an LSM-Tree has to search multiple components to find the latest version of each key. A point look up query, which fetches the value of a specific key, simply search all components one by one, from newest to oldest, and stops immediately after the first match is found. A range scan can search all components at the same time, feeding the search results into a query.
+
+As components or data blocks accumulate over time, the query performance of an LSM-Tree tends to degrade since more components must be examined. These components are merged to reduce the total number of components. There are two types of merge policies, leveling and tiering. Both policies organize components or data blocks, into logical levels (or tiers) and controlled by a size ratio of T. Each component is labeled with its key range. 
+
+In Leveling, each level only maintains one component, but the component at level L is T time larger than the component at level L-1. As a result, the component at level L will be merged multiple times with incoming components at level L-1 until it feels up, and it will then be merged into level L+1.
+
+In Tiering merge policy maintains up to T components per level. When level L is full, its T components are merged together into a new component at level L+1. If level L is already the configured maximum level, then the resulting component remains at level L. Two components at level L-1 are merged together to form a new component/data block at level L. 
+
+\includegraphics{images/MergingStrategies.PNG}
 
 % =============================================================================
 \section{Architecture}
 % =============================================================================
-This is where your papers will differ depending on what type of project you
-have. At this point everything is extremely flexible and depends on how you
-want to structure your paper.
+In this section, we will analyze the main components of our LSM-Tree Architecture.
 
-\subsection{TemplateDB}
-
-An example is the LSM project, generally you would want to start explaining
-your system architecture here. Additional features may also belong here. If
-you're benchmarking RocksDB you may end up explaining some of the experimental
-set ups (assuming you've defined the problem at hand!)
+\subsection{Bloom Filters}
+Bloom Filters are an essential component of the LSM-Tree. The concept of a bloom filter is suggested as the main mechanism to avoid double accesses. The main drawback is the possibility of giving a false positive result. 
 
 \subsection{Fence Pointers}
+Fence Pointers are the limits of the virtual blocks of data. By implementing fence pointers, we are do not have to access every single data entry during scanning or point searching. By checking the min/max values in each fence pointer, this reduces the time it takes for searching as we ignore blocks of data that do not meet the requirements.
 
-\subsection{Range Scan}
 
 \subsection{Testing}
 
@@ -130,11 +123,13 @@ You can also reference your old figures (Figure \ref{fig:filler}) and tables
 \section{Current Progress So Far}
 % =============================================================================
 
-We have finished coding the basic features of the LSM-Tree: Fence Pointers, Leveling, Buffers, Bloom Filters and basic operations such as Insert, Delete, Point Scan and Range Scan. Our prototype works with a basic workload and is able to run smoothly.
+We have finished coding the basic features of the LSM-Tree: Fence Pointers, Leveling, Buffers, Bloom Filters and basic operations such as Insert. Our prototype works with a basic workload and is able to run smoothly.
 
 % =============================================================================
 \section{Future work to be done}
 % =============================================================================
+
+We will finish up the remaining the operations: Delete, Range Scan and Point Scan.
 
 We will start working on is testing the prototype with a bigger workload and various levels of unsorted-ness to measure the performance of our implementation.
 
