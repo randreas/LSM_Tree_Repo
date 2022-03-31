@@ -1,3 +1,16 @@
+# CS561 compile instruction
+
+Clone the directory and in the root of the directory run:
+```
+sh ./make.sh
+cd build/src/LSMTree
+```
+
+Then, we are able to test it. For intsnce:
+```
+./main 3 3 ../../../data.wl ../../../empty.wl
+```
+
 # CS 561: Data Systems Architecture - TemplateDB
 
 
