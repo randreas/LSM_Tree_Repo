@@ -6,9 +6,11 @@
 \pagestyle{plain} % removes running headers
 \graphicspath{ {./images/} }
 % ================================
-
 \usepackage{graphicx}
 \usepackage{indentfirst}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{color}
 
 \begin{document}
     \title{CS561 : Performance Comparison between LSM-Trees and B+-Trees}
@@ -27,18 +29,10 @@
     }
 
     \begin{abstract}
-        In this paper, we explore the the design space of key-value stores that utilize the Log-Structured merge-tree (LSM-Tree) structure. More specifically, we have implemented a base version of the LSM-Tree that have been explored in previous work in order to get a better understanding of the basic knowledge of it. We decided to compare between performance of our design to another data structure (B+-tree), to see which data structure performs better based on different workloads and operations.
+        In this paper, we explore the the design space of key-value stores that utilize the Log-Structured merge-tree (LSM-Tree) structure. More specifically, we have implemented a base version of the LSM-Tree that have been explored in previous work in order to get a better understanding of the basic knowledge of it. We decided to compare between performance of our design to another data structure (B+-tree), to see which data structure performs better based on different workloads and operations. Instrutions to compilationare and running are in the README.md of the repository of this project: \href{https://github.com/randreas/LSM_Tree_Repo}{\color{blue}{LSM Tree}}.
     \end{abstract}
 
     \maketitle
-
-% =============================================================================
-\section{Introduction}
-% =============================================================================
-    Instrution to the compilation are in the README.md of the repository of this project.
-    ```
-    https://github.com/randreas/LSM_Tree_Repo
-    '''
 
 % =============================================================================
     \section{Introduction}
@@ -73,16 +67,28 @@
 
     In Leveling, each level only maintains one component, but the component at level L is T time larger than the component at level L-1. As a result, the component at level L will be merged multiple times with incoming components at level L-1 until it feels up, and it will then be merged into level L+1.
 
-    In Tiering merge policy maintains up to T components per level. When level L is full, its T components are merged together into a new component at level L+1. If level L is already the configured maximum level, then the resulting component remains at level L. Two components at level L-1 are merged together to form a new component/data block at level L.
-
-    \includegraphics[scale=0.85]{images/MergingStrategies.PNG}
-
+    In Tiering merge policy maintains up to T components per level. When level L is full, its T components are merged together into a new component at level L+1. If level L is already the configured maximum level, then the resulting component remains at level L. Two components at level L-1 are merged together to form a new component/data block at level L.\\
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.5\textwidth]{Images/MergingStrategies.PNG}
+        \caption{LSM Tree merge policies}
+        \label{Fig.main2}
+    \end{figure}
 % =============================================================================
     \section{Architecture}
 % =============================================================================
     In this section, we will analyze the main components of our LSM-Tree Architecture.
+    \subsection{Tuple}
+    Tuples are the units of data stored in a LSM-tree. In our implementation, a tuple consists of a key, a value, and an identifier of the type of the operation.
+
+    \subsection{Run}
+    A run is the form of a block of data in a level of LSM tree in the LSM tree when it is actual been read into memory. It contains the actual data.
+
+    \subsection{Buffer}
+    Operation log entries of the LSM tree goes directly into the buffer. Buffer in this project is an instance of Run. It has a fixed size, the same size as the blocks on the first level of the tree and it is the first data to look into when query. When the buffer if full, it is swapped into level 1 and the compaction process of this LSM tree begins.
+
     \subsection{Bloom Filters}
-    Bloom Filters are an essential component of the LSM-Tree. The concept of a bloom filter is suggested as the main mechanism to avoid unnecessary level accesses. The main drawback is the possibility of giving a false positive result.
+    Bloom Filters are an essential component of the LSM-Tree. The concept of a bloom filter is suggested as the main mechanism to avoid unnecessary level accesses. Queries first check the bloom filter, if the result is positive, then it checks the level, otherwise check a lower level or return not found if at bottom level. The main drawback is the possibility of giving a false positive result.
 
     \subsection{Fence Pointers}
     Fence Pointers are the limits of the virtual blocks of data. By implementing fence pointers, we are do not have to access every single data entry during scanning or point searching. We implement fence pointers in the form of zonemaps. By checking the min/max values in each fence pointer, this reduces the time it takes for searching as we ignore blocks of data that do not meet the requirements.
@@ -93,12 +99,6 @@
     \subsection{FileMeta}
     Filemeta corresponds to a lock of dat on a level. It is on persistent storage, in the case of this project, a local file. Filedata store the metadata of the block, including the path to the file, the upper bound and the lower bounding of this file. When LSM compact severl blocks into one single block, the corresponding filemeta are combined into a new file meta as well and the new filemeta contain all the metadata about the new block.
 
-    \subsection{Run}
-    A run is the form of a block of data in a level of LSM tree in the LSM tree when it is actual been read into memory. It contains the actual data.
-
-    \subsection{Buffer}
-    Buffer in this project is been implemented by a run. It has a fixed size, the same size as the blocks on the first level of the tree and it is the first data to look into when query. When the buffer if full, it is swap into level 1 and the compaction process of this LSM tree betgin.
-    
     \subsection{Testing}
     We tested the correctness of our implementation using a dataset created by ourselves. Will test more intensively in the future.
 
@@ -110,7 +110,7 @@
 % =============================================================================
     \section{Results}
 % =============================================================================
-    Graphs are basically a requirement here!
+    Will be updated after further benchmarking.
 
     \begin{figure}[ht]
         \includegraphics[width=3cm]{example-image-a}
@@ -162,7 +162,7 @@
     \section{Conclusion}
 % =============================================================================
 
-    Final thoughts here.
+    We will have a conclusion after future benchmarking.
 
 % reference
         {
@@ -178,3 +178,4 @@
     }
 
 \end{document}
+
