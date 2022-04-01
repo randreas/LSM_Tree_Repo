@@ -82,6 +82,15 @@
     \subsection{Levels}
     Levels are another important component in LSM trees as they contain actual data entries. Our implementation of levels contain "FileMeta" objects, each of the FileMeta objects contain information necessary to access the correct data file on disk. Upon query, the LSM tree deserializes the data file with the information in the corresponding FileMeta, instantiates an Run object accordingly, and either return the result of query or modify the file. Run objects are destructed when query finishes.
 
+    \subsection{FileMeta}
+    Filemeta corresponds to a lock of dat on a level. It is on persistent storage, in the case of this project, a local file. Filedata store the metadata of the block, including the path to the file, the upper bound and the lower bounding of this file. When LSM compact severl blocks into one single block, the corresponding filemeta are combined into a new file meta as well and the new filemeta contain all the metadata about the new block.
+
+    \subsection{Run}
+    A run is the form of a block of data in a level of LSM tree in the LSM tree when it is actual been read into memory. It contains the actual data.
+
+    \subsection{Buffer}
+    Buffer in this project is been implemented by a run. It has a fixed size, the same size as the blocks on the first level of the tree and it is the first data to look into when query. When the buffer if full, it is swap into level 1 and the compaction process of this LSM tree betgin.
+    
     \subsection{Testing}
     We tested the correctness of our implementation using a dataset created by ourselves. Will test more intensively in the future.
 
