@@ -70,7 +70,7 @@
     In Tiering merge policy maintains up to T components per level. When level L is full, its T components are merged together into a new component at level L+1. If level L is already the configured maximum level, then the resulting component remains at level L. Two components at level L-1 are merged together to form a new component/data block at level L.\\
     \begin{figure}[H]
         \centering
-        \includegraphics[width=0.5\textwidth]{Images/MergingStrategies.PNG}
+        \includegraphics[width=0.5\textwidth]{MergingStrategies.PNG}
         \caption{LSM Tree merge policies}
         \label{Fig.main2}
     \end{figure}
@@ -94,10 +94,10 @@
     Fence Pointers are the limits of the virtual blocks of data. By implementing fence pointers, we are do not have to access every single data entry during scanning or point searching. We implement fence pointers in the form of zonemaps. By checking the min/max values in each fence pointer, this reduces the time it takes for searching as we ignore blocks of data that do not meet the requirements.
 
     \subsection{Levels}
-    Levels are another important component in LSM trees as they contain actual data entries. Our implementation of levels contain "FileMeta" objects, each of the FileMeta objects contain information necessary to access the correct data file on disk. Upon query, the LSM tree deserializes the data file with the information in the corresponding FileMeta, instantiates an Run object accordingly, and either return the result of query or modify the file. Run objects are destructed when query finishes.
+    Levels are the core in LSM trees as they contain actual data entries. Our implementation of levels contain "FileMeta" objects, each of the FileMeta objects contain information necessary to access the correct data file on disk. Upon query, the LSM tree deserializes the data file with the information in the corresponding FileMeta, instantiates an Run object accordingly, and either return the result of query or modify the file. Run objects are destructed when query finishes.
 
     \subsection{FileMeta}
-    Filemeta corresponds to a lock of dat on a level. It is on persistent storage, in the case of this project, a local file. Filedata store the metadata of the block, including the path to the file, the upper bound and the lower bounding of this file. When LSM compact severl blocks into one single block, the corresponding filemeta are combined into a new file meta as well and the new filemeta contain all the metadata about the new block.
+    FileMeta corresponds to a block of data in a level. It is on persistent storage, in the case of this project, a local file. Filedata store the metadata of the block, including the path to the file, the upper bound and the lower bounding of this file. When LSM compact severl blocks into one single block, the corresponding filemeta are combined into a new file meta as well and the new filemeta contain all the metadata about the new block.
 
     \subsection{Testing}
     We tested the correctness of our implementation using a dataset created by ourselves. Will test more intensively in the future.
@@ -178,4 +178,3 @@
     }
 
 \end{document}
-
