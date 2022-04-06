@@ -31,7 +31,7 @@ public:
     }
 
     //Initiate run object
-    Run* getRun();
+    Run* geRun();
 
     //Datablock is full
     bool isFull() const;
@@ -42,6 +42,9 @@ public:
     string filePath;
 
     ~FileMeta();
+
+    //RA todo
+    vector<Tuple*> GetAllTuples()
 };
 
 class RunFullException : public exception {

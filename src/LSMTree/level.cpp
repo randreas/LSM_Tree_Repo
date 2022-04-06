@@ -60,6 +60,7 @@ Run *Level::merge() {
         initRun->merge(fm->getRun());
     }
     clear();
+    //RA todo recreate bloomfilter
     return initRun;
 }
 
@@ -89,6 +90,8 @@ void Level::addRunFileMeta(FileMeta *fm) {
         cout << "here2\n";
         throw LevelFullException();
     }
+
+    //RA todo recreate bloomfilter
 }
 
 Run *Level::getRunByFileMetaAtIndex(int idx) {
@@ -107,4 +110,30 @@ void Level::createAndInsertNewFileMeta() {
     ofstream newFile(newFilePath);
     newFile.close();
     addRunFileMeta(new FileMeta(newFilePath, MAX_TUPLE_NUM_IN_RUN));
+}
+
+
+
+//RA Todo
+vector<Tuple*> Level::GetAllTuples() {
+    vector<Tuple*> result;
+    for (auto & dataBlock : dataBlocks) {
+        DEBUG_LOG(std::string("getting tuples from #") + dataBlock->getFilePath());
+        auto tuples = dataBlock->GetAllTuples();
+        result.insert(result.end(), tuples.begin(), tuples.end());
+    }
+    return result;
+}
+
+
+//RA Todo
+BloomFilter Level::createBloomFilter() {
+    BloomFilter bf = new BloomFilter::BloomFilter(BF_NUM_TUPLES, BF_BITS_PER_ELEMENT);
+    vector<Tuple*> tupleList = GetAllTuples;
+    for(Tuple* t : tupleList) {
+        bf.program(t.key);
+    }
+
+
+    return bf;
 }

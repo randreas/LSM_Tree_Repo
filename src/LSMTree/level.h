@@ -7,9 +7,9 @@
 
 #include "run.h"
 #include "FileMeta.h"
-#include "fencePointer.h.
+#include "fencePointer.h"
 #include <vector>
-
+#include "const.h"
 
 /** Class for levels in LSM tree
  *  Store kv pairs in txt files
@@ -28,7 +28,12 @@ private:
     void createAndInsertNewFileMeta();
 
 public:
+    
+    //BloomFilter per Level
+    BF::BloomFilter* bloomFilter;
+
     //Maximum number of dataBlocks per level
+
     const size_t MAX_RUN_NUM;
 
     const size_t MAX_TUPLE_NUM_IN_RUN;
@@ -41,6 +46,7 @@ public:
     explicit Level(int max_run_num, int max_tuple_num_in_run, int lvlID) : MAX_RUN_NUM(max_run_num), MAX_TUPLE_NUM_IN_RUN(max_tuple_num_in_run) {
         this->dataBlocks = std::vector<FileMeta*>();
         this->lvlID = lvlID;
+        this->bloomFilter = createNewBloomFilter();
     }
 
     //If this level is saturated, no more tuples can be inserted
@@ -72,6 +78,10 @@ public:
 
     //Merges the entire level, return pointer of a merged run
     Run* merge();
+
+    vector<Tuple*> GetAllTuples();
+
+    BloomFilter* createBloomFilter();
 
 };
 

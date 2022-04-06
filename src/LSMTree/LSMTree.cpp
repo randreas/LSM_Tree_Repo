@@ -39,10 +39,17 @@ Tuple* LSMTree::query(int key) {
 
     int ind;
     for (Level *curLevel: levels) {
-        ind = curLevel->containsKey(key);
-        if (ind >= 0) {
-            return curLevel->getRunByFileMetaAtIndex(ind)->query(key);
+
+        //RA todo
+        //Check bloomFilter
+        if(level->bloomFilter->query(key)) {
+            ind = curLevel->containsKey(key);
+            if (ind >= 0) {
+                return curLevel->getRunByFileMetaAtIndex(ind)->query(key);
+            }
         }
+
+        
     }
 
     // if not found, return a tuple with delete flag

@@ -71,3 +71,9 @@ FileMeta::~FileMeta() {
         remove(filePath.c_str());
     }
 }
+
+//RA Todo
+vector<Tuple*> FileMeta::GetAllTuples() {
+    Run* run =  getRun();
+    return run->getTuples();
+}
