@@ -6,7 +6,7 @@
 #include <climits>
 #include <cmath>
 
-#include "../tuple.h"
+#include "tuple.h"
 
 struct Zone
 {

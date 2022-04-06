@@ -30,7 +30,7 @@ private:
 public:
     
     //BloomFilter per Level
-    BF::BloomFilter* bloomFilter;
+//    BF::BloomFilter* bloomFilter;
 
     //Maximum number of dataBlocks per level
 
@@ -46,7 +46,7 @@ public:
     explicit Level(int max_run_num, int max_tuple_num_in_run, int lvlID) : MAX_RUN_NUM(max_run_num), MAX_TUPLE_NUM_IN_RUN(max_tuple_num_in_run) {
         this->dataBlocks = std::vector<FileMeta*>();
         this->lvlID = lvlID;
-        this->bloomFilter = createNewBloomFilter();
+//        this->bloomFilter = createNewBloomFilter();
     }
 
     //If this level is saturated, no more tuples can be inserted
@@ -81,7 +81,7 @@ public:
 
     vector<Tuple*> GetAllTuples();
 
-    BloomFilter* createBloomFilter();
+//    BloomFilter* createBloomFilter();
 
 };
 

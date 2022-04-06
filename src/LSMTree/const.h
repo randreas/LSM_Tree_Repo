@@ -12,14 +12,14 @@ File to store Constants
 #define MAX_TUPLE_VALUES_CNTS   2 /// The number of values per tuple
 
 
-inline int getBFNumTuples() {
-    return BF_NUM_TUPLES;
-}
-
-inline int getBFBitsPerElement() {
-    return BF_BITS_PER_ELEMENT;
-}
-
-inline int getTupleBytesSize() {
-	return (MAX_TUPLE_KEYS_CNTS + MAX_TUPLE_VALUES_CNTS) * SIZEOFINT;
-}
+//inline int getBFNumTuples() {
+//    return BF_NUM_TUPLES;
+//}
+//
+//inline int getBFBitsPerElement() {
+//    return BF_BITS_PER_ELEMENT;
+//}
+//
+//inline int getTupleBytesSize() {
+//	return (MAX_TUPLE_KEYS_CNTS + MAX_TUPLE_VALUES_CNTS) * SIZEOFINT;
+//}
