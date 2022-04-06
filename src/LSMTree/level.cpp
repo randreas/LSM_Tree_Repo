@@ -118,7 +118,7 @@ void Level::createAndInsertNewFileMeta() {
 vector<Tuple*> Level::GetAllTuples() {
     vector<Tuple*> result;
     for (auto & dataBlock : dataBlocks) {
-        DEBUG_LOG(std::string("getting tuples from #") + dataBlock->getFilePath());
+//        DEBUG_LOG(std::string("getting tuples from #") + dataBlock->getFilePath());
         auto tuples = dataBlock->GetAllTuples();
         result.insert(result.end(), tuples.begin(), tuples.end());
     }
@@ -126,14 +126,14 @@ vector<Tuple*> Level::GetAllTuples() {
 }
 
 
-//RA Todo
-BloomFilter Level::createBloomFilter() {
-    BloomFilter bf = new BloomFilter::BloomFilter(BF_NUM_TUPLES, BF_BITS_PER_ELEMENT);
-    vector<Tuple*> tupleList = GetAllTuples;
-    for(Tuple* t : tupleList) {
-        bf.program(t.key);
-    }
-
-
-    return bf;
-}
+////RA Todo
+//BloomFilter Level::createBloomFilter() {
+//    BloomFilter bf = new BloomFilter::BloomFilter(BF_NUM_TUPLES, BF_BITS_PER_ELEMENT);
+//    vector<Tuple*> tupleList = GetAllTuples;
+//    for(Tuple* t : tupleList) {
+//        bf.program(t.key);
+//    }
+//
+//
+//    return bf;
+//}
