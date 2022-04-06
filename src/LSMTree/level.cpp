@@ -40,7 +40,11 @@ void Level::addTuple(Tuple *tuple) {
 }
 
 int Level::containsKey(int key) {
-    for (int i = dataBlocks.size()-1; i>=0; i--) {
+    std::vector<int> possibleZones = fp->query(key);
+    if (possibleZones.size() == 0) {
+        return -1
+    }
+    for (int i : possibleZones) {
         Run* curRun = getRunByFileMetaAtIndex(i);
         if (curRun->containsKey(key)) {
             return i;

@@ -7,6 +7,7 @@
 
 #include "run.h"
 #include "FileMeta.h"
+#include "fencePointer.h.
 #include <vector>
 
 
@@ -34,6 +35,8 @@ public:
 
     //Level ID: for file name generation
     unsigned int lvlID;
+
+    FencePointer *fp;
 
     explicit Level(int max_run_num, int max_tuple_num_in_run, int lvlID) : MAX_RUN_NUM(max_run_num), MAX_TUPLE_NUM_IN_RUN(max_tuple_num_in_run) {
         this->dataBlocks = std::vector<FileMeta*>();

@@ -12,6 +12,8 @@
 #include "./LSMTree.h"
 #include "./tuple.h"
 
+class KeyException : public exception {};
+
 using namespace std;
 
 void printIntVector(vector<int> v) {
@@ -36,9 +38,7 @@ void executeCommand(LSMTree* lsmTree, string command) {
     if (elements.size() < 2) {
         return;
     }
-    
-    int key;
-    key = stoi(elements[1]);
+
     if (elements[0] == "I") {
         vector<int> values;
         for (string cur_e : vector<string>(elements.begin() + 2, elements.end())) {
@@ -60,7 +60,20 @@ void executeCommand(LSMTree* lsmTree, string command) {
             cout << "Q with incorrect size\n";
             return;
         }
+        int key = stoi(elements[1]);
+        cout << "---------------------------------------\n";
         cout << "Point query " << "key: " << key << "\n";
+        // execute
+        Tuple* resultTuple = lsmTree->query(key);
+        if (resultTuple->key != key) {
+            throw KeyException;
+        }
+        if (resultTuple->isDeleteMarker()) {
+            cout << "query result : key: " << key << " not in the lsm tree, not entered or deleted" << "\n";
+        } else {
+            cout << "query result : key: " << key << " value: " << resultTuple->getValue() << "\n";
+        }
+
         // TODO execute
     } else if (elements[0] == "S") {
         if (elements.size() != 3) {
@@ -76,8 +89,12 @@ void executeCommand(LSMTree* lsmTree, string command) {
             cout << "D with incorrect size\n";
             return;
         }
+        int key = stoi(elements[1]);
+        cout << "---------------------------------------\n";
         cout << "Delete " << "key: " << key << "\n";
-        // TODO execute
+        // execute
+        lsmTree->addTuple(new Tuple(key, Value(false)));
+        cout << "delete; addtuple finished\n";
     }
 }
 
