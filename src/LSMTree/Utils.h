@@ -12,6 +12,7 @@
 
 FileMeta *createFileMetaFromRun(size_t lvlID, size_t newBlockIdx, Run* run) {
     //TODO: Replace with binary file
+    cout << "in create filemeta from run\n";
     stringstream ss;
     ss << "level-";
     ss << lvlID;
@@ -24,6 +25,8 @@ FileMeta *createFileMetaFromRun(size_t lvlID, size_t newBlockIdx, Run* run) {
     if (FILE *file = fopen(path, "r")) {
         fclose(file);
         remove(path);
+    } else {
+        cout << "unable to open file, previous file does not exist\n";
     }
 
     ofstream newFile(newFilePath);
@@ -35,8 +38,10 @@ FileMeta *createFileMetaFromRun(size_t lvlID, size_t newBlockIdx, Run* run) {
         str += "\n";
         newFile << str;
     }
-    auto* newFileMeta = new FileMeta(newFilePath, run->MAX_TUPLE_NUM);
     newFile.close();
+    cout << "finished writing to new file\n";
+    auto* newFileMeta = new FileMeta(newFilePath, run->MAX_TUPLE_NUM);
+    cout << "created new file meta\n";
     return newFileMeta;
 }
 
