@@ -7,6 +7,8 @@
 #include <cmath>
 
 #include "tuple.h"
+#include "FileMeta.h"
+
 
 struct Zone
 {

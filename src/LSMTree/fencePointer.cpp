@@ -34,7 +34,7 @@ std::vector<int> FencePointer::query(int low, int high) {
 
 void FencePointer::addNewZone(FileMeta *fm) {
     if (zones.size() >= num_zones) {
-        throw FencePointerException;
+        throw FencePointerException();
     }
 
     num_zones++;
@@ -49,20 +49,20 @@ void FencePointer::addNewZone(FileMeta *fm) {
 
 // shall not be used
 void FencePointer::addTuple(int index, Tuple* tuple) {
-    throw FencePointerException;
+    throw FencePointerException();
     if (index >= zones.size()) {
-        throw FencePointerException;
+        throw FencePointerException();
     }
 
-    if (tuple->key > zones[i].max) {
-        zones[i].max = tuple->key;
+    if (tuple->key > zones[index].max) {
+        zones[index].max = tuple->key;
     }
-    if (tuple->key < zones[i].min) {
-        zones[i].min = tuple->key;
+    if (tuple->key < zones[index].min) {
+        zones[index].min = tuple->key;
     }
 }
 
 void FencePointer::clear() {
     num_zones = 0;
-    zones.clear()
+    zones.clear();
 }

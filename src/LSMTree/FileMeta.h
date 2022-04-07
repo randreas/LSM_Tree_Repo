@@ -12,11 +12,10 @@
 using namespace std;
 
 class FileMeta {
-private:
+public:
     int size;
     int minKey, maxKey;
 
-public:
     const size_t MAX_TUPLE_NUM;
 
     explicit FileMeta(string filePath, size_t max_tuple_num) : MAX_TUPLE_NUM(max_tuple_num) {

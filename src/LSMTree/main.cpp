@@ -40,6 +40,7 @@ void executeCommand(LSMTree* lsmTree, string command) {
     }
 
     if (elements[0] == "I") {
+        int key = stoi(elements[1]);
         vector<int> values;
         for (string cur_e : vector<string>(elements.begin() + 2, elements.end())) {
             values.push_back(stoi(cur_e));
@@ -66,12 +67,14 @@ void executeCommand(LSMTree* lsmTree, string command) {
         // execute
         Tuple* resultTuple = lsmTree->query(key);
         if (resultTuple->key != key) {
-            throw KeyException;
+            throw KeyException();
         }
         if (resultTuple->isDeleteMarker()) {
             cout << "query result : key: " << key << " not in the lsm tree, not entered or deleted" << "\n";
         } else {
-            cout << "query result : key: " << key << " value: " << resultTuple->getValue() << "\n";
+            cout << "query result : key: " << key << " value: ";
+            resultTuple->getValue().printValue();
+            cout<< "\n";
         }
 
         // TODO execute
