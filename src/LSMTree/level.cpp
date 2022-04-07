@@ -9,6 +9,7 @@
 #include <cstdlib>
 #include <sstream>
 #include <fstream>
+#include "../BloomFilter/BloomFilter.h"
 
 bool Level::isFull() {
     cout << "in is full\n";
@@ -128,13 +129,13 @@ vector<Tuple*> Level::GetAllTuples() {
 
 
 ////RA Todo
-// BF::BloomFilter* Level::createBloomFilter() {
-//    BF::BloomFilter* bf = new BF::BloomFilter(BF_NUM_TUPLES, BF_BITS_PER_ELEMENT);
-//    vector<Tuple*> tupleList = GetAllTuples();
-//    for(Tuple* t : tupleList) {
-//        bf->program(std::to_string(t->getKey()));
-//    }
+BloomFilter* Level::createBloomFilter() {
+    auto* bf = new BloomFilter(BF_NUM_TUPLES, BF_BITS_PER_ELEMENT);
+    vector<Tuple*> tupleList = GetAllTuples();
+    for(Tuple* t : tupleList) {
+        bf->program(reinterpret_cast<const char *>(t->key));
+    }
 
 
-//    return bf;
-// }
+    return bf;
+}

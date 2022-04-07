@@ -1,10 +1,13 @@
+#ifndef BF_H
+#define BF_H
+
 #include <vector>
 #include <string>
 #include <math.h>
 
 using namespace std;
 
-namespace BF{
+//using namespace BF {
 
 class BloomFilter {
 public:
@@ -27,4 +30,5 @@ private:
 	void getIndex( string key, vector<int>* index );
 };
 
-} // namespace BF
+//} // namespace BF
+#endif

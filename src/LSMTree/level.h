@@ -11,6 +11,7 @@
 #include "../BloomFilter/BloomFilter.h"
 #include <vector>
 #include "const.h"
+#include "../BloomFilter/BloomFilter.h"
 
 /** Class for levels in LSM tree
  *  Store kv pairs in txt files
@@ -31,7 +32,7 @@ private:
 public:
     
     //BloomFilter per Level
-    BF::BloomFilter* bloomFilter;
+    BloomFilter* bloomFilter;
 
     //Maximum number of dataBlocks per level
 
@@ -82,8 +83,9 @@ public:
 
     vector<Tuple*> GetAllTuples();
 
-    BF::BloomFilter* createBloomFilter();
+    BloomFilter* createBloomFilter();
 
+    //BloomFilter* createBloomFilter();
 };
 
 class LevelFullException : public exception {

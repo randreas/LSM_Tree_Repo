@@ -3,8 +3,6 @@
 
 #include "BloomFilter/BloomFilter.h"
 
-using namespace BF;
-
 void queryTest( BloomFilter *bf,  string key ){
 	bool result = bf->query( key );
 	string result_str = (result)? "positive" : "negative";

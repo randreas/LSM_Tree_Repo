@@ -2,7 +2,6 @@
 #include "murmurhash.h"
 
 using namespace std;
-using namespace BF;
 
 BloomFilter::BloomFilter(){
 	numElement = 1024;
