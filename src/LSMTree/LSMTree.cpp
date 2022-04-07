@@ -26,10 +26,14 @@ void LSMTree::addTuple(Tuple* tuple) {
         cout << "run merged\n";
         push_run->printRun();
         mergeNMove(0, push_run);
-        cout << "finished merge and move\n";
+        //cout << "finished merge and move\n";
         //remove(const_cast<char*>(bufferFile->filePath.c_str()));
         buffer->shallowClear();
-    } else buffer->addTuple(tuple);
+    } else {
+        buffer->addTuple(tuple);
+        cout << "Buffer after insert: \n";
+        buffer->printRun();
+    }
 }
 
 Tuple* LSMTree::query(int key) {
@@ -61,19 +65,20 @@ void LSMTree::mergeNMove(int idx, Run* newRun) {
 }
 
 void LSMTree::moveToLevelAtIdxRecurse(int idx, Run* newRun) {
-    cout << "in move to level\n";
+    //cout << "in move to level\n";
     if (idx == levels.size()) {
-        cout << "here1\n";
-        int newRunSize = idx == 0 ? initial_run_size : (levels[levels.size() - 1]->MAX_TUPLE_NUM_IN_RUN + 1) * num_run_per_level;
-        cout << newRunSize << "\n";
+        //cout << "here1\n";
+        int newRunSize = idx == 0 ? newRun->MAX_TUPLE_NUM : (levels[levels.size() - 1]->MAX_TUPLE_NUM_IN_RUN + 1) * num_run_per_level;
+        //cout << newRunSize << "\n";
         int lvlId = levels.size();
-        cout << lvlId << "\n";
+        //cout << lvlId << "\n";
         levels.push_back(new Level(num_run_per_level, newRunSize, lvlId));
-        cout << levels.size() << "\n";
+        //cout << levels.size() << "\n";
         levels[lvlId]->addRunFileMeta(createFileMetaFromRun(lvlId, 0, newRun));
         //delete newRun;
+        cout << "level of size: " << levels.size() << "\n";
     } else {
-        cout << "here2\n";
+        //cout << "here2\n";
         Level *lvl = levels[idx];
         if (!lvl->isFull()) {
             lvl->addRunFileMeta(createFileMetaFromRun(idx, lvl->getCurrentSize(), newRun));

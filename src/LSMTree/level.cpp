@@ -12,10 +12,10 @@
 #include "../BloomFilter/BloomFilter.h"
 
 bool Level::isFull() {
-    cout << "in is full\n";
+    cout << "in isfull\n";
     cout << dataBlocks.size() << "\n";
     cout << MAX_RUN_NUM << "\n";
-    return dataBlocks.size() == MAX_RUN_NUM && dataBlocks[MAX_RUN_NUM - 1]->isFull();
+    return dataBlocks.size() == MAX_RUN_NUM;
 }
 
 Run *Level::getRun(int idx) {
