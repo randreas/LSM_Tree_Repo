@@ -8,6 +8,7 @@
 #include "run.h"
 #include "FileMeta.h"
 #include "fencePointer.h"
+#include "../BloomFilter/BloomFilter.h"
 #include <vector>
 #include "const.h"
 
@@ -30,7 +31,7 @@ private:
 public:
     
     //BloomFilter per Level
-//    BF::BloomFilter* bloomFilter;
+    BF::BloomFilter* bloomFilter;
 
     //Maximum number of dataBlocks per level
 
@@ -81,7 +82,7 @@ public:
 
     vector<Tuple*> GetAllTuples();
 
-//    BloomFilter* createBloomFilter();
+    BF::BloomFilter* createBloomFilter();
 
 };
 

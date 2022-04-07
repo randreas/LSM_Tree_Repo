@@ -4,6 +4,7 @@
 
 #include "level.h"
 #include "run.h"
+#include "const.h"
 #include <cstdio>
 #include <cstdlib>
 #include <sstream>
@@ -127,13 +128,13 @@ vector<Tuple*> Level::GetAllTuples() {
 
 
 ////RA Todo
-//BloomFilter Level::createBloomFilter() {
-//    BloomFilter bf = new BloomFilter::BloomFilter(BF_NUM_TUPLES, BF_BITS_PER_ELEMENT);
-//    vector<Tuple*> tupleList = GetAllTuples;
+// BF::BloomFilter* Level::createBloomFilter() {
+//    BF::BloomFilter* bf = new BF::BloomFilter(BF_NUM_TUPLES, BF_BITS_PER_ELEMENT);
+//    vector<Tuple*> tupleList = GetAllTuples();
 //    for(Tuple* t : tupleList) {
-//        bf.program(t.key);
+//        bf->program(std::to_string(t->getKey()));
 //    }
-//
-//
+
+
 //    return bf;
-//}
+// }
