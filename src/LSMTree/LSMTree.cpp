@@ -42,12 +42,12 @@ Tuple* LSMTree::query(int key) {
 
         //RA todo
         //Check bloomFilter
-        if(level->bloomFilter->query(key)) {
+//        if(curLevel->bloomFilter->query(key)) {
             ind = curLevel->containsKey(key);
             if (ind >= 0) {
                 return curLevel->getRunByFileMetaAtIndex(ind)->query(key);
             }
-        }
+//        }
 
         
     }

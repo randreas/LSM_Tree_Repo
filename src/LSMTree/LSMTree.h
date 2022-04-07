@@ -44,6 +44,4 @@ private:
     void moveToLevelAtIdxRecurse(int idx, Run *newRun);
 };
 
-class FencePointerException : public exception {};
-
 #endif
