@@ -1,4 +1,16 @@
-"C:\Program Files\JetBrains\CLion 2021.3.4\bin\cmake\win\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug "-DCMAKE_MAKE_PROGRAM=C:/Program Files/JetBrains/CLion 2021.3.4/bin/ninja/win/ninja.exe" -G Ninja C:\Users\xingk\Documents\github\LSM_Tree_Repo
+/snap/clion/184/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/jingyusu/Desktop/BU_Courses/SP2022/CS561/Projects/Final_proj/LSM_Tree_Repo
+-- The C compiler identification is GNU 9.4.0
+-- The CXX compiler identification is GNU 9.4.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
 CMake Deprecation Warning at CMakeLists.txt:1 (cmake_minimum_required):
   Compatibility with CMake < 2.8.12 will be removed from a future version of
   CMake.
@@ -7,16 +19,33 @@ CMake Deprecation Warning at CMakeLists.txt:1 (cmake_minimum_required):
   CMake that the project does not need compatibility with older versions.
 
 
-CMake Error: CMake was unable to find a build program corresponding to "Ninja".  CMAKE_MAKE_PROGRAM is not set.  You probably need to select a different build tool.
--- Configuring incomplete, errors occurred!
-See also "C:/Users/xingk/Documents/github/LSM_Tree_Repo/cmake-build-debug/external/googletest-download/CMakeFiles/CMakeOutput.log".
-The parameter is incorrect
-CMake Error: Generator: execution of make failed. Make command was:  && 
-CMake Error at CMakeLists.txt:37 (add_subdirectory):
-  add_subdirectory given source
-  "C:/Users/xingk/Documents/github/LSM_Tree_Repo/cmake-build-debug/external/googletest-src"
-  which is not an existing directory.
-
-
--- Configuring incomplete, errors occurred!
-See also "C:/Users/xingk/Documents/github/LSM_Tree_Repo/cmake-build-debug/CMakeFiles/CMakeOutput.log".
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/jingyusu/Desktop/BU_Courses/SP2022/CS561/Projects/Final_proj/LSM_Tree_Repo/cmake-build-debug/external/googletest-download
+[ 11%] Creating directories for 'googletest'
+[ 22%] Performing download step (git clone) for 'googletest'
+Cloning into 'googletest-src'...
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+[ 33%] Performing update step for 'googletest'
+HEAD is now at 5f467ec0 Clarify what live-at-head actually means
+[ 44%] No patch step for 'googletest'
+[ 55%] No configure step for 'googletest'
+[ 66%] No build step for 'googletest'
+[ 77%] No install step for 'googletest'
+[ 88%] No test step for 'googletest'
+[100%] Completed 'googletest'
+[100%] Built target googletest
+-- Found Python: /usr/bin/python3.8 (found version "3.8.10") found components: Interpreter 
+-- Looking for pthread.h
+-- Looking for pthread.h - found
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+-- Looking for pthread_create in pthreads
+-- Looking for pthread_create in pthreads - not found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - found
+-- Found Threads: TRUE  
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/jingyusu/Desktop/BU_Courses/SP2022/CS561/Projects/Final_proj/LSM_Tree_Repo/cmake-build-debug
