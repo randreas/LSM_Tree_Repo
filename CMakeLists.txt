@@ -15,6 +15,9 @@ set(bloomfilter_lib
 add_library(${PROJECT_NAME} ${templatedb_lib})
 target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/src)
 
+add_library(BF ${bloomfilter_lib})
+target_include_directories(BF PUBLIC ${PROJECT_SOURCE_DIR}/src)
+
 include_directories(external)
 
 configure_file(external/CMakeLists.txt.in external/googletest-download/CMakeLists.txt)
