@@ -13,7 +13,6 @@
 const int SIZE_OF_INT = sizeof(int);
 
 FileMeta *createFileMetaFromRun(size_t lvlID, size_t newBlockIdx, Run* run) {
-    //TODO: Replace with binary file
     cout << "in create filemeta from run\n";
     stringstream ss;
     ss << "level-";

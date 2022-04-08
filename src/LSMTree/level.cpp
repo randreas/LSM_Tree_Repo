@@ -59,11 +59,15 @@ int Level::containsKey(int key) {
 
 
 Run *Level::merge() {
+    cout << "in merge\n";
     Run* initRun = new Run((MAX_RUN_NUM + 1) * MAX_TUPLE_NUM_IN_RUN);
+    cout << "created new run\n";
     for (FileMeta* fm : dataBlocks) {
         initRun->merge(fm->getRun());
     }
+    cout << "merged\n";
     clear();
+    cout << "cleared\n";
     //RA todo recreate bloomfilter
     return initRun;
 }

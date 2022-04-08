@@ -84,7 +84,11 @@ void LSMTree::moveToLevelAtIdxRecurse(int idx, Run* newRun) {
             lvl->addRunFileMeta(createFileMetaFromRun(idx, lvl->getCurrentSize(), newRun));
             //delete newRun;
         } else {
+            cout << "level " << lvl->lvlID << " is full\n";
             Run* mergedResult = lvl->merge();
+            cout << "level merged\n";
+            cout << "level " << lvl->lvlID << " merged result:\n";
+            mergedResult->printRun();
             mergedResult->merge(newRun);
             moveToLevelAtIdxRecurse(idx + 1, mergedResult);
         }
