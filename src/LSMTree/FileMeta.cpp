@@ -11,31 +11,33 @@
 #include "run.h"
 
 Run *FileMeta::getRun() {
-    ifstream inFile;
-    inFile.open(filePath, ios::in);
+    ifstream *inFile = nullptr;
+    inFile->open(filePath, ios::in|ios::binary);
     Run* run = new Run(MAX_TUPLE_NUM);
-    string s;
-    while ( getline(inFile,s) ) {
-        stringstream strStream(s);
-        string temp;
+    //Read # of tuple from file
+    int tupleCnt;
+    inFile->read(reinterpret_cast<char *>(&tupleCnt), sizeof tupleCnt);
+    for (int i = 0; i < tupleCnt; i++) {
+        int offset = sizeof(int) * (i + 1);
+        int nextTupleOffset = sizeof(int) * (i + 2);
+        inFile->seekg(offset);
+        //Read key from file
         int key;
+        inFile->read(reinterpret_cast<char *>(&key), sizeof(int));
+        offset += sizeof(int);
+        //Read val items from file
         Value val;
-        bool readKey = false;
-        while (getline(strStream, temp, ' ')) {
-            if (temp.compare("\n") == 0) {
-                break;
-            }
-            if (!readKey) {
-                readKey = true;
-                key = stoi(temp);
-            } else {
-                val.items.push_back(stoi(temp));
-            }
+        while (offset < nextTupleOffset) {
+            int valItem;
+            inFile->seekg(offset);
+            inFile->read(reinterpret_cast<char *>(&valItem), sizeof(int));
+            val.items.push_back(valItem);
+            offset += sizeof(int);
         }
         auto* newTuple = new Tuple(key, val);
         run->addTuple(newTuple);
     }
-    inFile.close();
+    inFile->close();
     return run;
 }
 
@@ -43,18 +45,20 @@ bool FileMeta::isFull() const {
     return MAX_TUPLE_NUM == size;
 }
 
+/*Deprecated
 void FileMeta::appendTupleToFile(Tuple *tuple) {
-    //TODO: change this
     if (isFull()) {
         throw RunFullException();
     } else {
-        ofstream file(filePath);
-        string str = itoa(tuple->key) + " ";
+        ofstream file(filePath, ios::out|ios::binary);
+        file << tuple->key;
+        //string str = itoa(tuple->key) + " ";
         for (int val : tuple->value.items) {
-            str += itoa(tuple->key) + " ";
+            //str += itoa(tuple->key) + " ";
+            file << val;
         }
-        str += "\n";
-        file << str;
+        //str += "\n";
+        //file << str;
         size++;
         if (tuple->key > maxKey) {
             maxKey = tuple->key;
@@ -64,6 +68,7 @@ void FileMeta::appendTupleToFile(Tuple *tuple) {
         }
     }
 }
+ */
 
 FileMeta::~FileMeta() {
     if (FILE *file = fopen(const_cast<char*>(filePath.c_str()), "r")) {
