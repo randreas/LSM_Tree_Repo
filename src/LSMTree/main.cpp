@@ -1,3 +1,4 @@
+
 //
 // Created by xingk on 3/22/2022.
 //
@@ -52,7 +53,7 @@ void executeCommand(LSMTree* lsmTree, string command) {
         // execute
         lsmTree->addTuple(new Tuple(key, Value(values)));
         cout << "addtuple finished\n";
-        lsmTree->buffer->printRun();
+        //lsmTree->buffer->printRun();
         if (lsmTree->buffer == nullptr) {
             cout << "buffer is null\n";
         }
@@ -144,8 +145,10 @@ int main(int argc, char *argv[])
     lsmTree->buffer->printRun();
 
     // read and execute workload file
+    /*
     cout << "Start reading and executing workload file\n";
     executeQueryFile(lsmTree, workloadFilePath);
+     */
 
     return 0;
 }
