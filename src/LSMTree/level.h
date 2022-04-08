@@ -11,7 +11,6 @@
 #include "../BloomFilter/BloomFilter.h"
 #include <vector>
 #include "const.h"
-#include "../BloomFilter/BloomFilter.h"
 
 /** Class for levels in LSM tree
  *  Store kv pairs in txt files
@@ -83,9 +82,8 @@ public:
 
     vector<Tuple*> GetAllTuples();
 
-    BloomFilter* createBloomFilter();
+    void createBloomFilter();
 
-    //BloomFilter* createBloomFilter();
 };
 
 class LevelFullException : public exception {

@@ -63,6 +63,7 @@ Run *Level::merge() {
     }
     clear();
     //RA todo recreate bloomfilter
+    createBloomFilter();
     return initRun;
 }
 
@@ -94,6 +95,7 @@ void Level::addRunFileMeta(FileMeta *fm) {
     }
 
     //RA todo recreate bloomfilter
+    createBloomFilter();
 }
 
 Run *Level::getRunByFileMetaAtIndex(int idx) {
@@ -129,13 +131,11 @@ vector<Tuple*> Level::GetAllTuples() {
 
 
 ////RA Todo
-BloomFilter* Level::createBloomFilter() {
+void Level::createBloomFilter() {
     auto* bf = new BloomFilter(BF_NUM_TUPLES, BF_BITS_PER_ELEMENT);
     vector<Tuple*> tupleList = GetAllTuples();
     for(Tuple* t : tupleList) {
         bf->program(reinterpret_cast<const char *>(t->key));
     }
-
-
-    return bf;
+    bloomFilter = bf;
 }
