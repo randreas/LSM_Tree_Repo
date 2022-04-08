@@ -10,32 +10,44 @@
 #include "tuple.h"
 #include "run.h"
 
+const int SIZE_OF_INT = sizeof(int);
+
 Run *FileMeta::getRun() {
-    ifstream inFile;
-    inFile.open(filePath, ios::in);
+    cout << "in getRun of file " << filePath << "\n";
+    ifstream *inFile = new ifstream (filePath, ios::in|ios::binary);
     Run* run = new Run(MAX_TUPLE_NUM);
-    string s;
-    while ( getline(inFile,s) ) {
-        stringstream strStream(s);
-        string temp;
+    //Read # of tuple from file
+    int tupleCnt;
+    inFile->read(reinterpret_cast<char *>(&tupleCnt), SIZE_OF_INT);
+    for (int i = 0; i < tupleCnt; i++) {
+        cout << "tuple " << i << "\n";
+        inFile->seekg(sizeof(int) * (i + 1));
+        int offset;
+        inFile->read(reinterpret_cast<char *>(&offset), SIZE_OF_INT);
+        inFile->seekg(sizeof(int) * (i + 2));
+        int nextTupleOffset;
+        inFile->read(reinterpret_cast<char *>(&nextTupleOffset), SIZE_OF_INT);
+        cout << "offset: " << offset << ", next offset: " << nextTupleOffset << "\n";
+        inFile->seekg(offset);
+        //Read key from file
         int key;
+        inFile->read(reinterpret_cast<char *>(&key), SIZE_OF_INT);
+        offset += SIZE_OF_INT;
+        //Read val items from file
         Value val;
-        bool readKey = false;
-        while (getline(strStream, temp, ' ')) {
-            if (temp.compare("\n") == 0) {
-                break;
-            }
-            if (!readKey) {
-                readKey = true;
-                key = stoi(temp);
-            } else {
-                val.items.push_back(stoi(temp));
-            }
+        while (offset < nextTupleOffset) {
+            int valItem;
+            inFile->seekg(offset);
+            inFile->read(reinterpret_cast<char *>(&valItem), SIZE_OF_INT);
+            val.items.push_back(valItem);
+            offset += SIZE_OF_INT;
         }
         auto* newTuple = new Tuple(key, val);
         run->addTuple(newTuple);
     }
-    inFile.close();
+    cout << "generated run: \n";
+    run->printRun();
+    inFile->close();
     return run;
 }
 
@@ -43,18 +55,20 @@ bool FileMeta::isFull() const {
     return MAX_TUPLE_NUM == size;
 }
 
+/*Deprecated
 void FileMeta::appendTupleToFile(Tuple *tuple) {
-    //TODO: change this
     if (isFull()) {
         throw RunFullException();
     } else {
-        ofstream file(filePath);
-        string str = itoa(tuple->key) + " ";
+        ofstream file(filePath, ios::out|ios::binary);
+        file << tuple->key;
+        //string str = itoa(tuple->key) + " ";
         for (int val : tuple->value.items) {
-            str += itoa(tuple->key) + " ";
+            //str += itoa(tuple->key) + " ";
+            file << val;
         }
-        str += "\n";
-        file << str;
+        //str += "\n";
+        //file << str;
         size++;
         if (tuple->key > maxKey) {
             maxKey = tuple->key;
@@ -64,6 +78,7 @@ void FileMeta::appendTupleToFile(Tuple *tuple) {
         }
     }
 }
+ */
 
 FileMeta::~FileMeta() {
     if (FILE *file = fopen(const_cast<char*>(filePath.c_str()), "r")) {

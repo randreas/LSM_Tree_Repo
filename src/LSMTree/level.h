@@ -28,6 +28,9 @@ private:
     //Add a mew empty file meta
     void createAndInsertNewFileMeta();
 
+    //Get the offset of first tuple in data file
+    int getFirstTupleOffsetinBlock() const;
+
 public:
     
     //BloomFilter per Level
@@ -71,8 +74,8 @@ public:
     //Add a file meta to the level. Happens when the upper level merges.
     void addRunFileMeta(FileMeta* fm);
 
-    //Add a tuple
-    void addTuple(Tuple* tuple);
+    //Add a tuple, Deprecated
+    //void addTuple(Tuple* tuple);
 
     //Get run of FileMeta at index idx
     Run* getRunByFileMetaAtIndex(int idx);

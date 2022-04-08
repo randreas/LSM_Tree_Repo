@@ -26,6 +26,7 @@ size_t Level::getCurrentSize() {
     return dataBlocks.size();
 }
 
+/* Deprecated
 void Level::addTuple(Tuple *tuple) {
     if (isFull()) {
         throw LevelFullException();
@@ -40,6 +41,7 @@ void Level::addTuple(Tuple *tuple) {
         dataBlocks[dataBlocks.size() - 1]->appendTupleToFile(tuple);
     }
 }
+ */
 
 int Level::containsKey(int key) {
     std::vector<int> possibleZones = fp->query(key);
@@ -57,11 +59,15 @@ int Level::containsKey(int key) {
 
 
 Run *Level::merge() {
+    cout << "in merge\n";
     Run* initRun = new Run((MAX_RUN_NUM + 1) * MAX_TUPLE_NUM_IN_RUN);
+    cout << "created new run\n";
     for (FileMeta* fm : dataBlocks) {
         initRun->merge(fm->getRun());
     }
+    cout << "merged\n";
     clear();
+    cout << "cleared\n";
     //RA todo recreate bloomfilter
     createBloomFilter();
     return initRun;
@@ -102,6 +108,7 @@ Run *Level::getRunByFileMetaAtIndex(int idx) {
     return getDataMeta(idx)->getRun();
 }
 
+//32 bit cnt, max#of tuples offset
 void Level::createAndInsertNewFileMeta() {
     stringstream ss;
     ss << "./";
@@ -109,14 +116,19 @@ void Level::createAndInsertNewFileMeta() {
     ss << lvlID;
     ss << "-block-";
     ss << dataBlocks.size();
-    ss << ".txt";
+    ss << ".bin";
     string newFilePath = ss.str();
-    ofstream newFile(newFilePath);
+    ofstream newFile(newFilePath, ios::out|ios::binary);
+    int tupleCnt = 0;
+    newFile << tupleCnt;
+    newFile << getFirstTupleOffsetinBlock();
     newFile.close();
     addRunFileMeta(new FileMeta(newFilePath, MAX_TUPLE_NUM_IN_RUN));
 }
 
-
+int Level::getFirstTupleOffsetinBlock() const {
+    return sizeof(int) * (1 + MAX_TUPLE_NUM_IN_RUN);
+}
 
 //RA Todo
 vector<Tuple*> Level::GetAllTuples() {

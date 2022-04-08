@@ -35,8 +35,8 @@ public:
     //Datablock is full
     bool isFull() const;
 
-    //Append tuple to the end of file
-    void appendTupleToFile(Tuple* tuple);
+    //Append tuple to the end of file, Deprecated
+    //void appendTupleToFile(Tuple* tuple);
 
     string filePath;
 

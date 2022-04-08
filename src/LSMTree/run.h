@@ -38,6 +38,8 @@ public:
     //add tuple to the run, used only in instantiation.
     void addTuple(Tuple* newTuple);
 
+    int getSize();
+
     bool containsKey(int key);
 
     Tuple* query(int key);

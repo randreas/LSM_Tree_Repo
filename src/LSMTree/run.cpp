@@ -114,3 +114,7 @@ void Run::shallowClear() {
 vector<Tuple *> Run::getTuples() {
     return tuples;
 }
+
+int Run::getSize() {
+    return tuples.size();
+}
