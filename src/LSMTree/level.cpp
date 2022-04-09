@@ -44,6 +44,9 @@ void Level::addTuple(Tuple *tuple) {
  */
 
 int Level::containsKey(int key) {
+    if (!curLevel->bloomFilter->query(reinterpret_cast<const char *>(key))) {
+        return -1
+    }
     std::vector<int> possibleZones = fp->query(key);
     if (possibleZones.size() == 0) {
         return -1;

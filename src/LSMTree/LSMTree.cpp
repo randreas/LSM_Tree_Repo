@@ -46,11 +46,9 @@ Tuple* LSMTree::query(int key) {
 
         //RA todo
         //Check bloomFilter
-        if(curLevel->bloomFilter->query(reinterpret_cast<const char *>(key))) {
-            ind = curLevel->containsKey(key);
-            if (ind >= 0) {
-                return curLevel->getRunByFileMetaAtIndex(ind)->query(key);
-            }
+        ind = curLevel->containsKey(key);
+        if (ind >= 0) {
+            return curLevel->getRunByFileMetaAtIndex(ind)->query(key);
         }
 
         
