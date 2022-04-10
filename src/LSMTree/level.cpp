@@ -150,21 +150,16 @@ vector<Tuple*> Level::GetAllTuples() {
 void Level::createBloomFilter() {
     cout << "In create bloom filter\n";
     auto* bf = new BloomFilter(BF_NUM_TUPLES, BF_BITS_PER_ELEMENT);
-    cout << "created empty bf\n";
     vector<Tuple*> tupleList = GetAllTuples();
-    cout << "get all tuples done\n";
     for(Tuple* t : tupleList) {
         if (t == nullptr) {
             cout << "tuple is null!\n";
         } else {
             cout << "tuple key: " << t->key << "\n";
         };
-        cout << "!!!\n";
         int key = t->key;
         cout << reinterpret_cast<const char *>(&key) << "\n";
-        cout << "!!!\n";
         bf->program(reinterpret_cast<const char *>(&key));
-        cout << "tuple programmed!\n";
     }
     cout << "programmed all tuples\n";
     bloomFilter = bf;
