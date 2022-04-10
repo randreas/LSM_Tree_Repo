@@ -64,12 +64,14 @@ void executeCommand(LSMTree* lsmTree, string command) {
         }
         int key = stoi(elements[1]);
         cout << "---------------------------------------\n";
-        cout << "Point query " << "key: " << key << "\n";
+        cout << "Point query key: " << key << "\n";
         // execute
         Tuple* resultTuple = lsmTree->query(key);
+        cout << "gate 0\n";
         if (resultTuple->key != key) {
             throw KeyException();
         }
+        cout << "gate 1\n";
         if (resultTuple->isDeleteMarker()) {
             cout << "query result : key: " << key << " not in the lsm tree, not entered or deleted" << "\n";
         } else {
@@ -77,7 +79,6 @@ void executeCommand(LSMTree* lsmTree, string command) {
             resultTuple->getValue().printValue();
             cout<< "\n";
         }
-
         // TODO execute
     } else if (elements[0] == "S") {
         if (elements.size() != 3) {

@@ -43,19 +43,23 @@ void Level::addTuple(Tuple *tuple) {
  */
 
 int Level::containsKey(int key) {
-    if (!this->bloomFilter->query(reinterpret_cast<const char *>(key))) {
+    cout << "containsKey 0\n";
+    if (!this->bloomFilter->query(reinterpret_cast<const char *>(&key))) {
         return -1;
     }
+    cout << "containsKey 1\n";
     std::vector<int> possibleZones = fp->query(key);
     if (possibleZones.size() == 0) {
         return -1;
     }
+    cout << "containsKey 2\n";
     for (int i : possibleZones) {
         Run* curRun = getRunByFileMetaAtIndex(i);
         if (curRun->containsKey(key)) {
             return i;
         }
     }
+    cout << "containsKey 3\n";
     return -1;
 }
 
