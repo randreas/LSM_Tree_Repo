@@ -43,19 +43,23 @@ void Level::addTuple(Tuple *tuple) {
  */
 
 int Level::containsKey(int key) {
-    if (!this->bloomFilter->query(reinterpret_cast<const char *>(key))) {
+    cout << "containsKey 0\n";
+    if (!this->bloomFilter->query(reinterpret_cast<const char *>(&key))) {
         return -1;
     }
+    cout << "containsKey 1\n";
     std::vector<int> possibleZones = fp->query(key);
     if (possibleZones.size() == 0) {
         return -1;
     }
+    cout << "containsKey 2\n";
     for (int i : possibleZones) {
         Run* curRun = getRunByFileMetaAtIndex(i);
         if (curRun->containsKey(key)) {
             return i;
         }
     }
+    cout << "containsKey 3\n";
     return -1;
 }
 
@@ -153,21 +157,16 @@ vector<Tuple*> Level::GetAllTuples() {
 void Level::createBloomFilter() {
     cout << "In create bloom filter\n";
     auto* bf = new BloomFilter(BF_NUM_TUPLES, BF_BITS_PER_ELEMENT);
-    cout << "created empty bf\n";
     vector<Tuple*> tupleList = GetAllTuples();
-    cout << "get all tuples done\n";
     for(Tuple* t : tupleList) {
-        if (t == nullptr) {
-            cout << "tuple is null!\n";
-        } else {
-            cout << "tuple key: " << t->key << "\n";
-        };
-        cout << "!!!\n";
+//        if (t == nullptr) {
+//            cout << "tuple is null!\n";
+//        } else {
+//            cout << "tuple key: " << t->key << "\n";
+//        };
         int key = t->key;
-        cout << reinterpret_cast<const char *>(&key) << "\n";
-        cout << "!!!\n";
+//        cout << reinterpret_cast<const char *>(&key) << "\n";
         bf->program(reinterpret_cast<const char *>(&key));
-        cout << "tuple programmed!\n";
     }
     cout << "programmed all tuples\n";
     bloomFilter = bf;

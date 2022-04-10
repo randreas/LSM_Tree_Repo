@@ -40,18 +40,20 @@ Tuple* LSMTree::query(int key) {
     if (buffer->containsKey(key)) {
         return buffer->query(key);
     }
-
+    cout << "query 0\n";
     int ind;
     for (Level *curLevel: levels) {
+        cout << "query 1\n";
 
         //RA todo
         //Check bloomFilter
         ind = curLevel->containsKey(key);
+        cout << "query 2\n";
         if (ind >= 0) {
             return curLevel->getRunByFileMetaAtIndex(ind)->query(key);
         }
+        cout << "query 3\n";
 
-        
     }
 
     // if not found, return a tuple with delete flag
