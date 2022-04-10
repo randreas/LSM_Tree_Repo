@@ -12,7 +12,6 @@
 #include "../BloomFilter/BloomFilter.h"
 
 bool Level::isFull() {
-    cout << "in isfull\n";
     cout << dataBlocks.size() << "\n";
     cout << MAX_RUN_NUM << "\n";
     return dataBlocks.size() == MAX_RUN_NUM;
