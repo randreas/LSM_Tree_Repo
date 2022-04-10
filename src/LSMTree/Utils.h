@@ -54,6 +54,8 @@ FileMeta *createFileMetaFromRun(size_t lvlID, size_t newBlockIdx, Run* run) {
     newFile.close();
     cout << "finished writing to new file\n";
     auto* newFileMeta = new FileMeta(newFilePath, run->MAX_TUPLE_NUM);
+    newFileMeta->minKey = run->getTuples()[0]->getKey();
+    newFileMeta->maxKey = run->getTuples()[run->getSize() - 1]->getKey();
     cout << "created new file meta\n";
     return newFileMeta;
 }

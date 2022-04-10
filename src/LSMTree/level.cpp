@@ -44,8 +44,8 @@ void Level::addTuple(Tuple *tuple) {
  */
 
 int Level::containsKey(int key) {
-    if (!curLevel->bloomFilter->query(reinterpret_cast<const char *>(key))) {
-        return -1
+    if (!this->bloomFilter->query(reinterpret_cast<const char *>(key))) {
+        return -1;
     }
     std::vector<int> possibleZones = fp->query(key);
     if (possibleZones.size() == 0) {
@@ -71,6 +71,7 @@ Run *Level::merge() {
     cout << "merged\n";
     clear();
     cout << "cleared\n";
+    fp->clear();
     //RA todo recreate bloomfilter
     createBloomFilter();
     return initRun;
@@ -98,6 +99,7 @@ void Level::addRunFileMeta(FileMeta *fm) {
     if (!isFull()) {
         cout << "here1\n";
         dataBlocks.push_back(fm);
+        fp->addNewZone(fm);
     } else {
         cout << "here2\n";
         throw LevelFullException();
