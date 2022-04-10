@@ -63,9 +63,9 @@ void LSMTree::mergeNMove(int idx, Run* newRun) {
 }
 
 void LSMTree::moveToLevelAtIdxRecurse(int idx, Run* newRun) {
-    //cout << "in move to level\n";
+    cout << "in move to level\n";
     if (idx == levels.size()) {
-        //cout << "here1\n";
+        cout << "here1\n";
         int newRunSize = idx == 0 ? newRun->MAX_TUPLE_NUM : (levels[levels.size() - 1]->MAX_TUPLE_NUM_IN_RUN + 1) * num_run_per_level;
         //cout << newRunSize << "\n";
         int lvlId = levels.size();
@@ -76,7 +76,7 @@ void LSMTree::moveToLevelAtIdxRecurse(int idx, Run* newRun) {
         //delete newRun;
         cout << "level of size: " << levels.size() << "\n";
     } else {
-        //cout << "here2\n";
+        cout << "here2\n";
         Level *lvl = levels[idx];
         if (!lvl->isFull()) {
             lvl->addRunFileMeta(createFileMetaFromRun(idx, lvl->getCurrentSize(), newRun));

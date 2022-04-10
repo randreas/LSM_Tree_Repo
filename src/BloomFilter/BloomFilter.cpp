@@ -1,3 +1,4 @@
+#include <iostream>
 #include "BloomFilter.h"
 #include "murmurhash.h"
 
@@ -25,6 +26,7 @@ void BloomFilter::makeBloomFilter(){
 }
 
 void BloomFilter::program( string key ){
+	cout << "In bf::program\n";
 	vector<int> index( numIndex, 0 );
 	getIndex( key, &index );
 
