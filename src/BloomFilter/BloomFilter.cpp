@@ -26,7 +26,6 @@ void BloomFilter::makeBloomFilter(){
 }
 
 void BloomFilter::program( string key ){
-	cout << "In bf::program\n";
 	vector<int> index( numIndex, 0 );
 	getIndex( key, &index );
 
