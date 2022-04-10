@@ -66,6 +66,9 @@ Run *Level::merge() {
     cout << "created new run\n";
     for (FileMeta* fm : dataBlocks) {
         initRun->merge(fm->getRun());
+        cout << "MERGED " << fm->getFilePath() << "\n";
+        cout << "Merged result: \n";
+        initRun->printRun();
     }
     cout << "merged\n";
     clear();

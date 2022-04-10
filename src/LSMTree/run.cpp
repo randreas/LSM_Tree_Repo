@@ -27,7 +27,11 @@ void Run::clear() {
     }
 }
 
+//anotherRun is more up-to-date
 void Run::merge(Run *anotherRun) {
+    cout << "This run: \n";
+    printRun();
+    cout << "In run.merge\n";
     vector<Tuple*> newTuples;
     while (!(anotherRun->tuples.empty() && this->tuples.empty())) {
         if (this->tuples.empty() || anotherRun->tuples[0]->key < this->tuples[0]->key) {
@@ -37,21 +41,34 @@ void Run::merge(Run *anotherRun) {
             newTuples.push_back(this->tuples[0]);
             this->tuples.erase(this->tuples.begin());
         } else if (this->tuples[0]->key == anotherRun->tuples[0]->key) {
-            //deletion
-            if (anotherRun->tuples[0]->isDeleteMarker()) {
-                delete this->tuples[0];
-                this->tuples.erase(this->tuples.begin());
-                delete anotherRun->tuples[0];
-                anotherRun->tuples.erase(this->tuples.begin());
-            } else { //update
-                delete this->tuples[0];
-                this->tuples.erase(this->tuples.begin());
-                newTuples.push_back(anotherRun->tuples[0]);
-                anotherRun->tuples.erase(anotherRun->tuples.begin());
-            }
+            delete this->tuples[0];
+            this->tuples.erase(this->tuples.begin());
+            newTuples.push_back(anotherRun->tuples[0]);
+            anotherRun->tuples.erase(anotherRun->tuples.begin());
         }
     }
+    cout << "New tuple vector: \n";
+    for (Tuple* t : newTuples) {
+        t->printTuple();
+    }
+    cout << "Merge done\n";
     replaceTuplesWithInput(newTuples);
+    cout << "Replace done\n";
+}
+
+void Run::replaceTuplesWithInput(const vector<Tuple *>& newTuples) {
+    //this->tuples = std::move(newTuples);
+    cout << "In replace: \n";
+    /*
+    for (Tuple* tuple : this->tuples) {
+        delete tuple;
+    }
+     */
+    clear();
+    cout << "Cleared\n";
+    for (Tuple* tuple : newTuples) {
+        this->tuples.push_back(tuple);
+    }
 }
 
 void Run::addTuple(Tuple *newTuple) {
@@ -103,10 +120,6 @@ void Run::printRun() {
 
 Run::~Run() {
     clear();
-}
-
-void Run::replaceTuplesWithInput(vector<Tuple *> newTuples) {
-    this->tuples = std::move(newTuples);
 }
 
 void Run::shallowClear() {

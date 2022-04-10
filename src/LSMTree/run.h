@@ -14,7 +14,7 @@ private:
     vector<Tuple*> tuples;
 
     //Replaces current tuples vector with a provided vector
-    void replaceTuplesWithInput(vector<Tuple*> newTuples);
+    void replaceTuplesWithInput(const vector<Tuple*>& newTuples);
 
 public:
     //Maximum size of this run
