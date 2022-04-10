@@ -50,6 +50,7 @@ public:
     explicit Level(int max_run_num, int max_tuple_num_in_run, int lvlID) : MAX_RUN_NUM(max_run_num), MAX_TUPLE_NUM_IN_RUN(max_tuple_num_in_run) {
         this->dataBlocks = std::vector<FileMeta*>();
         this->lvlID = lvlID;
+        this->fp = new FencePointer(max_run_num);
 //        this->bloomFilter = createNewBloomFilter();
     }
 

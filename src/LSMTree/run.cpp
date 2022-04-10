@@ -91,12 +91,14 @@ Tuple* Run::query(int key) {
 }
 
 void Run::printRun() {
-    cout << "Run: \n";
+    cout << "|--------------\n";
+    cout << "| Run: \n";
     cout << "tuple count: " << tuples.size() << "\n";
     for (Tuple* tuple: tuples) {
         tuple->printTuple();
-    } 
+    }
     cout << "done\n";
+    cout << "|--------------\n";
 }
 
 Run::~Run() {

@@ -1,17 +1,19 @@
 #include "fencePointer.h"
 
-FencePointer::FencePointer(int _num_zones)  {
-    num_zones = _num_zones;
+FencePointer::FencePointer(int _max_num_zones)  {
+    max_num_zones = _max_num_zones;
+    cur_num_zones = 0;
 }
 
-FencePointer::FencePointer(std::vector<Zone> _zones, int _num_zones)  {
+FencePointer::FencePointer(std::vector<Zone> _zones, int _max_num_zones)  {
     zones = _zones;
-    num_zones = _num_zones;
+    max_num_zones = _max_num_zones;
+    cur_num_zones = 0;
 }
 
 std::vector<int> FencePointer::query(int key)  {
     std::vector<int> result;
-   for (int i = 0; i < num_zones; i++) {
+   for (int i = 0; i < cur_num_zones; i++) {
        Zone z = zones[i];
        if ((z.min <= key) && (key <= z.max)) {
            result.push_back(z.index);
@@ -22,7 +24,7 @@ std::vector<int> FencePointer::query(int key)  {
 
 std::vector<int> FencePointer::query(int low, int high) {
     std::vector<int> result;
-    for (int i = num_zones - 1; i >= 0; i--) {
+    for (int i = cur_num_zones - 1; i >= 0; i--) {
         Zone z = zones[i];
         if ((low < z.min) || (z.max < high)) {
             continue;
@@ -33,11 +35,11 @@ std::vector<int> FencePointer::query(int low, int high) {
 }
 
 void FencePointer::addNewZone(FileMeta *fm) {
-    if (zones.size() >= num_zones) {
+    if (zones.size() >= max_num_zones) {
         throw FencePointerException();
     }
 
-    num_zones++;
+    cur_num_zones++;
 
     Zone newZone;
     newZone.index = zones.size();
@@ -63,6 +65,6 @@ void FencePointer::addTuple(int index, Tuple* tuple) {
 }
 
 void FencePointer::clear() {
-    num_zones = 0;
+    cur_num_zones = 0;
     zones.clear();
 }

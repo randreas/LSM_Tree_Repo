@@ -21,7 +21,7 @@ Tuple::Tuple() {
 //Print
 
 void Tuple::printTuple() {
-    cout << "Key: " << key << " ";
+    cout << "| Key: " << key << " ";
     value.printValue();
     cout << "\n";
 }

@@ -21,18 +21,21 @@ struct Zone
 class FencePointer
 {
     std::vector<Zone> zones;
-    int num_zones;
+    int max_num_zones;
+    int cur_num_zones;
 
 public:
 
-    FencePointer(int _num_zones);
+    FencePointer();
+
+    FencePointer(int _max_num_zones);
 
     /**
      * Constructor
      * @param _zones
      * @param _num_zones
      */
-    FencePointer(std::vector<Zone> _zones, int _num_zones);
+    FencePointer(std::vector<Zone> _zones, int _max_num_zones);
 
     /**
      * Return all index of file meta that contains the key, null if the key does not exist in this fence pointer
