@@ -34,12 +34,12 @@ FileMeta *createFileMetaFromRun(size_t lvlID, size_t newBlockIdx, Run* run) {
     //Write # of tuples
     int size = run->getSize();
     newFile.write(reinterpret_cast<char*>(&size),SIZE_OF_INT);
-    int tupleOffSet = SIZE_OF_INT * (1 + run->MAX_TUPLE_NUM);
+    int tupleOffSet = SIZE_OF_INT * (2 + run->MAX_TUPLE_NUM);
+    //Write first
+    newFile.seekp(SIZE_OF_INT);
+    newFile.write(reinterpret_cast<char*>(&tupleOffSet),SIZE_OF_INT);
     for (int i = 0; i < size; i++) {
         Tuple* tuple = run->getTuples()[i];
-        //Write tuple offset
-        newFile.seekp(SIZE_OF_INT * (i + 1));
-        newFile.write(reinterpret_cast<char*>(&tupleOffSet),SIZE_OF_INT);
         //Write key
         int key = tuple->key;
         newFile.seekp(tupleOffSet);
@@ -50,6 +50,9 @@ FileMeta *createFileMetaFromRun(size_t lvlID, size_t newBlockIdx, Run* run) {
             newFile.write(reinterpret_cast<char*>(&val),SIZE_OF_INT);
             tupleOffSet += SIZE_OF_INT;
         }
+        //Write first
+        newFile.seekp(SIZE_OF_INT * (i + 2));
+        newFile.write(reinterpret_cast<char*>(&tupleOffSet),SIZE_OF_INT);
     }
     newFile.close();
     cout << "finished writing to new file\n";
