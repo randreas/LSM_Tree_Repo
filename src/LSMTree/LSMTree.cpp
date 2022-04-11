@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <unordered_set>
 
 #include "LSMTree.h"
 #include "run.h"
@@ -106,7 +107,8 @@ vector<Tuple*> LSMTree::query(int low, int high) {
     unordered_set <int> set;
     
     for(Tuple* t : buffer->getTuples()) {
-        if(t->key <= high && t->key >= low) {
+        int key = t-> key;
+        if(key <= high && key >= low) {
             if(set.find(key) != set.end()) {
                 cout << "key already is in the set";
             } else {
@@ -120,13 +122,14 @@ vector<Tuple*> LSMTree::query(int low, int high) {
     for (Level *curLevel: levels) {
         vector<Tuple*> curr_tuples = curLevel->GetAllTuples();
         for(Tuple* t :curr_tuples) {
-            if(t->key <= high && t->key >= low) {
+            int key = t-> key;
+            if(key <= high && key >= low) {
                 if(set.find(key) != set.end()) {
                     cout << "key already is in the set";
                 } else {
                     cout << "new key found adding into result";
                     result.push_back(t);
-                    set.insert(t->key);
+                    set.insert(key);
                 }
             }
         }
