@@ -31,7 +31,7 @@ public:
      * @param high
      * @return
      */
-    Tuple* query(int low, int high);
+    vector<Tuple*> query(int low, int high);
 
     void addTuple(Tuple* tuple);
 

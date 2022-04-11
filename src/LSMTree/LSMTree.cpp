@@ -45,14 +45,12 @@ Tuple* LSMTree::query(int key) {
     for (Level *curLevel: levels) {
         cout << "query 1\n";
 
-        //RA todo
         //Check bloomFilter
         ind = curLevel->containsKey(key);
         cout << "query 2\n";
         if (ind >= 0) {
             return curLevel->getRunByFileMetaAtIndex(ind)->query(key);
         }
-        cout << "query 3\n";
 
     }
 
@@ -99,4 +97,40 @@ void LSMTree::moveToLevelAtIdxRecurse(int idx, Run* newRun) {
 
 void LSMTree::deleteKey(int key) {
     addTuple(new Tuple(key, Value(false)));
+}
+
+
+
+vector<Tuple*> LSMTree::query(int low, int high) {
+    vector<Tuple*> result;
+    unordered_set <int> set;
+    
+    for(Tuple* t : buffer->getTuples()) {
+        if(t->key <= high && t->key >= low) {
+            if(set.find(key) != set.end()) {
+                cout << "key already is in the set";
+            } else {
+                cout << "new key found adding into result";
+                result.push_back(t);
+                set.insert(t->key);
+            }
+        }
+    }
+
+    for (Level *curLevel: levels) {
+        vector<Tuple*> curr_tuples = curLevel->GetAllTuples();
+        for(Tuple* t :curr_tuples) {
+            if(t->key <= high && t->key >= low) {
+                if(set.find(key) != set.end()) {
+                    cout << "key already is in the set";
+                } else {
+                    cout << "new key found adding into result";
+                    result.push_back(t);
+                    set.insert(t->key);
+                }
+            }
+        }
+    }
+    return result;
+
 }

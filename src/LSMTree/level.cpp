@@ -159,13 +159,13 @@ void Level::createBloomFilter() {
     auto* bf = new BloomFilter(BF_NUM_TUPLES, BF_BITS_PER_ELEMENT);
     vector<Tuple*> tupleList = GetAllTuples();
     for(Tuple* t : tupleList) {
-//        if (t == nullptr) {
-//            cout << "tuple is null!\n";
-//        } else {
-//            cout << "tuple key: " << t->key << "\n";
-//        };
+       if (t == nullptr) {
+           cout << "tuple is null!\n";
+       } else {
+           cout << "tuple key: " << t->key << "\n";
+       };
         int key = t->key;
-//        cout << reinterpret_cast<const char *>(&key) << "\n";
+        cout << reinterpret_cast<const char *>(&key) << "\n";
         bf->program(reinterpret_cast<const char *>(&key));
     }
     cout << "programmed all tuples\n";
