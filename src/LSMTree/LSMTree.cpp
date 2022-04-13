@@ -122,30 +122,22 @@ vector<Tuple*> LSMTree::query(int low, int high) {
     for (Level *curLevel: levels) {
         // Todo: check the fence pointer if low and high are in the range
         // Get the run using index if it matches
-        vector<Zone> zones = curLevel->fp->zones;
-
-        for(Zone zone : zones) {
-
-            vector<int> zoneIdxs = zone.query(low, high)
-            for(int idx : zoneIdxs) {
-                 Run* currRun = curLevel->getRunByFileMetaAtIndex(int idx);
-                vector<Tuple*> curr_tuples = currRun->getTuples();
-                for(Tuple* t :curr_tuples) {
-                    int key = t->key;
-                    if(key <= high && key >= low) {
-                        if(set.find(key) != set.end()) {
-                            cout << "key already is in the set";
-                        } else {
-                            cout << "new key found adding into result";
-                            result.push_back(t);
-                            set.insert(key);
-                        }
+        vector<int> zoneIdxs = curLevel->fp->query(low, high);
+        for(int idx : zoneIdxs) {
+            Run* currRun = curLevel->getRunByFileMetaAtIndex(int idx);
+            vector<Tuple*> curr_tuples = currRun->getTuples();
+            for(Tuple* t :curr_tuples) {
+                int key = t->key;
+                if(key <= high && key >= low) {
+                    if(set.find(key) != set.end()) {
+                        cout << "key already is in the set";
+                    } else {
+                        cout << "new key found adding into result";
+                        result.push_back(t);
+                        set.insert(key);
                     }
                 }
             }
-            
-           
-
         }
         
     }
