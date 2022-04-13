@@ -105,14 +105,14 @@ void LSMTree::deleteKey(int key) {
 vector<Tuple*> LSMTree::query(int low, int high) {
     vector<Tuple*> result;
     unordered_set <int> set;
-    
+    cout << "QUERY RANGE START \n";
     for(Tuple* t : buffer->getTuples()) {
         int key = t-> key;
         if(key <= high && key >= low) {
             if(set.find(key) != set.end()) {
-                cout << "key already is in the set";
+                cout << "key already is in the set" << "\n";
             } else {
-                cout << "new key found adding into result";
+                cout << "new key found adding into result" << "\n";
                 result.push_back(t);
                 set.insert(t->key);
             }
@@ -130,9 +130,9 @@ vector<Tuple*> LSMTree::query(int low, int high) {
                 int key = t->key;
                 if(key <= high && key >= low) {
                     if(set.find(key) != set.end()) {
-                        cout << "key already is in the set";
+                        cout << "key already is in the set" << "\n";
                     } else {
-                        cout << "new key found adding into result";
+                        cout << "new key found adding into result"<< "\n";
                         result.push_back(t);
                         set.insert(key);
                     }
