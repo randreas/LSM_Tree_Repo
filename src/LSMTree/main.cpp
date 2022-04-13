@@ -90,8 +90,8 @@ void executeCommand(LSMTree* lsmTree, string command) {
         cout << "Range query " << "low key: " << key_low << " high key: " << key_high << "\n";
         // TODO execute
         vector<Tuple*> resultTuples = lsmTree->query(key_low, key_high);
-        cout << "resultTuples size = " << resultTuples.size;
-        if(resultTuples.size > 0) {
+        cout << "resultTuples size = " << resultTuples.size();
+        if(resultTuples.size() > 0) {
             for (Tuple* t : resultTuples) {
                 t->getValue().printValue();
             }
