@@ -143,13 +143,13 @@ int main(int argc, char *argv[])
     lsmTree->buffer->printRun();
     cout << "Start reading and executing data file\n";
     executeQueryFile(lsmTree, dataFilePath);
-    lsmTree->buffer->printRun();
+    //lsmTree->buffer->printRun();
 
     // read and execute workload file
-    /*
+    
     cout << "Start reading and executing workload file\n";
     executeQueryFile(lsmTree, workloadFilePath);
-     */
+     
 
     return 0;
 }
