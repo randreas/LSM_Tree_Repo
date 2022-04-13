@@ -51,7 +51,7 @@ public:
         this->dataBlocks = std::vector<FileMeta*>();
         this->lvlID = lvlID;
         this->fp = new FencePointer(max_run_num);
-        // this->bloomFilter = createNewBloomFilter();
+        createNewBloomFilter();
     }
 
     //If this level is saturated, no more tuples can be inserted
