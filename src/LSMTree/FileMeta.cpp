@@ -20,14 +20,14 @@ Run *FileMeta::getRun() {
     int tupleCnt;
     inFile->read(reinterpret_cast<char *>(&tupleCnt), SIZE_OF_INT);
     for (int i = 0; i < tupleCnt; i++) {
-        cout << "tuple " << i << "\n";
+        //cout << "tuple " << i << "\n";
         inFile->seekg(sizeof(int) * (i + 1));
         int offset;
         inFile->read(reinterpret_cast<char *>(&offset), SIZE_OF_INT);
         inFile->seekg(sizeof(int) * (i + 2));
         int nextTupleOffset;
         inFile->read(reinterpret_cast<char *>(&nextTupleOffset), SIZE_OF_INT);
-        cout << "offset: " << offset << ", next offset: " << nextTupleOffset << "\n";
+        //cout << "offset: " << offset << ", next offset: " << nextTupleOffset << "\n";
         inFile->seekg(offset);
         //Read key from file
         int key;
@@ -45,8 +45,8 @@ Run *FileMeta::getRun() {
         auto* newTuple = new Tuple(key, val);
         run->addTuple(newTuple);
     }
-    cout << "generated run: \n";
-    run->printRun();
+    //cout << "generated run: \n";
+    //run->printRun();
     inFile->close();
     return run;
 }
