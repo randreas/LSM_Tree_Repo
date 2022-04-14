@@ -102,8 +102,8 @@ void LSMTree::deleteKey(int key) {
 
 
 
-vector<Tuple*> LSMTree::query(int low, int high) {
-    vector<Tuple*> result;
+vector<LSMTuple::Tuple*> LSMTree::query(int low, int high) {
+    vector<LSMTuple::Tuple*> result;
     unordered_set <int> set;
     cout << "QUERY RANGE START \n";
     for(Tuple* t : buffer->getTuples()) {
