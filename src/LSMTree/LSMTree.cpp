@@ -115,9 +115,9 @@ vector<LSMTuple::Tuple*> LSMTree::query(int low, int high) {
                 cout << "key already is in the set" << "\n";
             } else {
                 cout << "new key found adding into result" << "\n";
+                set.insert(t->key);
                 if(! t->isDeleteMarker()) {
                     result.push_back(t);
-                    set.insert(t->key);
                 }
                 
             }
@@ -125,8 +125,6 @@ vector<LSMTuple::Tuple*> LSMTree::query(int low, int high) {
     }
 
     for (Level *curLevel: levels) {
-        // Todo: check the fence pointer if low and high are in the range
-        // Get the run using index if it matches
         cout << " levels curr key scan \n";
         vector<int> zoneIdxs = curLevel->fp->query(low, high);
         cout << " size of zoneIdxs = " << zoneIdxs.size() << "\n";
@@ -140,9 +138,9 @@ vector<LSMTuple::Tuple*> LSMTree::query(int low, int high) {
                         cout << "key already is in the set" << "\n";
                     } else {
                         cout << "new key found adding into result"<< "\n";
+                        set.insert(t->key);
                         if(! t->isDeleteMarker()) {
                             result.push_back(t);
-                            set.insert(t->key);
                         }
                     }
                 }
