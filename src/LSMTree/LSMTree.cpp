@@ -126,6 +126,7 @@ vector<Tuple*> LSMTree::query(int low, int high) {
         // Get the run using index if it matches
         cout << " levels curr key scan \n";
         vector<int> zoneIdxs = curLevel->fp->query(low, high);
+        cout << " size of zoneIdxs = " << zoneIdxs.size() << "\n";
         for(int idx : zoneIdxs) {
             Run* currRun = curLevel->getRunByFileMetaAtIndex(idx);
             vector<Tuple*> curr_tuples = currRun->getTuples();
