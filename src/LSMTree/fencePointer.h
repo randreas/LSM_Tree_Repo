@@ -55,7 +55,7 @@ public:
     /**
      * Insert a new tuple into the fence pointer.
      */
-    void addTuple(int index, Tuple* tuple);
+    void addTuple(int index, LSMTuple::Tuple* tuple);
 
     /**
      * clear runs of the levl

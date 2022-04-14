@@ -51,7 +51,7 @@ void executeCommand(LSMTree* lsmTree, string command) {
         printIntVector(values);
         cout << "\n";
         // execute
-        lsmTree->addTuple(new Tuple(key, Value(values)));
+        lsmTree->addTuple(new LSMTuple::Tuple(key, LSMTuple::Value(values)));
         cout << "addtuple finished\n";
         //lsmTree->buffer->printRun();
         if (lsmTree->buffer == nullptr) {
@@ -66,7 +66,7 @@ void executeCommand(LSMTree* lsmTree, string command) {
         cout << "---------------------------------------\n";
         cout << "Point query key: " << key << "\n";
         // execute
-        Tuple* resultTuple = lsmTree->query(key);
+        LSMTuple::Tuple* resultTuple = lsmTree->query(key);
         cout << "gate 0\n";
         if (resultTuple->key != key) {
             throw KeyException();
@@ -98,7 +98,7 @@ void executeCommand(LSMTree* lsmTree, string command) {
         cout << "---------------------------------------\n";
         cout << "Delete " << "key: " << key << "\n";
         // execute
-        lsmTree->addTuple(new Tuple(key, Value(false)));
+        lsmTree->addTuple(new LSMTuple::Tuple(key, LSMTuple::Value(false)));
         cout << "delete; addtuple finished\n";
     }
 }
