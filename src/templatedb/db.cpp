@@ -11,9 +11,9 @@ templatedb::Value DB::get(int key)
 }
 
 
-void DB::put(int key, Value val)
+void DB::put(int key, templatedb::Value val)
 {
-    table[key] = val;
+    lsm_tree_idx->addTuple(new LSMTuple::Tuple(key, turn_db_value_to_lsm_value(val)));
 }
 
 

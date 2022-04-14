@@ -14,4 +14,14 @@ templatedb::Value turn_tree_value_to_db_value(const LSMTuple::Value& val) {
     return newVal;
 }
 
+LSMTuple::Value turn_db_value_to_lsm_value(const templatedb::Value& val) {
+    if (val.visible) {
+        LSMTuple::Value newVal = LSMTuple::Value(val.items);
+        newVal.visible = val.visible;
+        return newVal;
+    } else {
+        return {val.visible};
+    }
+}
+
 #endif //TEMPLATEDB_DBUTILS_H
