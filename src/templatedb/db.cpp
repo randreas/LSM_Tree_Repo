@@ -1,14 +1,13 @@
 #include "templatedb/db.hpp"
+#include "dbUtils.h"
 
 using namespace templatedb;
 
 
 templatedb::Value DB::get(int key)
 {
-    if (table.count(key))
-        return table[key];
-    
-    return Value(false);
+    LSMTuple::Value val = lsm_tree_idx->query(key);
+    return turn_tree_value_to_db_value(val);
 }
 
 
