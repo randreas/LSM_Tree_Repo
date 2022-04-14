@@ -20,7 +20,7 @@ bool Run::isFull() {
 
 void Run::clear() {
     while (!tuples.empty()) {
-        Tuple* tuple = tuples.back();
+        LSMTuple::Tuple* tuple = tuples.back();
         tuples.pop_back();
         delete tuple;
         tuple = nullptr;
@@ -32,7 +32,7 @@ void Run::merge(Run *anotherRun) {
     cout << "This run: \n";
     printRun();
     cout << "In run.merge\n";
-    vector<Tuple*> newTuples;
+    vector<LSMTuple::Tuple*> newTuples;
     while (!(anotherRun->tuples.empty() && this->tuples.empty())) {
         if (this->tuples.empty() || anotherRun->tuples[0]->key < this->tuples[0]->key) {
             newTuples.push_back(anotherRun->tuples[0]);
@@ -48,7 +48,7 @@ void Run::merge(Run *anotherRun) {
         }
     }
     cout << "New tuple vector: \n";
-    for (Tuple* t : newTuples) {
+    for (LSMTuple::Tuple* t : newTuples) {
         t->printTuple();
     }
     cout << "Merge done\n";
@@ -56,7 +56,7 @@ void Run::merge(Run *anotherRun) {
     cout << "Replace done\n";
 }
 
-void Run::replaceTuplesWithInput(const vector<Tuple *>& newTuples) {
+void Run::replaceTuplesWithInput(const vector<LSMTuple::Tuple *>& newTuples) {
     //this->tuples = std::move(newTuples);
     cout << "In replace: \n";
     /*
@@ -66,12 +66,12 @@ void Run::replaceTuplesWithInput(const vector<Tuple *>& newTuples) {
      */
     clear();
     cout << "Cleared\n";
-    for (Tuple* tuple : newTuples) {
+    for (LSMTuple::Tuple* tuple : newTuples) {
         this->tuples.push_back(tuple);
     }
 }
 
-void Run::addTuple(Tuple *newTuple) {
+void Run::addTuple(LSMTuple::Tuple *newTuple) {
     if (!isFull()) {
         auto it = tuples.begin();
         int pos = 0;
@@ -90,7 +90,7 @@ void Run::addTuple(Tuple *newTuple) {
 }
 
 bool Run::containsKey(int key) {
-    for (Tuple* tuple : tuples) {
+    for (LSMTuple::Tuple* tuple : tuples) {
         if (tuple->key == key) {
             return true;
         }
@@ -98,8 +98,8 @@ bool Run::containsKey(int key) {
     return false;
 }
 
-Tuple* Run::query(int key) {
-    for (Tuple* tuple : tuples) {
+LSMTuple::Tuple* Run::query(int key) {
+    for (LSMTuple::Tuple* tuple : tuples) {
         if (tuple->key == key) {
             return tuple;
         }
@@ -111,7 +111,7 @@ void Run::printRun() {
     cout << "--------------\n";
     cout << "| Run: \n";
     cout << "| tuple count: " << tuples.size() << "\n";
-    for (Tuple* tuple: tuples) {
+    for (LSMTuple::Tuple* tuple: tuples) {
         tuple->printTuple();
     }
     cout << "| done\n";
@@ -126,7 +126,7 @@ void Run::shallowClear() {
     tuples.clear();
 }
 
-vector<Tuple *> Run::getTuples() {
+vector<LSMTuple::Tuple *> Run::getTuples() {
     return tuples;
 }
 

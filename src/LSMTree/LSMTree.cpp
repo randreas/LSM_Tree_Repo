@@ -14,7 +14,7 @@ LSMTree::LSMTree(int _initial_run_size, int _num_run_per_level) {
     buffer = new Run(initial_run_size);
 }
 
-void LSMTree::addTuple(Tuple* tuple) {
+void LSMTree::addTuple(LSMTuple::Tuple* tuple) {
     // check if buffer is full
     // full, move run to level 1, clear buffer
     cout << "in add tuple\n";
@@ -37,7 +37,7 @@ void LSMTree::addTuple(Tuple* tuple) {
     }
 }
 
-Tuple* LSMTree::query(int key) {
+LSMTuple::Tuple* LSMTree::query(int key) {
     if (buffer->containsKey(key)) {
         return buffer->query(key);
     }
@@ -56,7 +56,7 @@ Tuple* LSMTree::query(int key) {
     }
 
     // if not found, return a tuple with delete flag
-    return new Tuple(key, Value(false));
+    return new LSMTuple::Tuple(key, LSMTuple::Value(false));
 }
 
 void LSMTree::mergeNMove(int idx, Run* newRun) {
@@ -97,7 +97,7 @@ void LSMTree::moveToLevelAtIdxRecurse(int idx, Run* newRun) {
 }
 
 void LSMTree::deleteKey(int key) {
-    addTuple(new Tuple(key, Value(false)));
+    addTuple(new LSMTuple::Tuple(key, LSMTuple::Value(false)));
 }
 
 

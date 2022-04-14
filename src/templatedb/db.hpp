@@ -9,6 +9,8 @@
 #include <unordered_map>
 #include <vector>
 
+#include "../LSMTree/LSMTree.h"
+
 #include "templatedb/operation.hpp"
 
 namespace templatedb
@@ -41,17 +43,30 @@ public:
 
 class DB
 {
+private:
+    LSMTree* lsm_tree_idx;
+
 public:
     db_status status;
 
     DB() {};
+
+    DB(int _initial_run_size, int _num_run_per_level) {
+        this->lsm_tree_idx = new LSMTree(_initial_run_size, _num_run_per_level);
+        this->status = OPEN;
+    };
+
+    //TODO: Clear index
     ~DB() {close();};
 
+    //TODO: USE LSMTree in these ops
     Value get(int key);
     void put(int key, Value val);
     std::vector<Value> scan();
     std::vector<Value> scan(int min_key, int max_key);
     void del(int key);
+
+    //TODO: IMPLEMENT THIS
     void del(int min_key, int max_key);
     size_t size();
 

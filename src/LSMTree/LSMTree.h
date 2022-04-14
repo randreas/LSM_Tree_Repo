@@ -23,7 +23,7 @@ public:
     /**
      * Return all index of file meta that contains the key, null if the key does not exist in this fence pointer
      */
-    Tuple* query(int key);
+    LSMTuple::Tuple* query(int key);
 
     /**
      * Given a high and a low, return all index of file meta that contains key in the range
@@ -31,9 +31,11 @@ public:
      * @param high
      * @return
      */
-    vector<Tuple*> query(int low, int high);
 
-    void addTuple(Tuple* tuple);
+    //vector<Tuple*> query(int low, int high);
+    vector<LSMTuple::Tuple*> query(int low, int high);
+
+    void addTuple(LSMTuple::Tuple* tuple);
 
     void deleteKey(int key);
 

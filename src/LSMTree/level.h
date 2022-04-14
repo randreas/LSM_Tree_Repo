@@ -84,7 +84,7 @@ public:
     //Merges the entire level, return pointer of a merged run
     Run* merge();
 
-    vector<Tuple*> GetAllTuples();
+    vector<LSMTuple::Tuple*> GetAllTuples();
 
     void createBloomFilter();
 

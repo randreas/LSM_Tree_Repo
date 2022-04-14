@@ -7,12 +7,12 @@
 
 using namespace std;
 
-Tuple::Tuple(int key, Value val):
+LSMTuple::Tuple::Tuple(int key, Value val):
     key(key), value(val){
 }
 
 
-Tuple::Tuple() {
+LSMTuple::Tuple::Tuple() {
 	value = Value();
 }
 
@@ -20,7 +20,7 @@ Tuple::Tuple() {
 
 //Print
 
-void Tuple::printTuple() {
+void LSMTuple::Tuple::printTuple() {
     cout << "| Key: " << key << " ";
     value.printValue();
     cout << "\n";
