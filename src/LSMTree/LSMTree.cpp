@@ -108,7 +108,9 @@ vector<Tuple*> LSMTree::query(int low, int high) {
     cout << "QUERY RANGE START \n";
     for(Tuple* t : buffer->getTuples()) {
         int key = t-> key;
+        cout << " buffer tuples curr key scan = " << key << "\n";
         if(key <= high && key >= low) {
+            cout << "curr key in range \n";
             if(set.find(key) != set.end()) {
                 cout << "key already is in the set" << "\n";
             } else {
@@ -122,6 +124,7 @@ vector<Tuple*> LSMTree::query(int low, int high) {
     for (Level *curLevel: levels) {
         // Todo: check the fence pointer if low and high are in the range
         // Get the run using index if it matches
+        cout << " levels curr key scan \n";
         vector<int> zoneIdxs = curLevel->fp->query(low, high);
         for(int idx : zoneIdxs) {
             Run* currRun = curLevel->getRunByFileMetaAtIndex(idx);
