@@ -79,7 +79,6 @@ void executeCommand(LSMTree* lsmTree, string command) {
             resultTuple->getValue().printValue();
             cout<< "\n";
         }
-        // TODO execute
     } else if (elements[0] == "S") {
         if (elements.size() != 3) {
             cout << "D with incorrect size\n";
@@ -88,7 +87,8 @@ void executeCommand(LSMTree* lsmTree, string command) {
         int key_low = stoi(elements[1]);
         int key_high = stoi(elements[2]);
         cout << "Range query " << "low key: " << key_low << " high key: " << key_high << "\n";
-        // TODO execute
+        // Execute
+        //lsmTree->query(key_low, key_high)
     } else if (elements[0] == "D") {
         if (elements.size() != 2) {
             cout << "D with incorrect size\n";

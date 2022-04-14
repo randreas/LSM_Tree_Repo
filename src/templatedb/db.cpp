@@ -3,7 +3,7 @@
 using namespace templatedb;
 
 
-Value DB::get(int key)
+templatedb::Value DB::get(int key)
 {
     if (table.count(key))
         return table[key];
@@ -18,7 +18,7 @@ void DB::put(int key, Value val)
 }
 
 
-std::vector<Value> DB::scan()
+std::vector<templatedb::Value> DB::scan()
 {
     std::vector<Value> return_vector;
     for (auto pair: table)
@@ -30,7 +30,7 @@ std::vector<Value> DB::scan()
 }
 
 
-std::vector<Value> DB::scan(int min_key, int max_key)
+std::vector<templatedb::Value> DB::scan(int min_key, int max_key)
 {
     std::vector<Value> return_vector;
     for (auto pair: table)
@@ -67,7 +67,7 @@ size_t DB::size()
 }
 
 
-std::vector<Value> DB::execute_op(Operation op)
+std::vector<templatedb::Value> DB::execute_op(Operation op)
 {
     std::vector<Value> results;
     if (op.type == GET)
