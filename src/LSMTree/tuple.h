@@ -33,7 +33,9 @@ namespace LSMTuple {
         }
 
         bool IsDelMarker() const {
-            if (items.size() > 0) return items[0] == TERMINATE;
+            if (items.size() > 0) {
+                return items[0] == TERMINATE;
+            }
             return false;
         }
 
