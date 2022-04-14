@@ -129,8 +129,8 @@ vector<LSMTuple::Tuple*> LSMTree::query(int low, int high) {
         cout << " size of zoneIdxs = " << zoneIdxs.size() << "\n";
         for(int idx : zoneIdxs) {
             Run* currRun = curLevel->getRunByFileMetaAtIndex(idx);
-            vector<Tuple*> curr_tuples = currRun->getTuples();
-            for(Tuple* t :curr_tuples) {
+            vector<LSMTuple::Tuple*> curr_tuples = currRun->getTuples();
+            for(LSMTuple::Tuple* t : curr_tuples) {
                 int key = t->key;
                 if(key <= high && key >= low) {
                     if(set.find(key) != set.end()) {
