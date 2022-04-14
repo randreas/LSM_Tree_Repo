@@ -10,86 +10,89 @@
 
 using namespace std;
 
-class Value {
-public:
-	std::vector<int> items;
-	bool visible = true;
+namespace LSMTuple {
 
-	Value(){}
+    class Value {
+    public:
+        std::vector<int> items;
+        bool visible = true;
 
-	Value(bool del) {
-		items = {TERMINATE};
-	}
+        Value() {}
 
-	Value(std::vector<int> items) {
-		this->items = items;
-	}
+        Value(bool del) {
+            items = {TERMINATE};
+        }
 
-	Value(const Value& v) {
-		visible = v.visible;
-		items.insert(items.end(), v.items.begin(), v.items.end());
-	}
+        Value(std::vector<int> items) {
+            this->items = items;
+        }
 
-	bool IsDelMarker() const {
-        if (items.size() > 0) return items[0] == TERMINATE;
-        return false;
-    }
+        Value(const Value &v) {
+            visible = v.visible;
+            items.insert(items.end(), v.items.begin(), v.items.end());
+        }
 
-    bool operator==(const Value& v) {
-    	if(v.items.size() != items.size()) {
-    		return false;
-    	}
-    	for(int i = 0; i < items.size(); i++) {
-    		if(items[i] != v.items[i]) {
-    			return false;
-    		}
-    	}
-    	return true;
-    } 
+        bool IsDelMarker() const {
+            if (items.size() > 0) return items[0] == TERMINATE;
+            return false;
+        }
 
-	void printValue() {
-		cout << "Value: ";
-		if (IsDelMarker()) {
-			cout << "deleted";
-			return;
-		}
-		for (int i : items) {
-			cout << i << " ";
-		}
-	}
+        bool operator==(const Value &v) {
+            if (v.items.size() != items.size()) {
+                return false;
+            }
+            for (int i = 0; i < items.size(); i++) {
+                if (items[i] != v.items[i]) {
+                    return false;
+                }
+            }
+            return true;
+        }
 
-};
+        void printValue() {
+            cout << "Value: ";
+            if (IsDelMarker()) {
+                cout << "deleted";
+                return;
+            }
+            for (int i: items) {
+                cout << i << " ";
+            }
+        }
 
-class Tuple{
-public:
-	int key;
-	Value value;
+    };
 
-public:
-    Tuple();
+    class Tuple {
+    public:
+        int key;
+        Value value;
 
-	Tuple(int key, Value v);
+    public:
+        Tuple();
 
-	inline void setValue(Value v) {
-		this->value = v;
-	}
+        Tuple(int key, Value v);
 
-	inline Value getValue() const{
-		return value;
-	}
+        inline void setValue(Value v) {
+            this->value = v;
+        }
 
-	inline int getKey() const{
-		return key;
-	}
+        inline Value getValue() const {
+            return value;
+        }
 
-	std::string toString() const;
+        inline int getKey() const {
+            return key;
+        }
 
-	inline bool isDeleteMarker() const {
-		return value.IsDelMarker();
-	}
+        std::string toString() const;
 
-	void printTuple();
+        inline bool isDeleteMarker() const {
+            return value.IsDelMarker();
+        }
 
-};
+        void printTuple();
+
+    };
+}
 
 #endif //TEMPLATEDB_TUPLE_H

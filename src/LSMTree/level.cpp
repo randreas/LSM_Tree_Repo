@@ -142,8 +142,8 @@ int Level::getFirstTupleOffsetinBlock() const {
 }
 
 //RA Todo
-vector<Tuple*> Level::GetAllTuples() {
-    vector<Tuple*> result;
+vector<LSMTuple::Tuple*> Level::GetAllTuples() {
+    vector<LSMTuple::Tuple*> result;
     for (auto & dataBlock : dataBlocks) {
 //        DEBUG_LOG(std::string("getting tuples from #") + dataBlock->getFilePath());
         auto tuples = dataBlock->GetAllTuples();
@@ -157,8 +157,8 @@ vector<Tuple*> Level::GetAllTuples() {
 void Level::createBloomFilter() {
     cout << "In create bloom filter\n";
     auto* bf = new BloomFilter(BF_NUM_TUPLES, BF_BITS_PER_ELEMENT);
-    vector<Tuple*> tupleList = GetAllTuples();
-    for(Tuple* t : tupleList) {
+    vector<LSMTuple::Tuple*> tupleList = GetAllTuples();
+    for(LSMTuple::Tuple* t : tupleList) {
 //        if (t == nullptr) {
 //            cout << "tuple is null!\n";
 //        } else {

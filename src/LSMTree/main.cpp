@@ -51,7 +51,7 @@ void executeCommand(LSMTree* lsmTree, string command) {
         printIntVector(values);
         cout << "\n";
         // execute
-        lsmTree->addTuple(new Tuple(key, Value(values)));
+        lsmTree->addTuple(new LSMTuple::Tuple(key, LSMTuple::Value(values)));
         cout << "addtuple finished\n";
         //lsmTree->buffer->printRun();
         if (lsmTree->buffer == nullptr) {
@@ -66,7 +66,7 @@ void executeCommand(LSMTree* lsmTree, string command) {
         cout << "---------------------------------------\n";
         cout << "Point query key: " << key << "\n";
         // execute
-        Tuple* resultTuple = lsmTree->query(key);
+        LSMTuple::Tuple* resultTuple = lsmTree->query(key);
         cout << "gate 0\n";
         if (resultTuple->key != key) {
             throw KeyException();
@@ -79,7 +79,6 @@ void executeCommand(LSMTree* lsmTree, string command) {
             resultTuple->getValue().printValue();
             cout<< "\n";
         }
-        // TODO execute
     } else if (elements[0] == "S") {
         if (elements.size() != 3) {
             cout << "D with incorrect size\n";
@@ -88,7 +87,8 @@ void executeCommand(LSMTree* lsmTree, string command) {
         int key_low = stoi(elements[1]);
         int key_high = stoi(elements[2]);
         cout << "Range query " << "low key: " << key_low << " high key: " << key_high << "\n";
-        // TODO execute
+        // Execute
+        //lsmTree->query(key_low, key_high)
     } else if (elements[0] == "D") {
         if (elements.size() != 2) {
             cout << "D with incorrect size\n";
@@ -98,7 +98,7 @@ void executeCommand(LSMTree* lsmTree, string command) {
         cout << "---------------------------------------\n";
         cout << "Delete " << "key: " << key << "\n";
         // execute
-        lsmTree->addTuple(new Tuple(key, Value(false)));
+        lsmTree->addTuple(new LSMTuple::Tuple(key, LSMTuple::Value(false)));
         cout << "delete; addtuple finished\n";
     }
 }

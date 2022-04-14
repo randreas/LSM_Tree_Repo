@@ -50,7 +50,7 @@ void FencePointer::addNewZone(FileMeta *fm) {
 }
 
 // shall not be used
-void FencePointer::addTuple(int index, Tuple* tuple) {
+void FencePointer::addTuple(int index, LSMTuple::Tuple* tuple) {
     throw FencePointerException();
     if (index >= zones.size()) {
         throw FencePointerException();

@@ -43,7 +43,7 @@ public:
     ~FileMeta();
 
     //RA todo
-    vector<Tuple*> GetAllTuples();
+    vector<LSMTuple::Tuple*> GetAllTuples();
 };
 
 class RunFullException : public exception {

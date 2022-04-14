@@ -51,7 +51,8 @@ public:
         this->dataBlocks = std::vector<FileMeta*>();
         this->lvlID = lvlID;
         this->fp = new FencePointer(max_run_num);
-//        this->bloomFilter = createNewBloomFilter();
+        //this->bloomFilter = createNewBloomFilter();
+        createBloomFilter();
     }
 
     //If this level is saturated, no more tuples can be inserted
@@ -84,7 +85,7 @@ public:
     //Merges the entire level, return pointer of a merged run
     Run* merge();
 
-    vector<Tuple*> GetAllTuples();
+    vector<LSMTuple::Tuple*> GetAllTuples();
 
     void createBloomFilter();
 

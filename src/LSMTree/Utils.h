@@ -39,7 +39,7 @@ FileMeta *createFileMetaFromRun(size_t lvlID, size_t newBlockIdx, Run* run) {
     newFile.seekp(SIZE_OF_INT);
     newFile.write(reinterpret_cast<char*>(&tupleOffSet),SIZE_OF_INT);
     for (int i = 0; i < size; i++) {
-        Tuple* tuple = run->getTuples()[i];
+        LSMTuple::Tuple* tuple = run->getTuples()[i];
         //Write key
         int key = tuple->key;
         newFile.seekp(tupleOffSet);

@@ -11,10 +11,10 @@ class Run {
 
 private:
     //tuples in this run
-    vector<Tuple*> tuples;
+    vector<LSMTuple::Tuple*> tuples;
 
     //Replaces current tuples vector with a provided vector
-    void replaceTuplesWithInput(const vector<Tuple*>& newTuples);
+    void replaceTuplesWithInput(const vector<LSMTuple::Tuple*>& newTuples);
 
 public:
     //Maximum size of this run
@@ -36,17 +36,17 @@ public:
     void merge(Run* anotherRun);
 
     //add tuple to the run, used only in instantiation.
-    void addTuple(Tuple* newTuple);
+    void addTuple(LSMTuple::Tuple* newTuple);
 
     int getSize();
 
     bool containsKey(int key);
 
-    Tuple* query(int key);
+    LSMTuple::Tuple* query(int key);
 
     void printRun();
 
-    vector<Tuple*> getTuples();
+    vector<LSMTuple::Tuple*> getTuples();
 
     ~Run();
 };

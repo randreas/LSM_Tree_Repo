@@ -34,7 +34,7 @@ Run *FileMeta::getRun() {
         inFile->read(reinterpret_cast<char *>(&key), SIZE_OF_INT);
         offset += SIZE_OF_INT;
         //Read val items from file
-        Value val;
+        LSMTuple::Value val;
         while (offset < nextTupleOffset) {
             int valItem;
             inFile->seekg(offset);
@@ -42,7 +42,7 @@ Run *FileMeta::getRun() {
             val.items.push_back(valItem);
             offset += SIZE_OF_INT;
         }
-        auto* newTuple = new Tuple(key, val);
+        auto* newTuple = new LSMTuple::Tuple(key, val);
         run->addTuple(newTuple);
     }
     cout << "generated run: \n";
@@ -88,7 +88,7 @@ FileMeta::~FileMeta() {
 }
 
 //RA Todo
-vector<Tuple*> FileMeta::GetAllTuples() {
+vector<LSMTuple::Tuple*> FileMeta::GetAllTuples() {
     Run* run =  getRun();
     return run->getTuples();
 }
