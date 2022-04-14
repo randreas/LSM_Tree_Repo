@@ -106,7 +106,7 @@ vector<LSMTuple::Tuple*> LSMTree::query(int low, int high) {
     vector<LSMTuple::Tuple*> result;
     unordered_set <int> set;
     cout << "QUERY RANGE START \n";
-    for(Tuple* t : buffer->getTuples()) {
+    for(LSMTuple::Tuple* t : buffer->getTuples()) {
         int key = t-> key;
         cout << " buffer tuples curr key scan = " << key << "\n";
         if(key <= high && key >= low) {
