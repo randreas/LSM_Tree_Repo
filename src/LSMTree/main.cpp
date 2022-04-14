@@ -87,8 +87,16 @@ void executeCommand(LSMTree* lsmTree, string command) {
         int key_low = stoi(elements[1]);
         int key_high = stoi(elements[2]);
         cout << "Range query " << "low key: " << key_low << " high key: " << key_high << "\n";
-        // Execute
-        //lsmTree->query(key_low, key_high)
+        vector<Tuple*> resultTuples = lsmTree->query(key_low, key_high);
+        cout << "resultTuples size = " << resultTuples.size() << "\n";
+        if(resultTuples.size() > 0) {
+            for (Tuple* t : resultTuples) {
+                t->getValue().printValue();
+            }
+        }
+
+
+
     } else if (elements[0] == "D") {
         if (elements.size() != 2) {
             cout << "D with incorrect size\n";
@@ -143,13 +151,13 @@ int main(int argc, char *argv[])
     lsmTree->buffer->printRun();
     cout << "Start reading and executing data file\n";
     executeQueryFile(lsmTree, dataFilePath);
-    lsmTree->buffer->printRun();
+    //lsmTree->buffer->printRun();
 
     // read and execute workload file
-    /*
+    
     cout << "Start reading and executing workload file\n";
     executeQueryFile(lsmTree, workloadFilePath);
-     */
+     
 
     return 0;
 }

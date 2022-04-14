@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <unordered_set>
 
 #include "LSMTree.h"
 #include "run.h"
@@ -45,14 +46,12 @@ LSMTuple::Tuple* LSMTree::query(int key) {
     for (Level *curLevel: levels) {
         cout << "query 1\n";
 
-        //RA todo
         //Check bloomFilter
         ind = curLevel->containsKey(key);
         cout << "query 2\n";
         if (ind >= 0) {
             return curLevel->getRunByFileMetaAtIndex(ind)->query(key);
         }
-        cout << "query 3\n";
 
     }
 
@@ -99,4 +98,53 @@ void LSMTree::moveToLevelAtIdxRecurse(int idx, Run* newRun) {
 
 void LSMTree::deleteKey(int key) {
     addTuple(new LSMTuple::Tuple(key, LSMTuple::Value(false)));
+}
+
+
+
+vector<Tuple*> LSMTree::query(int low, int high) {
+    vector<Tuple*> result;
+    unordered_set <int> set;
+    cout << "QUERY RANGE START \n";
+    for(Tuple* t : buffer->getTuples()) {
+        int key = t-> key;
+        cout << " buffer tuples curr key scan = " << key << "\n";
+        if(key <= high && key >= low) {
+            cout << "curr key in range \n";
+            if(set.find(key) != set.end()) {
+                cout << "key already is in the set" << "\n";
+            } else {
+                cout << "new key found adding into result" << "\n";
+                result.push_back(t);
+                set.insert(t->key);
+            }
+        }
+    }
+
+    for (Level *curLevel: levels) {
+        // Todo: check the fence pointer if low and high are in the range
+        // Get the run using index if it matches
+        cout << " levels curr key scan \n";
+        vector<int> zoneIdxs = curLevel->fp->query(low, high);
+        cout << " size of zoneIdxs = " << zoneIdxs.size() << "\n";
+        for(int idx : zoneIdxs) {
+            Run* currRun = curLevel->getRunByFileMetaAtIndex(idx);
+            vector<Tuple*> curr_tuples = currRun->getTuples();
+            for(Tuple* t :curr_tuples) {
+                int key = t->key;
+                if(key <= high && key >= low) {
+                    if(set.find(key) != set.end()) {
+                        cout << "key already is in the set" << "\n";
+                    } else {
+                        cout << "new key found adding into result"<< "\n";
+                        result.push_back(t);
+                        set.insert(key);
+                    }
+                }
+            }
+        }
+        
+    }
+    return result;
+
 }

@@ -157,15 +157,25 @@ vector<LSMTuple::Tuple*> Level::GetAllTuples() {
 void Level::createBloomFilter() {
     cout << "In create bloom filter\n";
     auto* bf = new BloomFilter(BF_NUM_TUPLES, BF_BITS_PER_ELEMENT);
-    vector<LSMTuple::Tuple*> tupleList = GetAllTuples();
-    for(LSMTuple::Tuple* t : tupleList) {
+// <<<<<<< rangeQuery
+//     vector<Tuple*> tupleList = GetAllTuples();
+//     for(Tuple* t : tupleList) {
 //        if (t == nullptr) {
 //            cout << "tuple is null!\n";
 //        } else {
 //            cout << "tuple key: " << t->key << "\n";
 //        };
+// =======
+    vector<LSMTuple::Tuple*> tupleList = GetAllTuples();
+    for(LSMTuple::Tuple* t : tupleList) {
+// //        if (t == nullptr) {
+// //            cout << "tuple is null!\n";
+// //        } else {
+// //            cout << "tuple key: " << t->key << "\n";
+// //        };
+// >>>>>>> main
         int key = t->key;
-//        cout << reinterpret_cast<const char *>(&key) << "\n";
+        cout << reinterpret_cast<const char *>(&key) << "\n";
         bf->program(reinterpret_cast<const char *>(&key));
     }
     cout << "programmed all tuples\n";

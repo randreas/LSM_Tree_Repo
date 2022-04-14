@@ -31,7 +31,9 @@ public:
      * @param high
      * @return
      */
-    LSMTuple::Tuple* query(int low, int high);
+
+    //vector<Tuple*> query(int low, int high);
+    vector<LSMTuple::Tuple*> query(int low, int high);
 
     void addTuple(LSMTuple::Tuple* tuple);
 
