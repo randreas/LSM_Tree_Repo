@@ -102,7 +102,7 @@ void executeCommand(LSMTree* lsmTree, string command) {
         //     cout << "D with incorrect size\n";
         //     return;
         // }
-
+        cout << "D  size = " << elements.size() << "\n";
         if (elements.size() == 2) {
             int key = stoi(elements[1]);
             cout << "---------------------------------------\n";
