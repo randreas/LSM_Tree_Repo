@@ -89,6 +89,8 @@ public:
 
     void createBloomFilter();
 
+    //Destructor of a level
+    ~Level(){clear();}
 };
 
 class LevelFullException : public exception {

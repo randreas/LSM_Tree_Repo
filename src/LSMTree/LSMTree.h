@@ -9,6 +9,7 @@
 #include "run.h"
 #include "level.h"
 #include "tuple.h"
+#include "Utils.h"
 
 class LSMTree
 {
@@ -37,11 +38,31 @@ public:
 
     void deleteKey(int key);
 
+    //Opens the index and load previous data
+    void open();
+
+    //Persist data to files
+    void close();
+
+    //Destructor
+    ~LSMTree(){close();}
 
 private:
     void mergeNMove(int sourceLevel, Run* newRun);
 
     void moveToLevelAtIdxRecurse(int idx, Run *newRun);
+
+    void writeBufferToFile() const;
+
+    void writeMetaDataToFile();
+
+    vector<int> readMetaDataFromFile();
+
+    static void writeIntToOffset(ofstream* fileStream, int *offSet, int data);
+
+    static void readIntFromOffset(ifstream *fileStream, int *offSet, int *data);
+
+    void readBufferFromFile();
 };
 
 #endif
