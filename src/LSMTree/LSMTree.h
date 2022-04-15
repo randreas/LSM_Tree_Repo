@@ -31,13 +31,13 @@ public:
      * @param high
      * @return
      */
-
-    //vector<Tuple*> query(int low, int high);
     vector<LSMTuple::Tuple*> query(int low, int high);
 
     void addTuple(LSMTuple::Tuple* tuple);
 
     void deleteKey(int key);
+
+    void deleteKey(int low, int high);
 
 
 private:

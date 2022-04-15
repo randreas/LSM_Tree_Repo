@@ -101,6 +101,13 @@ void LSMTree::deleteKey(int key) {
 }
 
 
+void LSMTree::deleteKey(int low, int high) {
+    vector<LSMTuple::Tuple*> toBeDeletedList = query(low,high);
+    for(LSMTuple::Tuple* t : toBeDeletedList) {
+        addTuple(new LSMTuple::Tuple(t->key, LSMTuple::Value(false)));
+    }
+}
+
 
 vector<LSMTuple::Tuple*> LSMTree::query(int low, int high) {
     vector<LSMTuple::Tuple*> result;
