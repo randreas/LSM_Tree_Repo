@@ -81,7 +81,7 @@ void executeCommand(LSMTree* lsmTree, string command) {
         }
     } else if (elements[0] == "S") {
         if (elements.size() != 3) {
-            cout << "D with incorrect size\n";
+            cout << "S with incorrect size\n";
             return;
         }
         int key_low = stoi(elements[1]);
