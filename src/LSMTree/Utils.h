@@ -13,7 +13,7 @@
 
 const int SIZE_OF_INT = sizeof(int);
 
-void writeRunToFileWithPath(const string& newFilePath, Run* run) {
+inline void writeRunToFileWithPath(const string& newFilePath, Run* run) {
     char* path = const_cast<char*>(newFilePath.c_str());
 
     if (FILE *file = fopen(path, "r")) {
@@ -51,7 +51,7 @@ void writeRunToFileWithPath(const string& newFilePath, Run* run) {
     cout << "finished writing to new file\n";
 }
 
-void readRunFromData(ifstream* inFile, Run* run) {
+inline void readRunFromData(ifstream* inFile, Run* run) {
     int tupleCnt;
     inFile->read(reinterpret_cast<char *>(&tupleCnt), SIZE_OF_INT);
     for (int i = 0; i < tupleCnt; i++) {
@@ -85,7 +85,7 @@ void readRunFromData(ifstream* inFile, Run* run) {
     inFile->close();
 }
 
-FileMeta *createFileMetaFromRun(size_t lvlID, size_t newBlockIdx, Run* run) {
+inline FileMeta *createFileMetaFromRun(size_t lvlID, size_t newBlockIdx, Run* run) {
     cout << "in create filemeta from run\n";
     stringstream ss;
     ss << "level-";
@@ -102,7 +102,7 @@ FileMeta *createFileMetaFromRun(size_t lvlID, size_t newBlockIdx, Run* run) {
     return newFileMeta;
 }
 
-FileMeta* createFileMetaFromExistingFile(size_t lvlID, size_t blockIdx, int max_tuple_num) {
+inline FileMeta* createFileMetaFromExistingFile(size_t lvlID, size_t blockIdx, int max_tuple_num) {
     stringstream ss;
     ss << "level-";
     ss << lvlID;
