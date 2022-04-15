@@ -98,16 +98,31 @@ void executeCommand(LSMTree* lsmTree, string command) {
 
 
     } else if (elements[0] == "D") {
-        if (elements.size() != 2) {
+        if (elements.size() > 3) {
             cout << "D with incorrect size\n";
             return;
         }
-        int key = stoi(elements[1]);
-        cout << "---------------------------------------\n";
-        cout << "Delete " << "key: " << key << "\n";
-        // execute
-        lsmTree->addTuple(new LSMTuple::Tuple(key, LSMTuple::Value(false)));
-        cout << "delete; addtuple finished\n";
+
+        if (elements.size() == 2) {
+            int key = stoi(elements[1]);
+            cout << "---------------------------------------\n";
+            cout << "Delete " << "key: " << key << "\n";
+            // execute
+            lsmTree->deleteKey(key);
+           
+            cout << "delete; addtuple finished\n";
+        } else if (elements.size() == 3) {
+            int low = stoi(elements[1]);
+            int high = stoi(elements[2]);
+            cout << "---------------------------------------\n";
+           
+            // execute
+            lsmTree->deleteKey(low,high);
+            cout << "delete; addtuple finished\n";
+        } else {
+            cout << "D with incorrect size\n";
+            return;
+        }
     }
 }
 
