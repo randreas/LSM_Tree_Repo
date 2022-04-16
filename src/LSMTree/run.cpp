@@ -19,21 +19,26 @@ bool Run::isFull() {
 }
 
 void Run::clear() {
+    /*
     while (!tuples.empty()) {
         LSMTuple::Tuple* tuple = tuples.back();
         tuples.pop_back();
         delete tuple;
         tuple = nullptr;
     }
+     */
+    tuples.clear();
 }
 
 //anotherRun is more up-to-date
 void Run::merge(Run *anotherRun) {
+    cout << "In run.merge\n";
     cout << "This run: \n";
     printRun();
-    cout << "In run.merge\n";
+    cout << "Run to merge: \n";
+    anotherRun->printRun();
     vector<LSMTuple::Tuple*> newTuples;
-    while (!(anotherRun->tuples.empty() && this->tuples.empty())) {
+    while (!anotherRun->tuples.empty() && !this->tuples.empty()) {
         if (this->tuples.empty() || anotherRun->tuples[0]->key < this->tuples[0]->key) {
             newTuples.push_back(anotherRun->tuples[0]);
             anotherRun->tuples.erase(anotherRun->tuples.begin());
@@ -47,6 +52,15 @@ void Run::merge(Run *anotherRun) {
             anotherRun->tuples.erase(anotherRun->tuples.begin());
         }
     }
+    if (!anotherRun->tuples.empty()) {
+        for (LSMTuple::Tuple* tuple : anotherRun->tuples) {
+            newTuples.push_back(tuple);
+        }
+    } else if (!this->tuples.empty()) {
+        for (LSMTuple::Tuple* tuple : this->tuples) {
+            newTuples.push_back(tuple);
+        }
+    }
     cout << "New tuple vector: \n";
     for (LSMTuple::Tuple* t : newTuples) {
         t->printTuple();
@@ -58,14 +72,14 @@ void Run::merge(Run *anotherRun) {
 
 void Run::replaceTuplesWithInput(const vector<LSMTuple::Tuple *>& newTuples) {
     //this->tuples = std::move(newTuples);
-    cout << "In replace: \n";
+    //cout << "In replace: \n";
     /*
     for (Tuple* tuple : this->tuples) {
         delete tuple;
     }
      */
     clear();
-    cout << "Cleared\n";
+    //cout << "Cleared\n";
     for (LSMTuple::Tuple* tuple : newTuples) {
         this->tuples.push_back(tuple);
     }

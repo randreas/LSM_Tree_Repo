@@ -40,10 +40,12 @@ public:
 
     string filePath;
 
-    ~FileMeta();
+    ~FileMeta(){};
 
     //RA todo
     vector<LSMTuple::Tuple*> GetAllTuples();
+
+    void clearFiles();
 };
 
 class RunFullException : public exception {

@@ -12,6 +12,7 @@
 #include "../BloomFilter/BloomFilter.h"
 
 bool Level::isFull() {
+    cout << "In level.isFull()\n";
     cout << dataBlocks.size() << "\n";
     cout << MAX_RUN_NUM << "\n";
     return dataBlocks.size() == MAX_RUN_NUM;
@@ -47,25 +48,25 @@ int Level::containsKey(int key) {
     if (!this->bloomFilter->query(reinterpret_cast<const char *>(&key))) {
         return -1;
     }
-    cout << "containsKey 1\n";
+    //cout << "containsKey 1\n";
     std::vector<int> possibleZones = fp->query(key);
     if (possibleZones.size() == 0) {
         return -1;
     }
-    cout << "containsKey 2\n";
+    //cout << "containsKey 2\n";
     for (int i : possibleZones) {
         Run* curRun = getRunByFileMetaAtIndex(i);
         if (curRun->containsKey(key)) {
             return i;
         }
     }
-    cout << "containsKey 3\n";
+    //cout << "containsKey 3\n";
     return -1;
 }
 
 
 Run *Level::merge() {
-    cout << "in merge\n";
+    cout << "in level.merge\n";
     Run* initRun = new Run((MAX_RUN_NUM + 1) * MAX_TUPLE_NUM_IN_RUN);
     cout << "created new run\n";
     for (FileMeta* fm : dataBlocks) {
@@ -75,12 +76,22 @@ Run *Level::merge() {
         initRun->printRun();
     }
     cout << "merged\n";
-    clear();
+    deepClear();
     cout << "cleared\n";
     fp->clear();
     //RA todo recreate bloomfilter
     createBloomFilter();
     return initRun;
+}
+
+void Level::deepClear() {
+    while (!dataBlocks.empty()) {
+        FileMeta* fmToDel = dataBlocks.back();
+        fmToDel->clearFiles();
+        dataBlocks.pop_back();
+        delete fmToDel;
+        fmToDel = nullptr;
+    }
 }
 
 void Level::clear() {
@@ -101,18 +112,19 @@ FileMeta *Level::getDataMeta(int idx) {
 }
 
 void Level::addRunFileMeta(FileMeta *fm) {
-    cout << "in add run file meta\n";
+    cout << "in level.addRunFileMeta\n";
     if (!isFull()) {
-        cout << "here1\n";
+        //cout << "here1\n";
         dataBlocks.push_back(fm);
         fp->addNewZone(fm);
     } else {
-        cout << "here2\n";
+        //cout << "here2\n";
         throw LevelFullException();
     }
 
     //RA todo recreate bloomfilter
     createBloomFilter();
+    cout << "Added FileMeta " << fm->filePath << "to level "<< lvlID << "\n";
 }
 
 Run *Level::getRunByFileMetaAtIndex(int idx) {
@@ -178,6 +190,6 @@ void Level::createBloomFilter() {
         cout << reinterpret_cast<const char *>(&key) << "\n";
         bf->program(reinterpret_cast<const char *>(&key));
     }
-    cout << "programmed all tuples\n";
+    cout << "finished Bloom Filter creation, programmed all tuples\n";
     bloomFilter = bf;
 }

@@ -1,4 +1,4 @@
-/snap/clion/184/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/jingyusu/Desktop/BU_Courses/SP2022/CS561/Projects/Final_proj/LSM_Tree_Repo
+/snap/clion/189/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" -S /home/jingyusu/Desktop/BU_Courses/SP2022/CS561/Projects/Final_proj/LSM_Tree_Repo -B /home/jingyusu/Desktop/BU_Courses/SP2022/CS561/Projects/Final_proj/LSM_Tree_Repo/cmake-build-debug
 CMake Deprecation Warning at CMakeLists.txt:1 (cmake_minimum_required):
   Compatibility with CMake < 2.8.12 will be removed from a future version of
   CMake.
@@ -11,8 +11,6 @@ CMake Deprecation Warning at CMakeLists.txt:1 (cmake_minimum_required):
 -- Generating done
 -- Build files have been written to: /home/jingyusu/Desktop/BU_Courses/SP2022/CS561/Projects/Final_proj/LSM_Tree_Repo/cmake-build-debug/external/googletest-download
 [ 11%] Performing update step for 'googletest'
-From https://github.com/google/googletest
-   a1cc8c55..80600e56  main       -> origin/main
 HEAD is now at 80600e56 Document two surprises in `DoAllAction::NonFinalType`.
 [ 22%] No patch step for 'googletest'
 [ 33%] No configure step for 'googletest'
