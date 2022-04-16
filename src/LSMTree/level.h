@@ -91,6 +91,8 @@ public:
 
     //Destructor of a level
     ~Level(){clear();}
+
+    void deepClear();
 };
 
 class LevelFullException : public exception {

@@ -47,6 +47,8 @@ public:
     //Destructor
     ~LSMTree(){close();}
 
+    int getLevelCnt();
+
 private:
     void mergeNMove(int sourceLevel, Run* newRun);
 
@@ -63,6 +65,7 @@ private:
     static void readIntFromOffset(ifstream *fileStream, int *offSet, int *data);
 
     void readBufferFromFile();
+
 };
 
 #endif

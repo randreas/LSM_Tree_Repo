@@ -52,6 +52,7 @@ inline void writeRunToFileWithPath(const string& newFilePath, Run* run) {
 }
 
 inline void readRunFromData(ifstream* inFile, Run* run) {
+    cout << "In read run from data\n";
     int tupleCnt;
     inFile->read(reinterpret_cast<char *>(&tupleCnt), SIZE_OF_INT);
     for (int i = 0; i < tupleCnt; i++) {

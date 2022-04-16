@@ -52,11 +52,11 @@ void executeCommand(LSMTree* lsmTree, string command) {
         cout << "\n";
         // execute
         lsmTree->addTuple(new LSMTuple::Tuple(key, LSMTuple::Value(values)));
-        cout << "addtuple finished\n";
+        cout << "Finished adding LSMTree.addTuple with key " << key << "\n";
         //lsmTree->buffer->printRun();
-        if (lsmTree->buffer == nullptr) {
-            cout << "buffer is null\n";
-        }
+        //if (lsmTree->buffer == nullptr) {
+        //    cout << "buffer is null\n";
+        //}
     } else if (elements[0] == "Q") {
         if (elements.size() != 2) {
             cout << "Q with incorrect size\n";
@@ -67,11 +67,11 @@ void executeCommand(LSMTree* lsmTree, string command) {
         cout << "Point query key: " << key << "\n";
         // execute
         LSMTuple::Tuple* resultTuple = lsmTree->query(key);
-        cout << "gate 0\n";
+        //cout << "gate 0\n";
         if (resultTuple->key != key) {
             throw KeyException();
         }
-        cout << "gate 1\n";
+        //cout << "gate 1\n";
         if (resultTuple->isDeleteMarker()) {
             cout << "query result : key: " << key << " not in the lsm tree, not entered or deleted" << "\n";
         } else {
@@ -138,11 +138,15 @@ int main(int argc, char *argv[])
 
     // create levels for this tree
     LSMTree* lsmTree = new LSMTree(initial_run_size, num_run_per_level);
-
+    lsmTree->open();
+    cout << "LSMTREE OPEN finished\n";
     // read and execute data file
+    cout << "buffer: \n";
     lsmTree->buffer->printRun();
+    cout << "tree level number: " << lsmTree->getLevelCnt() << "\n";
     cout << "Start reading and executing data file\n";
     executeQueryFile(lsmTree, dataFilePath);
+    cout << "buffer: \n";
     lsmTree->buffer->printRun();
 
     // read and execute workload file
@@ -150,6 +154,6 @@ int main(int argc, char *argv[])
     cout << "Start reading and executing workload file\n";
     executeQueryFile(lsmTree, workloadFilePath);
      */
-
+    lsmTree->close();
     return 0;
 }

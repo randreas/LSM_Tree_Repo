@@ -9,7 +9,7 @@
 #include "Utils.h"
 
 Run *FileMeta::getRun() {
-    cout << "in getRun of file " << filePath << "\n";
+    //cout << "in getRun of file " << filePath << "\n";
     ifstream inFile(filePath, ios::in|ios::binary);
     Run* run = new Run(MAX_TUPLE_NUM);
     //Read # of tuple from file
@@ -47,7 +47,7 @@ void FileMeta::appendTupleToFile(Tuple *tuple) {
 }
  */
 
-FileMeta::~FileMeta() {
+void FileMeta::clearFiles() {
     if (FILE *file = fopen(const_cast<char*>(filePath.c_str()), "r")) {
         fclose(file);
         remove(filePath.c_str());
