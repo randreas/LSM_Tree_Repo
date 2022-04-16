@@ -15,22 +15,21 @@ void LSMTree::addTuple(LSMTuple::Tuple* tuple) {
     // check if buffer is full
     // full, move run to level 1, clear buffer
     cout << "in LSMTree.addTuple\n";
+    buffer->addTuple(tuple);
+    cout << "Buffer after insert: \n";
+    buffer->printRun();
     if (buffer->isFull()) {
         //FileMeta* bufferFile = buffer->createFileMetaFromRun(0, 0);  // level 0, index 0
         cout << "Buffer is full, need to flush\n";
         Run* push_run = new Run(buffer->MAX_TUPLE_NUM + 1);
         push_run->merge(buffer);
-        push_run->addTuple(tuple);
+        //push_run->addTuple(tuple);
         cout << "run merged\n";
         push_run->printRun();
         mergeNMove(0, push_run);
         cout << "finished merge and move\n";
         //remove(const_cast<char*>(bufferFile->filePath.c_str()));
         buffer->shallowClear();
-    } else {
-        buffer->addTuple(tuple);
-        cout << "Buffer after insert: \n";
-        buffer->printRun();
     }
 }
 
@@ -66,7 +65,7 @@ void LSMTree::moveToLevelAtIdxRecurse(int idx, Run* newRun) {
     cout << "in move to level " << idx << "\n";
     if (idx == levels.size()) {
         cout << "here1\n";
-        int newRunSize = idx == 0 ? newRun->MAX_TUPLE_NUM : (levels[levels.size() - 1]->MAX_TUPLE_NUM_IN_RUN + 1) * num_run_per_level;
+        int newRunSize = idx == 0 ? newRun->MAX_TUPLE_NUM : (levels[levels.size() - 1]->MAX_TUPLE_NUM_IN_RUN) * num_run_per_level;
         //cout << newRunSize << "\n";
         int lvlId = levels.size();
         //cout << lvlId << "\n";
