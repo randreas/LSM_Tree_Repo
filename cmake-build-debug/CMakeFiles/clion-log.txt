@@ -1,4 +1,4 @@
-/snap/clion/184/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/jingyusu/Desktop/BU_Courses/SP2022/CS561/Projects/Final_proj/LSM_Tree_Repo
+/snap/clion/189/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" -S /home/jingyusu/Desktop/BU_Courses/SP2022/CS561/Projects/Final_proj/LSM_Tree_Repo -B /home/jingyusu/Desktop/BU_Courses/SP2022/CS561/Projects/Final_proj/LSM_Tree_Repo/cmake-build-debug
 CMake Deprecation Warning at CMakeLists.txt:1 (cmake_minimum_required):
   Compatibility with CMake < 2.8.12 will be removed from a future version of
   CMake.
