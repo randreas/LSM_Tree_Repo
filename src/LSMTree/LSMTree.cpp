@@ -42,14 +42,12 @@ LSMTuple::Tuple* LSMTree::query(int key) {
     for (Level *curLevel: levels) {
         //cout << "query 1\n";
 
-        //RA todo
         //Check bloomFilter
         ind = curLevel->containsKey(key);
         //cout << "query 2\n";
         if (ind >= 0) {
             return curLevel->getRunByFileMetaAtIndex(ind)->query(key);
         }
-        //cout << "query 3\n";
 
     }
 
@@ -206,4 +204,63 @@ vector<int> LSMTree::readMetaDataFromFile() {
 
 int LSMTree::getLevelCnt() {
     return levels.size();
+}
+
+void LSMTree::deleteKey(int low, int high) {
+    vector<LSMTuple::Tuple*> toBeDeletedList = query(low,high);
+
+    for(LSMTuple::Tuple* t : toBeDeletedList) {
+        cout << "Key to be deleted " << t->key << "\n";
+        addTuple(new LSMTuple::Tuple(t->key, LSMTuple::Value(false)));
+    }
+}
+
+
+vector<LSMTuple::Tuple*> LSMTree::query(int low, int high) {
+    vector<LSMTuple::Tuple*> result;
+    unordered_set <int> set;
+    cout << "QUERY RANGE START \n";
+    for(LSMTuple::Tuple* t : buffer->getTuples()) {
+        int key = t-> key;
+        cout << " buffer tuples curr key scan = " << key << "\n";
+        if(key <= high && key >= low) {
+            cout << "curr key in range \n";
+            if(set.find(key) != set.end()) {
+                cout << "key already is in the set" << "\n";
+            } else {
+                cout << "new key found adding into result" << "\n";
+                set.insert(t->key);
+                if(! t->isDeleteMarker()) {
+                    result.push_back(t);
+                }
+                
+            }
+        }
+    }
+
+    for (Level *curLevel: levels) {
+        cout << " levels curr key scan \n";
+        vector<int> zoneIdxs = curLevel->fp->query(low, high);
+        cout << " size of zoneIdxs = " << zoneIdxs.size() << "\n";
+        for(int idx : zoneIdxs) {
+            Run* currRun = curLevel->getRunByFileMetaAtIndex(idx);
+            vector<LSMTuple::Tuple*> curr_tuples = currRun->getTuples();
+            for(LSMTuple::Tuple* t : curr_tuples) {
+                int key = t->key;
+                if(key <= high && key >= low) {
+                    if(set.find(key) != set.end()) {
+                        cout << "key already is in the set" << "\n";
+                    } else {
+                        cout << "new key found adding into result"<< "\n";
+                        set.insert(t->key);
+                        if(! t->isDeleteMarker()) {
+                            result.push_back(t);
+                        }
+                    }
+                }
+            }
+        }
+        
+    }
+    return result;
 }

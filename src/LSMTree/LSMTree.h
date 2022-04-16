@@ -32,7 +32,7 @@ public:
      * @param high
      * @return
      */
-    LSMTuple::Tuple* query(int low, int high);
+    vector<LSMTuple::Tuple*> query(int low, int high);
 
     void addTuple(LSMTuple::Tuple* tuple);
 
@@ -48,6 +48,9 @@ public:
     ~LSMTree(){close();}
 
     int getLevelCnt();
+  
+    void deleteKey(int low, int high);
+
 
 private:
     void mergeNMove(int sourceLevel, Run* newRun);

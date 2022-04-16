@@ -81,25 +81,48 @@ void executeCommand(LSMTree* lsmTree, string command) {
         }
     } else if (elements[0] == "S") {
         if (elements.size() != 3) {
-            cout << "D with incorrect size\n";
+            cout << "S with incorrect size\n";
             return;
         }
         int key_low = stoi(elements[1]);
         int key_high = stoi(elements[2]);
         cout << "Range query " << "low key: " << key_low << " high key: " << key_high << "\n";
-        // Execute
-        //lsmTree->query(key_low, key_high)
+        vector<LSMTuple::Tuple*> resultTuples = lsmTree->query(key_low, key_high);
+        cout << "resultTuples size = " << resultTuples.size() << "\n";
+        if(resultTuples.size() > 0) {
+            for (LSMTuple::Tuple* t : resultTuples) {
+                t->getValue().printValue();
+            }
+        }
+
+
+
     } else if (elements[0] == "D") {
-        if (elements.size() != 2) {
+        // if (elements.size() > 3) {
+        //     cout << "D with incorrect size\n";
+        //     return;
+        // }
+        cout << "D  size = " << elements.size() << "\n";
+        if (elements.size() == 2) {
+            int key = stoi(elements[1]);
+            cout << "---------------------------------------\n";
+            cout << "Delete " << "key: " << key << "\n";
+            // execute
+            lsmTree->deleteKey(key);
+           
+            cout << "delete; addtuple finished\n";
+        } else if (elements.size() == 3) {
+            int low = stoi(elements[1]);
+            int high = stoi(elements[2]);
+            cout << "---------------------------------------\n";
+           
+            // execute
+            lsmTree->deleteKey(low,high);
+            cout << "delete; addtuple finished\n";
+        } else {
             cout << "D with incorrect size\n";
             return;
         }
-        int key = stoi(elements[1]);
-        cout << "---------------------------------------\n";
-        cout << "Delete " << "key: " << key << "\n";
-        // execute
-        lsmTree->addTuple(new LSMTuple::Tuple(key, LSMTuple::Value(false)));
-        cout << "delete; addtuple finished\n";
     }
 }
 
@@ -150,10 +173,10 @@ int main(int argc, char *argv[])
     lsmTree->buffer->printRun();
 
     // read and execute workload file
-    /*
+    
     cout << "Start reading and executing workload file\n";
     executeQueryFile(lsmTree, workloadFilePath);
-     */
     lsmTree->close();
+     
     return 0;
 }
