@@ -52,6 +52,8 @@ public:
   
     void deleteKey(int low, int high);
 
+    void printLSMTree();
+
 
 private:
     void mergeNMove(int sourceLevel, Run* newRun);

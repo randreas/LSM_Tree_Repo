@@ -232,6 +232,23 @@ void LSMTree::deleteKey(int low, int high) {
     }
 }
 
+void LSMTree::printLSMTree() {
+    cout << "++++++++++++++++++++++++\n";
+    cout << "Current LSM Tree Status: \n";
+    if (isTiering) {
+        cout << "Policy: Tiering \n";
+    } else {
+        cout << "Policy: Leveling \n";
+    }
+    cout << "Buffer: \n";
+    buffer->printRun();
+    cout << "Levels: \n";
+    for (Level* lvl : levels) {
+        lvl->printLevel();
+    }
+    cout << "++++++++++++++++++++++++\n";
+}
+
 
 vector<LSMTuple::Tuple*> LSMTree::query(int low, int high) {
     vector<LSMTuple::Tuple*> result;

@@ -192,3 +192,15 @@ void Level::createBloomFilter() {
     cout << "finished Bloom Filter creation, programmed all tuples\n";
     bloomFilter = bf;
 }
+
+void Level::printLevel() {
+    cout << "==================\n";
+    cout << "Level ID: " << lvlID << " Number of FileMeta: " << dataBlocks.size() << "\n";
+    for (FileMeta* fm : dataBlocks) {
+        fm->getRun()->printRun();
+    }
+
+    cout << "==================\n";
+}
+
+

@@ -92,6 +92,8 @@ public:
     ~Level(){clear();}
 
     void deepClear();
+
+    void printLevel();
 };
 
 class LevelFullException : public exception {

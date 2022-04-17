@@ -151,6 +151,7 @@ void commandLineHelp() {
     cout << "Start reading command from terminal\n";
     cout << "   'exit' for exit\n";
     cout << "   'help' for display this information again\n";
+    cout << "   'status' for display current LSM Tree status\n";
     cout << "   'I K V...' for inserting key value pair, number of V should be the same as the length specified above\n";
     cout << "   'Q K' for querying the value of the specified key\n";
     cout << "   'S minK maxK' for querying the value of the keys between minK and maxK\n";
@@ -192,6 +193,10 @@ int main(int argc, char *argv[])
         if (command == "help") {
                 commandLineHelp();
                 continue;
+        }
+        if (command == "status") {
+            lsmTree->printLSMTree();
+            continue;
         }
         executeCommand(lsmTree, command);
     }
