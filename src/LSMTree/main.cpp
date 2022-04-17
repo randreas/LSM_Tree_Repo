@@ -148,19 +148,21 @@ void executeQueryFile(LSMTree* lsmTree, string filePath) {
 
 int main(int argc, char *argv[])
 {
-    if (argc !=  5) {
-        cout << "USAGE: ./main <initial run size> <number of runs per level> <data file path> <workload file path>\n";
+    if (argc !=  2) {
+        cout << "USAGE: ./main <data file path> \n";
         return 1;
     }
 
     // constant, hyper parameter
-    int initial_run_size = stoi(argv[1]);
-    int num_run_per_level = stoi(argv[2]);
-    char* dataFilePath = argv[3];
-    char* workloadFilePath = argv[4];
+    int initial_run_size = 3;
+    int num_run_per_level = 3;
+    bool isTiering = false;
+
+    // constant, hyper parameter
+    char* inputFilePath = argv[1];
 
     // create levels for this tree
-    LSMTree* lsmTree = new LSMTree(initial_run_size, num_run_per_level);
+    LSMTree* lsmTree = new LSMTree(initial_run_size, num_run_per_level, isTiering);
     lsmTree->open();
     cout << "LSMTREE OPEN finished\n";
     // read and execute data file
@@ -168,14 +170,7 @@ int main(int argc, char *argv[])
     lsmTree->buffer->printRun();
     cout << "tree level number: " << lsmTree->getLevelCnt() << "\n";
     cout << "Start reading and executing data file\n";
-    executeQueryFile(lsmTree, dataFilePath);
-    cout << "buffer: \n";
-    lsmTree->buffer->printRun();
-
-    // read and execute workload file
-    
-    cout << "Start reading and executing workload file\n";
-    executeQueryFile(lsmTree, workloadFilePath);
+    executeQueryFile(lsmTree, inputFilePath);
     lsmTree->close();
      
     return 0;

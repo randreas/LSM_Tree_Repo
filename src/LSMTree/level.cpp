@@ -11,11 +11,15 @@
 #include <fstream>
 #include "../BloomFilter/BloomFilter.h"
 
-bool Level::isFull() {
+bool Level::isFull(bool isTiering) {
     cout << "In level.isFull()\n";
     cout << dataBlocks.size() << "\n";
     cout << MAX_RUN_NUM << "\n";
-    return dataBlocks.size() == MAX_RUN_NUM;
+    if (isTiering) {
+        return dataBlocks.size() == MAX_RUN_NUM;
+    } else {
+        return dataBlocks[0]->size >= dataBlocks[0]->MAX_TUPLE_NUM;
+    }
 }
 
 Run *Level::getRun(int idx) {
@@ -113,14 +117,8 @@ FileMeta *Level::getDataMeta(int idx) {
 
 void Level::addRunFileMeta(FileMeta *fm) {
     cout << "in level.addRunFileMeta\n";
-    if (!isFull()) {
-        //cout << "here1\n";
-        dataBlocks.push_back(fm);
-        fp->addNewZone(fm);
-    } else {
-        //cout << "here2\n";
-        throw LevelFullException();
-    }
+    dataBlocks.push_back(fm);
+    fp->addNewZone(fm);
 
     //RA todo recreate bloomfilter
     createBloomFilter();

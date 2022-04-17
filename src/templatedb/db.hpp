@@ -52,7 +52,7 @@ public:
     DB() {};
 
     DB(int _initial_run_size, int _num_run_per_level) {
-        this->lsm_tree_idx = new LSMTree(_initial_run_size, _num_run_per_level);
+        this->lsm_tree_idx = new LSMTree(_initial_run_size, _num_run_per_level, true);
         this->status = OPEN;
     };
 
