@@ -168,6 +168,7 @@ void LSMTree::writeMetaDataToFile() {
     writeIntToOffset(&metaDataFile, &offSet, initial_run_size);
     //Merge threshold
     writeIntToOffset(&metaDataFile, &offSet, num_run_per_level);
+    //todo: store is leveling/tiering
     for (Level* lvl : levels) {
         int lvlSize = lvl->getCurrentSize();
         writeIntToOffset(&metaDataFile, &offSet, lvlSize);
