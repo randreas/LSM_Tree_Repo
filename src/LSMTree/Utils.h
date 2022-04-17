@@ -138,6 +138,7 @@ inline FileMeta* createFileMetaFromExistingFile(size_t lvlID, size_t blockIdx, i
 
     newFileMeta->minKey = minKey;
     newFileMeta->maxKey = maxKey;
+    newFileMeta->size = tupleCnt;
     cout << "created new file meta from existing file " << filePath << "\n";
     return newFileMeta;
 }
