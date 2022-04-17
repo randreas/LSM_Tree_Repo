@@ -92,6 +92,7 @@ void executeCommand(LSMTree* lsmTree, string command) {
         if(resultTuples.size() > 0) {
             for (LSMTuple::Tuple* t : resultTuples) {
                 t->getValue().printValue();
+                cout << "\n";
             }
         }
 
@@ -146,6 +147,17 @@ void executeQueryFile(LSMTree* lsmTree, string filePath) {
     }
 }
 
+void commandLineHelp() {
+    cout << "Start reading command from terminal\n";
+    cout << "   'exit' for exit\n";
+    cout << "   'help' for display this information again\n";
+    cout << "   'I K V...' for inserting key value pair, number of V should be the same as the length specified above\n";
+    cout << "   'Q K' for querying the value of the specified key\n";
+    cout << "   'S minK maxK' for querying the value of the keys between minK and maxK\n";
+    cout << "   'D K' for deleting the specified key\n";
+    cout << "*** invalid input will cause error\n";
+}
+
 int main(int argc, char *argv[])
 {
     if (argc !=  2) {
@@ -171,7 +183,20 @@ int main(int argc, char *argv[])
     cout << "tree level number: " << lsmTree->getLevelCnt() << "\n";
     cout << "Start reading and executing data file\n";
     executeQueryFile(lsmTree, inputFilePath);
+
+    commandLineHelp();
+    string command = "tmp";
+    while (command != "exit") {
+        cout << "[command input]>>> ";
+        getline (cin, command);
+        if (command == "help") {
+                commandLineHelp();
+                continue;
+        }
+        executeCommand(lsmTree, command);
+    }
+
     lsmTree->close();
-     
+
     return 0;
 }
