@@ -81,17 +81,21 @@ void LSMTree::moveToLevelAtIdxRecurse(int idx, Run* newRun) {
             if (!lvl->isFull(isTiering)) {
                 cout << "level " << lvl->lvlID << " is not full\n";
                 lvl->addRunFileMeta(createFileMetaFromRun(idx, lvl->getCurrentSize(), newRun));
+                delete newRun;
+                newRun = nullptr;
             } else {
                 cout << "level " << lvl->lvlID << " is full\n";
                 Run* mergedResult = lvl->merge();
                 cout << "level merged\n";
                 cout << "level " << lvl->lvlID << " merged result:\n";
                 mergedResult->printRun();
-                mergedResult->merge(newRun);
+                //mergedResult->merge(newRun);
                 moveToLevelAtIdxRecurse(idx + 1, mergedResult);
+                moveToLevelAtIdxRecurse(idx, newRun);
             }
         } else {
             // leveling
+            cout << "leveling in mergeToLevel\n";
             Run* mergedResult = lvl->merge();
             mergedResult->merge(newRun);
             levels[idx]->addRunFileMeta(createFileMetaFromRun(idx, 0, mergedResult));
@@ -102,8 +106,6 @@ void LSMTree::moveToLevelAtIdxRecurse(int idx, Run* newRun) {
             }
         }
     }
-    delete newRun;
-    newRun = nullptr;
 }
 
 void LSMTree::deleteKey(int key) {
