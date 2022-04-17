@@ -72,7 +72,7 @@ int Level::containsKey(int key) {
 
 Run *Level::merge() {
     cout << "in level.merge\n";
-    Run* initRun = new Run((MAX_RUN_NUM + 1) * MAX_TUPLE_NUM_IN_RUN);
+    Run* initRun = new Run(MAX_RUN_NUM * MAX_TUPLE_NUM_IN_RUN);
     cout << "created new run\n";
     for (FileMeta* fm : dataBlocks) {
         initRun->merge(fm->getRun());
