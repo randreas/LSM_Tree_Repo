@@ -96,7 +96,9 @@ void LSMTree::moveToLevelAtIdxRecurse(int idx, Run* newRun) {
             mergedResult->merge(newRun);
             levels[idx]->addRunFileMeta(createFileMetaFromRun(idx, 0, mergedResult));
             // full
+            cout << "+++ check is full+++ \n";
             if (lvl->isFull(isTiering)) {
+                cout << "+++ is full+++ \n";
                 Run* moveResult = lvl->merge();
                 moveToLevelAtIdxRecurse(idx + 1, moveResult);
             }

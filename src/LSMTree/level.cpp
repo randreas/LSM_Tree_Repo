@@ -18,6 +18,7 @@ bool Level::isFull(bool isTiering) {
     if (isTiering) {
         return dataBlocks.size() == MAX_RUN_NUM;
     } else {
+        cout << "dataBlocks[0]->size " << dataBlocks[0]->size << " dataBlocks[0]->MAX_TUPLE_NUM " << dataBlocks[0]->MAX_TUPLE_NUM << "\n";
         return dataBlocks[0]->size >= dataBlocks[0]->MAX_TUPLE_NUM;
     }
 }

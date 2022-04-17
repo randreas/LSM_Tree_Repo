@@ -99,6 +99,7 @@ inline FileMeta *createFileMetaFromRun(size_t lvlID, size_t newBlockIdx, Run* ru
     auto* newFileMeta = new FileMeta(newFilePath, run->MAX_TUPLE_NUM);
     newFileMeta->minKey = run->getTuples()[0]->getKey();
     newFileMeta->maxKey = run->getTuples()[run->getSize() - 1]->getKey();
+    newFileMeta->size = run->getSize();
     cout << "created new file meta\n";
     return newFileMeta;
 }
