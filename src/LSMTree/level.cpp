@@ -11,11 +11,16 @@
 #include <fstream>
 #include "../BloomFilter/BloomFilter.h"
 
-bool Level::isFull() {
+bool Level::isFull(bool isTiering) {
     cout << "In level.isFull()\n";
     cout << dataBlocks.size() << "\n";
     cout << MAX_RUN_NUM << "\n";
-    return dataBlocks.size() == MAX_RUN_NUM;
+    if (isTiering) {
+        return dataBlocks.size() == MAX_RUN_NUM;
+    } else {
+        cout << "dataBlocks[0]->size " << dataBlocks[0]->size << " dataBlocks[0]->MAX_TUPLE_NUM " << dataBlocks[0]->MAX_TUPLE_NUM << "\n";
+        return dataBlocks[0]->size >= dataBlocks[0]->MAX_TUPLE_NUM;
+    }
 }
 
 Run *Level::getRun(int idx) {
@@ -67,7 +72,7 @@ int Level::containsKey(int key) {
 
 Run *Level::merge() {
     cout << "in level.merge\n";
-    Run* initRun = new Run((MAX_RUN_NUM + 1) * MAX_TUPLE_NUM_IN_RUN);
+    Run* initRun = new Run(MAX_RUN_NUM * MAX_TUPLE_NUM_IN_RUN);
     cout << "created new run\n";
     for (FileMeta* fm : dataBlocks) {
         initRun->merge(fm->getRun());
@@ -113,14 +118,8 @@ FileMeta *Level::getDataMeta(int idx) {
 
 void Level::addRunFileMeta(FileMeta *fm) {
     cout << "in level.addRunFileMeta\n";
-    if (!isFull()) {
-        //cout << "here1\n";
-        dataBlocks.push_back(fm);
-        fp->addNewZone(fm);
-    } else {
-        //cout << "here2\n";
-        throw LevelFullException();
-    }
+    dataBlocks.push_back(fm);
+    fp->addNewZone(fm);
 
     //RA todo recreate bloomfilter
     createBloomFilter();
@@ -193,3 +192,15 @@ void Level::createBloomFilter() {
     cout << "finished Bloom Filter creation, programmed all tuples\n";
     bloomFilter = bf;
 }
+
+void Level::printLevel() {
+    cout << "==================\n";
+    cout << "Level ID: " << lvlID << " Number of FileMeta: " << dataBlocks.size() << "\n";
+    for (FileMeta* fm : dataBlocks) {
+        fm->getRun()->printRun();
+    }
+
+    cout << "==================\n";
+}
+
+

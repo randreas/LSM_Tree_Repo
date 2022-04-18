@@ -17,9 +17,10 @@ class LSMTree
     vector<Level*> levels;
 
 public:
+    bool isTiering;
     Run* buffer;
 
-    LSMTree(int _initial_run_size, int _num_run_per_level);
+    LSMTree(int _initial_run_size, int _num_run_per_level, bool _isTiering);
 
     /**
      * Return all index of file meta that contains the key, null if the key does not exist in this fence pointer
@@ -50,6 +51,8 @@ public:
     int getLevelCnt();
   
     void deleteKey(int low, int high);
+
+    void printLSMTree();
 
 
 private:

@@ -5,9 +5,10 @@
 
 using namespace std;
 
-LSMTree::LSMTree(int _initial_run_size, int _num_run_per_level) {
+LSMTree::LSMTree(int _initial_run_size, int _num_run_per_level, bool _isTiering) {
     initial_run_size = _initial_run_size;
     num_run_per_level = _num_run_per_level;
+    isTiering = _isTiering;
     buffer = new Run(initial_run_size);
 }
 
@@ -21,7 +22,7 @@ void LSMTree::addTuple(LSMTuple::Tuple* tuple) {
     if (buffer->isFull()) {
         //FileMeta* bufferFile = buffer->createFileMetaFromRun(0, 0);  // level 0, index 0
         cout << "Buffer is full, need to flush\n";
-        Run* push_run = new Run(buffer->MAX_TUPLE_NUM + 1);
+        Run* push_run = new Run(buffer->MAX_TUPLE_NUM);
         push_run->merge(buffer);
         //push_run->addTuple(tuple);
         cout << "run merged\n";
@@ -76,21 +77,37 @@ void LSMTree::moveToLevelAtIdxRecurse(int idx, Run* newRun) {
     } else {
         cout << "here2\n";
         Level *lvl = levels[idx];
-        if (!lvl->isFull()) {
-            cout << "level " << lvl->lvlID << " is not full\n";
-            lvl->addRunFileMeta(createFileMetaFromRun(idx, lvl->getCurrentSize(), newRun));
+        if (isTiering) {
+            if (!lvl->isFull(isTiering)) {
+                cout << "level " << lvl->lvlID << " is not full\n";
+                lvl->addRunFileMeta(createFileMetaFromRun(idx, lvl->getCurrentSize(), newRun));
+                delete newRun;
+                newRun = nullptr;
+            } else {
+                cout << "level " << lvl->lvlID << " is full\n";
+                Run* mergedResult = lvl->merge();
+                cout << "level merged\n";
+                cout << "level " << lvl->lvlID << " merged result:\n";
+                mergedResult->printRun();
+                //mergedResult->merge(newRun);
+                moveToLevelAtIdxRecurse(idx + 1, mergedResult);
+                moveToLevelAtIdxRecurse(idx, newRun);
+            }
         } else {
-            cout << "level " << lvl->lvlID << " is full\n";
+            // leveling
+            cout << "leveling in mergeToLevel\n";
             Run* mergedResult = lvl->merge();
-            cout << "level merged\n";
-            cout << "level " << lvl->lvlID << " merged result:\n";
-            mergedResult->printRun();
             mergedResult->merge(newRun);
-            moveToLevelAtIdxRecurse(idx + 1, mergedResult);
+            levels[idx]->addRunFileMeta(createFileMetaFromRun(idx, 0, mergedResult));
+            // full
+            cout << "+++ check is full+++ \n";
+            if (lvl->isFull(isTiering)) {
+                cout << "+++ is full+++ \n";
+                Run* moveResult = lvl->merge();
+                moveToLevelAtIdxRecurse(idx + 1, moveResult);
+            }
         }
     }
-    delete newRun;
-    newRun = nullptr;
 }
 
 void LSMTree::deleteKey(int key) {
@@ -213,6 +230,23 @@ void LSMTree::deleteKey(int low, int high) {
         cout << "Key to be deleted " << t->key << "\n";
         addTuple(new LSMTuple::Tuple(t->key, LSMTuple::Value(false)));
     }
+}
+
+void LSMTree::printLSMTree() {
+    cout << "++++++++++++++++++++++++\n";
+    cout << "Current LSM Tree Status: \n";
+    if (isTiering) {
+        cout << "Policy: Tiering \n";
+    } else {
+        cout << "Policy: Leveling \n";
+    }
+    cout << "Buffer: \n";
+    buffer->printRun();
+    cout << "Levels: \n";
+    for (Level* lvl : levels) {
+        lvl->printLevel();
+    }
+    cout << "++++++++++++++++++++++++\n";
 }
 
 

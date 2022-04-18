@@ -52,18 +52,18 @@ inline void writeRunToFileWithPath(const string& newFilePath, Run* run) {
 }
 
 inline void readRunFromData(ifstream* inFile, Run* run) {
-    cout << "In read run from data\n";
+//    cout << "In read run from data\n";
     int tupleCnt;
     inFile->read(reinterpret_cast<char *>(&tupleCnt), SIZE_OF_INT);
     for (int i = 0; i < tupleCnt; i++) {
-        cout << "tuple " << i << "\n";
+//        cout << "tuple " << i << "\n";
         inFile->seekg(sizeof(int) * (i + 1));
         int offset;
         inFile->read(reinterpret_cast<char *>(&offset), SIZE_OF_INT);
         inFile->seekg(sizeof(int) * (i + 2));
         int nextTupleOffset;
         inFile->read(reinterpret_cast<char *>(&nextTupleOffset), SIZE_OF_INT);
-        cout << "offset: " << offset << ", next offset: " << nextTupleOffset << "\n";
+//        cout << "offset: " << offset << ", next offset: " << nextTupleOffset << "\n";
         inFile->seekg(offset);
         //Read key from file
         int key;
@@ -81,8 +81,8 @@ inline void readRunFromData(ifstream* inFile, Run* run) {
         auto* newTuple = new LSMTuple::Tuple(key, val);
         run->addTuple(newTuple);
     }
-    cout << "generated run: \n";
-    run->printRun();
+//    cout << "generated run: \n";
+//    run->printRun();
     inFile->close();
 }
 
@@ -99,6 +99,7 @@ inline FileMeta *createFileMetaFromRun(size_t lvlID, size_t newBlockIdx, Run* ru
     auto* newFileMeta = new FileMeta(newFilePath, run->MAX_TUPLE_NUM);
     newFileMeta->minKey = run->getTuples()[0]->getKey();
     newFileMeta->maxKey = run->getTuples()[run->getSize() - 1]->getKey();
+    newFileMeta->size = run->getSize();
     cout << "created new file meta\n";
     return newFileMeta;
 }
@@ -137,6 +138,7 @@ inline FileMeta* createFileMetaFromExistingFile(size_t lvlID, size_t blockIdx, i
 
     newFileMeta->minKey = minKey;
     newFileMeta->maxKey = maxKey;
+    newFileMeta->size = tupleCnt;
     cout << "created new file meta from existing file " << filePath << "\n";
     return newFileMeta;
 }

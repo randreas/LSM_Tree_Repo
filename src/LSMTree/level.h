@@ -55,7 +55,7 @@ public:
     }
 
     //If this level is saturated, no more tuples can be inserted
-    bool isFull();
+    bool isFull(bool isTiering);
 
     //If this level is empty
     bool isEmpty();
@@ -92,6 +92,8 @@ public:
     ~Level(){clear();}
 
     void deepClear();
+
+    void printLevel();
 };
 
 class LevelFullException : public exception {

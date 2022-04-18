@@ -15,7 +15,7 @@ Run::Run(size_t size) : MAX_TUPLE_NUM(size) {
 }
 
 bool Run::isFull() {
-    return tuples.size() == MAX_TUPLE_NUM;
+    return tuples.size() >= MAX_TUPLE_NUM;
 }
 
 void Run::clear() {
