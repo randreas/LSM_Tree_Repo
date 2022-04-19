@@ -5,7 +5,6 @@ def readDataFile(readFile, writeFile):
 	wf = open(writeFile,"a");
 	
 	for line in f:
-		print(line)
 		a = line.split() 
 		if(len(a) == 1):
 			continue;
@@ -33,8 +32,12 @@ def readDataFile(readFile, writeFile):
 			high = a[2]
 			selectRange = range(int(low),int(high))
 			rangeScanResult = result.intersection(selectRange)
-			wf.write("Found rangeScan " + rangeScanResult + "\n")
+			print(rangeScanResult)
+			wf.write("Found rangeScan [" 
+			for i in rangeScanResult:
+				wf.write( str(i) + " ");
 
+			wf.write("]\n"); 
 
 
 def main():
