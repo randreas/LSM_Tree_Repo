@@ -44,8 +44,8 @@ def readDataFile(readFile, writeFile):
 
 def main():
 	print("Inside")
-	readDataFile("data.wl","expectedResults.txt");
-	readDataFile("rangeQuerySearch.wl","expectedResults.txt")
+	readDataFile("test_1000_3.data","res.txt");
+	readDataFile("test_10000_3_1000.wl","res2.txt")
 
 main();
 	
