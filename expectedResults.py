@@ -24,8 +24,10 @@ def readDataFile(readFile, writeFile):
 					wf.write("Delete " + d + " || currSize = " +str(len(result))+ "\n")
 		elif(a[0] == "Q"):
 			#query
-			result.find(int(a[1]));
-			wf.write("Found  " + a[1] + "\n")
+			if(int(a[1]) in result) :
+				wf.write("Found  " + a[1] + "\n")
+			else:
+				wf.write("Did not Find  " + a[1] + "\n")
 		elif(a[0] == "S"):
 			#range scan
 			low = a[1]
