@@ -21,7 +21,7 @@ def readDataFile(readFile, writeFile):
 				dRange = range(low,high)
 				for d in dRange:
 					result.discard(d)
-					wf.write("Delete " + d + " || currSize = " +str(len(result))+ "\n")
+					wf.write("Delete " + str(d) + " || currSize = " +str(len(result))+ "\n")
 		elif(a[0] == "Q"):
 			#query
 			if(int(a[1]) in result) :
