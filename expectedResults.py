@@ -3,9 +3,8 @@ result = set()
 def readDataFile(readFile, writeFile):
 	f = open(readFile,"r");
 	wf = open(writeFile,"x");
-	lines = f.readLines()
-
-	for line in lines:
+	
+	for line in f:
 		print(line)
 		a = line.split() 
 		if(a[0] == "I"):
