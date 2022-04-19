@@ -40,6 +40,8 @@ def main():
 	print("Inside")
 	readDataFile("data.wl","expectedResults.txt");
 	readDataFile("test_10000_3.wl","expectedResults.txt")
+
+main();
 	
 
 
