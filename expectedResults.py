@@ -29,8 +29,8 @@ def readDataFile(readFile, writeFile):
 			wf.write("Found  " + a[1] + "\n")
 		elif(a[0] == "S"):
 			#range scan
-			low = a[2]
-			high = a[3]
+			low = a[1]
+			high = a[2]
 			selectRange = range(low,high)
 			rangeScanResult = result.intersection(selectRange)
 			wf.write("Found rangeScan " + rangeScanResult + "\n")
