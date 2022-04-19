@@ -6,6 +6,7 @@ def readDataFile(readFile, writeFile):
 	lines = f.readLines()
 
 	for line in lines:
+		print(line)
 		a = line.split() 
 		if(a[0] == "I"):
 			result.add(a[1]);
@@ -36,8 +37,10 @@ def readDataFile(readFile, writeFile):
 
 
 def main():
+	print("Inside")
 	readDataFile("data.wl","expectedResults.txt");
 	readDataFile("test_10000_3.wl","expectedResults.txt")
+	
 
 
 
