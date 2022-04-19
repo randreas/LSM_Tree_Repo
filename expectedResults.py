@@ -7,10 +7,12 @@ def readDataFile(readFile, writeFile):
 	for line in f:
 		print(line)
 		a = line.split() 
+		if(len(a) == 1):
+			continue;
 		if(a[0] == "I"):
 			result.add(a[1]);
 			wf.write("Insert " + a[1] + " || currSize = " + str(len(result)) + "\n");
-		elif(a[1] == "D"):
+		elif(a[0] == "D"):
 			if(len(a) == 3) :
 				result.discard(a[1]);
 				wf.write("Delete " + a[1] + " || currSize = " +str(len(result))+ "\n")
@@ -21,11 +23,11 @@ def readDataFile(readFile, writeFile):
 				for d in dRange:
 					result.discard(d)
 					wf.write("Delete " + d + " || currSize = " +str(len(result))+ "\n")
-		elif(a[1] == "Q"):
+		elif(a[0] == "Q"):
 			#query
 			result.find(a[1]);
 			wf.write("Found  " + a[1] + "\n")
-		elif(a[1] == "S"):
+		elif(a[0] == "S"):
 			#range scan
 			low = a[2]
 			high = a[3]
