@@ -9,29 +9,29 @@ def readDataFile(readFile, writeFile):
 		a = line.split() 
 		if(a[0] == "I"):
 			result.add(a[1]);
-			wf.write("Insert " + a[1] + "currSize = " + str(len(result)));
+			wf.write("Insert " + a[1] + "currSize = " + str(len(result)) + "\n");
 		elif(a[1] == "D"):
 			if(len(a) == 3) :
 				result.discard(a[1]);
-				wf.write("Delete " + a[1] + "currSize = " +str(len(result)));
+				wf.write("Delete " + a[1] + "currSize = " +str(len(result))+ "\n")
 			elif(len(a) == 4) :
 				low = a[2]
 				high = a[3]
 				dRange = range(low,high)
 				for d in dRange:
 					result.discard(d)
-					wf.write("Delete " + d + "currSize = " +str(len(result)));
+					wf.write("Delete " + d + "currSize = " +str(len(result))+ "\n")
 		elif(a[1] == "Q"):
 			#query
 			result.find(a[1]);
-			wf.write("Found  " + a[1]);
+			wf.write("Found  " + a[1] + "\n")
 		elif(a[1] == "S"):
 			#range scan
 			low = a[2]
 			high = a[3]
 			selectRange = range(low,high)
 			rangeScanResult = result.intersection(selectRange)
-			wf.write("Found rangeScan " + rangeScanResult);
+			wf.write("Found rangeScan " + rangeScanResult + "\n")
 
 
 
