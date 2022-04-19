@@ -6,7 +6,7 @@ def readDataFile(readFile, writeFile):
 	
 	for line in f:
 		a = line.split() 
-		if(len(a) == 1):
+		if(len(a) < 1):
 			continue;
 		if(a[0] == "I"):
 			result.add(int(a[1]));
