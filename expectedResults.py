@@ -9,18 +9,18 @@ def readDataFile(readFile, writeFile):
 		a = line.split() 
 		if(a[0] == "I"):
 			result.add(a[1]);
-			wf.write("Insert " + a[1] + "currSize = " +result.size());
+			wf.write("Insert " + a[1] + "currSize = " +len(result));
 		elif(a[1] == "D"):
-			if(a.size == 3) :
+			if(len(a) == 3) :
 				result.discard(a[1]);
-				wf.write("Delete " + a[1] + "currSize = " +result.size());
-			elif(a.size == 4) :
+				wf.write("Delete " + a[1] + "currSize = " +len(result));
+			elif(len(a) == 4) :
 				low = a[2]
 				high = a[3]
 				dRange = range(low,high)
 				for d in dRange:
 					result.discard(d)
-					wf.write("Delete " + d + "currSize = " +result.size());
+					wf.write("Delete " + d + "currSize = " +len(result));
 		elif(a[1] == "Q"):
 			#query
 			result.find(a[1]);
