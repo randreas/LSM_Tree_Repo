@@ -2,42 +2,54 @@ result = set()
 
 def readDataFile(readFile, writeFile):
 	f = open(readFile,"r");
-	wf = open(writeFile,"x");
-	lines = f.readLines()
-
-	for line in lines:
+	wf = open(writeFile,"a");
+	
+	for line in f:
 		a = line.split() 
+		if(len(a) < 1):
+			continue;
 		if(a[0] == "I"):
-			result.add(a[1]);
-			wf.write("Insert " + a[1] + "currSize = " +result.size());
-		elif(a[1] == "D"):
-			if(a.size == 3) :
-				result.discard(a[1]);
-				wf.write("Delete " + a[1] + "currSize = " +result.size());
-			elif(a.size == 4) :
-				low = a[2]
-				high = a[3]
+			result.add(int(a[1]));
+			wf.write("Insert " + a[1] + " || currSize = " + str(len(result)) + "\n");
+		elif(a[0] == "D"):
+			if(len(a) == 2) :
+				result.discard(int(a[1]));
+				wf.write("Delete " + a[1] + " || currSize = " +str(len(result))+ "\n")
+			elif(len(a) == 3) :
+				low = int(a[1])
+				high = int(a[2]) + 1
 				dRange = range(low,high)
+				print(dRange);
 				for d in dRange:
 					result.discard(d)
-					wf.write("Delete " + d + "currSize = " +result.size());
-		elif(a[1] == "Q"):
+					wf.write("Delete " + str(d) + " || currSize = " +str(len(result))+ "\n")
+		elif(a[0] == "Q"):
 			#query
-			result.find(a[1]);
-			wf.write("Found  " + a[1]);
-		elif(a[1] == "S"):
+			if(int(a[1]) in result) :
+				wf.write("Found  " + a[1] + "\n")
+			else:
+				wf.write("Did not Find  " + a[1] + "\n")
+		elif(a[0] == "S"):
 			#range scan
-			low = a[2]
-			high = a[3]
-			selectRange = range(low,high)
+			low = a[1]
+			high = a[2]
+			selectRange = range(int(low),int(high))
+			print(selectRange);
 			rangeScanResult = result.intersection(selectRange)
-			wf.write("Found rangeScan " + rangeScanResult);
+			wf.write("Found rangeScan [" );
+			for i in rangeScanResult :
+				wf.write( str(i) + " ");
 
+			wf.write("]\n"); 
 
 
 def main():
-	readDataFile("data.wl","expectedResults.txt");
-	readDataFile("test_10000_3.wl","expectedResults.txt")
+	print("Inside")
+	readDataFile("test_1000_3.data","res.txt");
+	readDataFile("test_10000_3_1000.wl","res2.txt")
+
+main();
+	
 
 
 
