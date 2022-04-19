@@ -34,7 +34,7 @@ def readDataFile(readFile, writeFile):
 			rangeScanResult = result.intersection(selectRange)
 			print(rangeScanResult)
 			wf.write("Found rangeScan [" 
-			for i in rangeScanResult:
+			for i in rangeScanResult :
 				wf.write( str(i) + " ");
 
 			wf.write("]\n"); 
