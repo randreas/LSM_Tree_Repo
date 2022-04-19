@@ -2,7 +2,7 @@ result = set()
 
 def readDataFile(readFile, writeFile):
 	f = open(readFile,"r");
-	wf = open(writeFile,"x");
+	wf = open(writeFile,"rwx");
 	
 	for line in f:
 		print(line)
