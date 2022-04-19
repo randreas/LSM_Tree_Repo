@@ -17,8 +17,9 @@ def readDataFile(readFile, writeFile):
 				wf.write("Delete " + a[1] + " || currSize = " +str(len(result))+ "\n")
 			elif(len(a) == 3) :
 				low = int(a[1])
-				high = int(a[2])
+				high = int(a[2]) + 1
 				dRange = range(low,high)
+				print(dRange);
 				for d in dRange:
 					result.discard(d)
 					wf.write("Delete " + str(d) + " || currSize = " +str(len(result))+ "\n")
@@ -33,6 +34,7 @@ def readDataFile(readFile, writeFile):
 			low = a[1]
 			high = a[2]
 			selectRange = range(int(low),int(high))
+			print(selectRange);
 			rangeScanResult = result.intersection(selectRange)
 			wf.write("Found rangeScan [" );
 			for i in rangeScanResult :
