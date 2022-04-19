@@ -12,12 +12,12 @@ def readDataFile(readFile, writeFile):
 			result.add(int(a[1]));
 			wf.write("Insert " + a[1] + " || currSize = " + str(len(result)) + "\n");
 		elif(a[0] == "D"):
-			if(len(a) == 3) :
+			if(len(a) == 2) :
 				result.discard(int(a[1]));
 				wf.write("Delete " + a[1] + " || currSize = " +str(len(result))+ "\n")
-			elif(len(a) == 4) :
-				low = int(a[2])
-				high = int(a[3])
+			elif(len(a) == 3) :
+				low = int(a[1])
+				high = int(a[2])
 				dRange = range(low,high)
 				for d in dRange:
 					result.discard(d)
