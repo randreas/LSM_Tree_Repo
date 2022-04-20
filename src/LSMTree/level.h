@@ -82,7 +82,7 @@ public:
     Run* getRunByFileMetaAtIndex(int idx);
 
     //Merges the entire level, return pointer of a merged run
-    Run* merge();
+    Run* merge(bool isTiering);
 
     vector<LSMTuple::Tuple*> GetAllTuples();
 

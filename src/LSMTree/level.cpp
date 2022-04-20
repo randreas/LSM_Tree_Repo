@@ -70,9 +70,14 @@ int Level::containsKey(int key) {
 }
 
 
-Run *Level::merge() {
+Run *Level::merge(bool isTiering) {
     cout << "in level.merge\n";
-    Run* initRun = new Run(MAX_RUN_NUM * MAX_TUPLE_NUM_IN_RUN);
+    Run* initRun;
+    if (isTiering) {
+        initRun = new Run(MAX_RUN_NUM * MAX_TUPLE_NUM_IN_RUN);
+    } else {
+        initRun = new Run(1 * MAX_TUPLE_NUM_IN_RUN);
+    }
     cout << "created new run\n";
     for (FileMeta* fm : dataBlocks) {
         initRun->merge(fm->getRun());
@@ -188,7 +193,8 @@ void Level::createBloomFilter() {
         int key = t->key;
         cout << reinterpret_cast<const char *>(&key) << "\n";
         bf->program(reinterpret_cast<const char *>(&key));
-    }
+    }I 18 18
+st
     cout << "finished Bloom Filter creation, programmed all tuples\n";
     bloomFilter = bf;
 }
