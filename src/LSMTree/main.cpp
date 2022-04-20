@@ -23,10 +23,14 @@ void printIntVector(vector<int> v) {
     }
 }
 
-void executeCommand(LSMTree* lsmTree, string command) {
+void executeCommand(LSMTree* lsmTree, string command, string outputFilePath) {
     stringstream iss(command);
     vector<string> elements;
     string e;
+
+
+    ofstream fw(outputFilePath, std::ofstream::out);
+
     
     // read all elements into a vector of strings
     int counter = 0;
@@ -57,6 +61,12 @@ void executeCommand(LSMTree* lsmTree, string command) {
         //if (lsmTree->buffer == nullptr) {
         //    cout << "buffer is null\n";
         //}
+
+
+        if (fw.is_open()) {
+            fw << "Insert " << key << "\n"
+        }
+        fw.close();
     } else if (elements[0] == "Q") {
         if (elements.size() != 2) {
             cout << "Q with incorrect size\n";
@@ -74,10 +84,19 @@ void executeCommand(LSMTree* lsmTree, string command) {
         //cout << "gate 1\n";
         if (resultTuple->isDeleteMarker()) {
             cout << "query result : key: " << key << " not in the lsm tree, not entered or deleted" << "\n";
+            if (fw.is_open()) {
+                fw << "Found " << key << "\n"
+            }
+            fw.close();
         } else {
             cout << "query result : key: " << key << " value: ";
             resultTuple->getValue().printValue();
             cout<< "\n";
+
+            if (fw.is_open()) {
+                fw << "Did not find " << key << "\n"
+            }
+            fw.close();
         }
     } else if (elements[0] == "S") {
         if (elements.size() != 3) {
@@ -89,12 +108,17 @@ void executeCommand(LSMTree* lsmTree, string command) {
         cout << "Range query " << "low key: " << key_low << " high key: " << key_high << "\n";
         vector<LSMTuple::Tuple*> resultTuples = lsmTree->query(key_low, key_high);
         cout << "resultTuples size = " << resultTuples.size() << "\n";
-        if(resultTuples.size() > 0) {
-            for (LSMTuple::Tuple* t : resultTuples) {
-                t->getValue().printValue();
-                cout << "\n";
+        if (fw.is_open()) {
+            if(resultTuples.size() > 0) {
+                for (LSMTuple::Tuple* t : resultTuples) {
+                    t->getValue().printValue();
+                    cout << "\n";
+                    fw << "Found " << t->getValue() << "\n"
+                }
             }
-        }
+
+        
+        fw.close();
 
 
 
@@ -112,6 +136,12 @@ void executeCommand(LSMTree* lsmTree, string command) {
             lsmTree->deleteKey(key);
            
             cout << "delete; addtuple finished\n";
+
+            if (fw.is_open()) {
+                fw << "Deleted " << key << "\n"
+            }
+            fw.close();
+
         } else if (elements.size() == 3) {
             int low = stoi(elements[1]);
             int high = stoi(elements[2]);
@@ -119,6 +149,13 @@ void executeCommand(LSMTree* lsmTree, string command) {
            
             // execute
             lsmTree->deleteKey(low,high);
+            if (fw.is_open()) {
+                for(int i = low; i <= high; i++) {
+                    fw << "Deleted " << i << "\n"
+                }
+            }
+            fw.close();
+
             cout << "delete; addtuple finished\n";
         } else {
             cout << "D with incorrect size\n";
@@ -127,7 +164,7 @@ void executeCommand(LSMTree* lsmTree, string command) {
     }
 }
 
-void executeQueryFile(LSMTree* lsmTree, string filePath) {
+void executeQueryFile(LSMTree* lsmTree, string filePath, string outputFilePath) {
     ifstream fs;
     fs.open(filePath);
 
@@ -136,7 +173,7 @@ void executeQueryFile(LSMTree* lsmTree, string filePath) {
         // cout << "In executeQueryFile(), file string is open.\n";
         while (getline(fs, line)) {
             // fs >> line;
-            executeCommand(lsmTree, line);
+            executeCommand(lsmTree, line, outputFilePath);
         }
         // while (fs.good()) {
         //     fs >> line;
@@ -161,8 +198,8 @@ void commandLineHelp() {
 
 int main(int argc, char *argv[])
 {
-    if (argc >  2) {
-        cout << "USAGE: ./main or ./main <data file path> \n";
+    if (argc >  3) {
+        cout << "USAGE: ./main or ./main <data file path> <outputFilePath>\n";
         return 1;
     }
 
@@ -173,6 +210,7 @@ int main(int argc, char *argv[])
 
     // constant, hyper parameter
     char* inputFilePath = argv[1];
+    char* outputFilePath = argv[2];
 
     // create levels for this tree
     LSMTree* lsmTree = new LSMTree(initial_run_size, num_run_per_level, isTiering);
@@ -190,7 +228,7 @@ int main(int argc, char *argv[])
         lsmTree->buffer->printRun();
         cout << "tree level number: " << lsmTree->getLevelCnt() << "\n";
         cout << "Start reading and executing data file\n";
-        executeQueryFile(lsmTree, inputFilePath);
+        executeQueryFile(lsmTree, inputFilePath, outputFilePath);
     }
 
     commandLineHelp();
@@ -206,7 +244,7 @@ int main(int argc, char *argv[])
             lsmTree->printLSMTree();
             continue;
         }
-        executeCommand(lsmTree, command);
+        executeCommand(lsmTree, command, outputFilePath);
     }
 
     lsmTree->close();
