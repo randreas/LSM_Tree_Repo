@@ -113,9 +113,10 @@ void executeCommand(LSMTree* lsmTree, string command, string outputFilePath) {
                 for (LSMTuple::Tuple* t : resultTuples) {
                     t->getValue().printValue();
                     cout << "\n";
-                    fw << "Found " << t->getValue() << "\n"
+                    fw << "Found " << t->getValue() << "\n";
                 }
             }
+        }
 
         
         fw.close();
