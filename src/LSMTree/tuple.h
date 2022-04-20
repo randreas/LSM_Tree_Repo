@@ -92,7 +92,7 @@ namespace LSMTuple {
             return value.IsDelMarker();
         }
 
-        inline void printTuple();
+        void printTuple();
 
     };
 }
