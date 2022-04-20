@@ -155,7 +155,7 @@ void commandLineHelp() {
     cout << "   'I K V...' for inserting key value pair, number of V should be the same as the length specified above\n";
     cout << "   'Q K' for querying the value of the specified key\n";
     cout << "   'S minK maxK' for querying the value of the keys between minK and maxK\n";
-    cout << "   'D K' for deleting the specified key\n";
+    cout << "   'D K [max_K]' for deleting the specified key, 2 parameters for range delete\n";
     cout << "*** invalid input will cause error\n";
 }
 
