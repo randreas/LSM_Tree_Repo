@@ -138,7 +138,7 @@ void executeCommand(LSMTree* lsmTree, string command, string outputFilePath) {
             cout << "delete; addtuple finished\n";
 
             if (fw.is_open()) {
-                fw << "Deleted " << key << "\n"
+                fw << "Deleted " << key << "\n";
             }
             fw.close();
 
@@ -151,7 +151,7 @@ void executeCommand(LSMTree* lsmTree, string command, string outputFilePath) {
             lsmTree->deleteKey(low,high);
             if (fw.is_open()) {
                 for(int i = low; i <= high; i++) {
-                    fw << "Deleted " << i << "\n"
+                    fw << "Deleted " << i << "\n";
                 }
             }
             fw.close();
