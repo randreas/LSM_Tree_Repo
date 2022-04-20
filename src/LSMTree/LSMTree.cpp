@@ -66,7 +66,18 @@ void LSMTree::moveToLevelAtIdxRecurse(int idx, Run* newRun) {
     cout << "in move to level " << idx << "\n";
     if (idx == levels.size()) {
         cout << "here1\n";
-        int newRunSize = idx == 0 ? newRun->MAX_TUPLE_NUM : (levels[levels.size() - 1]->MAX_TUPLE_NUM_IN_RUN) * num_run_per_level;
+        int newRunSize;
+        if (idx == 0) {
+            if (isTiering) {
+                newRunSize = newRun->MAX_TUPLE_NUM;
+            } else {
+                newRunSize = newRun->MAX_TUPLE_NUM * num_run_per_level;
+                cout << "%%%%%%%%%" << newRun->MAX_TUPLE_NUM << " " << num_run_per_level << " " << newRunSize << "\n";
+            }
+        } else {
+            newRunSize = (levels[levels.size() - 1]->MAX_TUPLE_NUM_IN_RUN) * num_run_per_level;
+        }
+//        int newRunSize = idx == 0 ? newRun->MAX_TUPLE_NUM : (levels[levels.size() - 1]->MAX_TUPLE_NUM_IN_RUN) * num_run_per_level;
         //cout << newRunSize << "\n";
         int lvlId = levels.size();
         //cout << lvlId << "\n";
