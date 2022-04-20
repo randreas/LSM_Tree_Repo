@@ -193,8 +193,7 @@ void Level::createBloomFilter() {
         int key = t->key;
         cout << reinterpret_cast<const char *>(&key) << "\n";
         bf->program(reinterpret_cast<const char *>(&key));
-    }I 18 18
-st
+    }
     cout << "finished Bloom Filter creation, programmed all tuples\n";
     bloomFilter = bf;
 }
