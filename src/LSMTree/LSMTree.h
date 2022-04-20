@@ -72,6 +72,9 @@ private:
 
     void readBufferFromFile();
 
+    static void writeCharToOffset(ofstream *fileStream, int *offSet, char data);
+
+    void readCharFromOffset(ifstream *fileStream, int *offSet, char *data);
 };
 
 #endif

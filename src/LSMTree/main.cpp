@@ -178,6 +178,11 @@ int main(int argc, char *argv[])
     LSMTree* lsmTree = new LSMTree(initial_run_size, num_run_per_level, isTiering);
     lsmTree->open();
     cout << "LSMTREE OPEN finished\n";
+    if (lsmTree->isTiering) {
+        cout << "Tiering Tree\n";
+    } else {
+        cout << "Leveling Tree\n";
+    }
     // read and execute data file
     cout << "buffer: \n";
     lsmTree->buffer->printRun();
