@@ -161,8 +161,8 @@ void commandLineHelp() {
 
 int main(int argc, char *argv[])
 {
-    if (argc !=  2) {
-        cout << "USAGE: ./main <data file path> \n";
+    if (argc >  2) {
+        cout << "USAGE: ./main or ./main <data file path> \n";
         return 1;
     }
 
@@ -183,12 +183,15 @@ int main(int argc, char *argv[])
     } else {
         cout << "Leveling Tree\n";
     }
-    // read and execute data file
-    cout << "buffer: \n";
-    lsmTree->buffer->printRun();
-    cout << "tree level number: " << lsmTree->getLevelCnt() << "\n";
-    cout << "Start reading and executing data file\n";
-    executeQueryFile(lsmTree, inputFilePath);
+
+    if (argc > 1) {
+        // read and execute data file
+        cout << "buffer: \n";
+        lsmTree->buffer->printRun();
+        cout << "tree level number: " << lsmTree->getLevelCnt() << "\n";
+        cout << "Start reading and executing data file\n";
+        executeQueryFile(lsmTree, inputFilePath);
+    }
 
     commandLineHelp();
     string command = "tmp";
