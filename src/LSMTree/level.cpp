@@ -203,4 +203,8 @@ void Level::printLevel() {
     cout << "==================\n";
 }
 
+int Level::getDataBlockCnt() {
+    return dataBlocks.size();
+}
+
 
