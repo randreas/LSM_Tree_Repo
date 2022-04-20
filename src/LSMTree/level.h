@@ -22,9 +22,6 @@ private:
     //Meta data for runs in the level
     std::vector<FileMeta*> dataBlocks;
 
-    //Clear all the dataBlocks in the level
-    void clear();
-
     //Add a mew empty file meta
     void createAndInsertNewFileMeta();
 
@@ -93,7 +90,12 @@ public:
 
     void deepClear();
 
+    //Clear all the dataBlocks in the level
+    void clear();
+
     void printLevel();
+
+    int getDataBlockCnt();
 };
 
 class LevelFullException : public exception {
