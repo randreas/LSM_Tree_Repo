@@ -10,11 +10,11 @@ def readDataFile(readFile, writeFile):
 			continue;
 		if(a[0] == "I"):
 			result.add(int(a[1]));
-			wf.write("Insert " + a[1] + " || currSize = " + str(len(result)) + "\n");
+			wf.write("Insert " + a[1] + "\n");
 		elif(a[0] == "D"):
 			if(len(a) == 2) :
 				result.discard(int(a[1]));
-				wf.write("Delete " + a[1] + " || currSize = " +str(len(result))+ "\n")
+				wf.write("Delete " + a[1] + "\n")
 			elif(len(a) == 3) :
 				low = int(a[1])
 				high = int(a[2]) + 1
@@ -22,13 +22,13 @@ def readDataFile(readFile, writeFile):
 				print(dRange);
 				for d in dRange:
 					result.discard(d)
-					wf.write("Delete " + str(d) + " || currSize = " +str(len(result))+ "\n")
+					wf.write("Deleted " + str(d) + "\n")
 		elif(a[0] == "Q"):
 			#query
 			if(int(a[1]) in result) :
-				wf.write("Found  " + a[1] + "\n")
+				wf.write("Found " + a[1] + "\n")
 			else:
-				wf.write("Did not Find  " + a[1] + "\n")
+				wf.write("Did not Find " + a[1] + "\n")
 		elif(a[0] == "S"):
 			#range scan
 			low = a[1]
