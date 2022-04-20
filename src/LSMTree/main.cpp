@@ -29,7 +29,7 @@ void executeCommand(LSMTree* lsmTree, string command, string outputFilePath) {
     string e;
 
 
-    ofstream fw(outputFilePath, std::ofstream::out);
+    ofstream fw(outputFilePath, std::ios_base::app);
 
     
     // read all elements into a vector of strings
