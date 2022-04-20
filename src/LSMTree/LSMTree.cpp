@@ -154,6 +154,36 @@ void LSMTree::close() {
     levels.clear();
 }
 
+vector<int> LSMTree::readMetaDataFromFile() {
+    string fileName = "metaData.bin";
+    char* path = const_cast<char*>(fileName.c_str());
+    if (!(fopen(path, "r"))) {
+        cout << "No previous meta data!\n";
+        return {};
+    } else {
+        ifstream metaDataFile(path, ios::in|ios::binary);
+        int lvlCnt;
+        int offSet = 0;
+        readIntFromOffset(&metaDataFile, &offSet, &lvlCnt);
+        vector<int> parameters;
+        parameters.push_back(lvlCnt);
+        readIntFromOffset(&metaDataFile, &offSet, &initial_run_size);
+        readIntFromOffset(&metaDataFile, &offSet, &num_run_per_level);
+        for (int i = 0; i < lvlCnt; i++) {
+            int lvlSize;
+            readIntFromOffset(&metaDataFile, &offSet, &lvlSize);
+            parameters.push_back(lvlSize);
+            int blockSize;
+            readIntFromOffset(&metaDataFile, &offSet, &blockSize);
+            parameters.push_back(blockSize);
+        }
+        char isTieringIndicator;
+        readCharFromOffset(&metaDataFile, &offSet, &isTieringIndicator);
+        isTiering = isTieringIndicator == '1';
+        return parameters;
+    }
+}
+
 void LSMTree::writeMetaDataToFile() {
     string fileName = "metaData.bin";
     char* path = const_cast<char*>(fileName.c_str());
@@ -178,6 +208,20 @@ void LSMTree::writeMetaDataToFile() {
         int max_tuple_in_run = lvl->MAX_TUPLE_NUM_IN_RUN;
         writeIntToOffset(&metaDataFile, &offSet, max_tuple_in_run);
     }
+    char tieringIndicator = isTiering ? '1' : '0';
+    writeCharToOffset(&metaDataFile, &offSet, tieringIndicator);
+}
+
+void LSMTree::writeCharToOffset(ofstream* fileStream, int* offSet, char data) {
+    fileStream->seekp(*offSet);
+    fileStream->write(reinterpret_cast<char*>(&data),SIZE_OF_CHAR);
+    *offSet += SIZE_OF_CHAR;
+}
+
+void LSMTree::readCharFromOffset(ifstream* fileStream, int* offSet, char* data) {
+    fileStream->seekg(*offSet);
+    fileStream->read(reinterpret_cast<char*>(data),SIZE_OF_CHAR);
+    *offSet += SIZE_OF_CHAR;
 }
 
 void LSMTree::writeIntToOffset(ofstream* fileStream, int* offSet, int data) {
@@ -190,33 +234,6 @@ void LSMTree::readIntFromOffset(ifstream* fileStream, int* offSet, int* data) {
     fileStream->seekg(*offSet);
     fileStream->read(reinterpret_cast<char*>(data),SIZE_OF_INT);
     *offSet += SIZE_OF_INT;
-}
-
-vector<int> LSMTree::readMetaDataFromFile() {
-    string fileName = "metaData.bin";
-    char* path = const_cast<char*>(fileName.c_str());
-    if (!(fopen(path, "r"))) {
-        cout << "No previous meta data!\n";
-        return {};
-    } else {
-        ifstream metaDataFile(path, ios::in|ios::binary);
-        int lvlCnt;
-        int offSet = 0;
-        readIntFromOffset(&metaDataFile, &offSet, &lvlCnt);
-        vector<int> parameters;
-        parameters.push_back(lvlCnt);
-        readIntFromOffset(&metaDataFile, &offSet, &initial_run_size);
-        readIntFromOffset(&metaDataFile, &offSet, &num_run_per_level);
-        for (int i = 0; i < lvlCnt; i++) {
-            int lvlSize;
-            readIntFromOffset(&metaDataFile, &offSet, &lvlSize);
-            parameters.push_back(lvlSize);
-            int blockSize;
-            readIntFromOffset(&metaDataFile, &offSet, &blockSize);
-            parameters.push_back(blockSize);
-        }
-        return parameters;
-    }
 }
 
 int LSMTree::getLevelCnt() {
