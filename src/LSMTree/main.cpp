@@ -111,7 +111,7 @@ void executeCommand(LSMTree* lsmTree, string command, string outputFilePath) {
         if (fw.is_open()) {
             if(resultTuples.size() > 0) {
                 for (LSMTuple::Tuple* t : resultTuples) {
-                    t.printValue();
+                    t->printValue();
                     cout << "\n";
                     fw << "Found " << t->getKey() << "\n";
                 }
