@@ -155,14 +155,14 @@ void commandLineHelp() {
     cout << "   'I K V...' for inserting key value pair, number of V should be the same as the length specified above\n";
     cout << "   'Q K' for querying the value of the specified key\n";
     cout << "   'S minK maxK' for querying the value of the keys between minK and maxK\n";
-    cout << "   'D K' for deleting the specified key\n";
+    cout << "   'D K [max_K]' for deleting the specified key, 2 parameters for range delete\n";
     cout << "*** invalid input will cause error\n";
 }
 
 int main(int argc, char *argv[])
 {
-    if (argc !=  2) {
-        cout << "USAGE: ./main <data file path> \n";
+    if (argc >  2) {
+        cout << "USAGE: ./main or ./main <data file path> \n";
         return 1;
     }
 
@@ -178,12 +178,20 @@ int main(int argc, char *argv[])
     LSMTree* lsmTree = new LSMTree(initial_run_size, num_run_per_level, isTiering);
     lsmTree->open();
     cout << "LSMTREE OPEN finished\n";
-    // read and execute data file
-    cout << "buffer: \n";
-    lsmTree->buffer->printRun();
-    cout << "tree level number: " << lsmTree->getLevelCnt() << "\n";
-    cout << "Start reading and executing data file\n";
-    executeQueryFile(lsmTree, inputFilePath);
+    if (lsmTree->isTiering) {
+        cout << "Tiering Tree\n";
+    } else {
+        cout << "Leveling Tree\n";
+    }
+
+    if (argc > 1) {
+        // read and execute data file
+        cout << "buffer: \n";
+        lsmTree->buffer->printRun();
+        cout << "tree level number: " << lsmTree->getLevelCnt() << "\n";
+        cout << "Start reading and executing data file\n";
+        executeQueryFile(lsmTree, inputFilePath);
+    }
 
     commandLineHelp();
     string command = "tmp";

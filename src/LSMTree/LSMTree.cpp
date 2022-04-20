@@ -66,7 +66,18 @@ void LSMTree::moveToLevelAtIdxRecurse(int idx, Run* newRun) {
     cout << "in move to level " << idx << "\n";
     if (idx == levels.size()) {
         cout << "here1\n";
-        int newRunSize = idx == 0 ? newRun->MAX_TUPLE_NUM : (levels[levels.size() - 1]->MAX_TUPLE_NUM_IN_RUN) * num_run_per_level;
+        int newRunSize;
+        if (idx == 0) {
+            if (isTiering) {
+                newRunSize = newRun->MAX_TUPLE_NUM;
+            } else {
+                newRunSize = newRun->MAX_TUPLE_NUM * num_run_per_level;
+                cout << "%%%%%%%%%" << newRun->MAX_TUPLE_NUM << " " << num_run_per_level << " " << newRunSize << "\n";
+            }
+        } else {
+            newRunSize = (levels[levels.size() - 1]->MAX_TUPLE_NUM_IN_RUN) * num_run_per_level;
+        }
+//        int newRunSize = idx == 0 ? newRun->MAX_TUPLE_NUM : (levels[levels.size() - 1]->MAX_TUPLE_NUM_IN_RUN) * num_run_per_level;
         //cout << newRunSize << "\n";
         int lvlId = levels.size();
         //cout << lvlId << "\n";
@@ -96,7 +107,23 @@ void LSMTree::moveToLevelAtIdxRecurse(int idx, Run* newRun) {
         } else {
             // leveling
             cout << "leveling in mergeToLevel\n";
-            Run* mergedResult = lvl->merge();
+            Run* mergedResult = lvl->getDataBlockCnt() == 0 ? new Run(lvl->MAX_TUPLE_NUM_IN_RUN) : lvl->getRunByFileMetaAtIndex(0);
+            cout << "merged run:\n";
+            mergedResult->printRun();
+            cout << "new run:\n";
+            newRun->printRun();
+            if (mergedResult->MAX_TUPLE_NUM - mergedResult->getSize() > newRun->getSize()) {
+                cout << "run can merge:\n";
+                mergedResult->merge(newRun);
+                levels[idx]->deepClear();
+                levels[idx]->addRunFileMeta(createFileMetaFromRun(idx, 0, mergedResult));
+            } else {
+                cout << "run can not merge:\n";
+                mergedResult = lvl->merge();
+                mergedResult->merge(newRun);
+                moveToLevelAtIdxRecurse(idx + 1, mergedResult);
+            }
+            /*
             mergedResult->merge(newRun);
             levels[idx]->addRunFileMeta(createFileMetaFromRun(idx, 0, mergedResult));
             // full
@@ -106,6 +133,7 @@ void LSMTree::moveToLevelAtIdxRecurse(int idx, Run* newRun) {
                 Run* moveResult = lvl->merge();
                 moveToLevelAtIdxRecurse(idx + 1, moveResult);
             }
+             */
         }
     }
 }
@@ -154,6 +182,36 @@ void LSMTree::close() {
     levels.clear();
 }
 
+vector<int> LSMTree::readMetaDataFromFile() {
+    string fileName = "metaData.bin";
+    char* path = const_cast<char*>(fileName.c_str());
+    if (!(fopen(path, "r"))) {
+        cout << "No previous meta data!\n";
+        return {};
+    } else {
+        ifstream metaDataFile(path, ios::in|ios::binary);
+        int lvlCnt;
+        int offSet = 0;
+        readIntFromOffset(&metaDataFile, &offSet, &lvlCnt);
+        vector<int> parameters;
+        parameters.push_back(lvlCnt);
+        readIntFromOffset(&metaDataFile, &offSet, &initial_run_size);
+        readIntFromOffset(&metaDataFile, &offSet, &num_run_per_level);
+        for (int i = 0; i < lvlCnt; i++) {
+            int lvlSize;
+            readIntFromOffset(&metaDataFile, &offSet, &lvlSize);
+            parameters.push_back(lvlSize);
+            int blockSize;
+            readIntFromOffset(&metaDataFile, &offSet, &blockSize);
+            parameters.push_back(blockSize);
+        }
+        char isTieringIndicator;
+        readCharFromOffset(&metaDataFile, &offSet, &isTieringIndicator);
+        isTiering = isTieringIndicator == '1';
+        return parameters;
+    }
+}
+
 void LSMTree::writeMetaDataToFile() {
     string fileName = "metaData.bin";
     char* path = const_cast<char*>(fileName.c_str());
@@ -178,6 +236,20 @@ void LSMTree::writeMetaDataToFile() {
         int max_tuple_in_run = lvl->MAX_TUPLE_NUM_IN_RUN;
         writeIntToOffset(&metaDataFile, &offSet, max_tuple_in_run);
     }
+    char tieringIndicator = isTiering ? '1' : '0';
+    writeCharToOffset(&metaDataFile, &offSet, tieringIndicator);
+}
+
+void LSMTree::writeCharToOffset(ofstream* fileStream, int* offSet, char data) {
+    fileStream->seekp(*offSet);
+    fileStream->write(reinterpret_cast<char*>(&data),SIZE_OF_CHAR);
+    *offSet += SIZE_OF_CHAR;
+}
+
+void LSMTree::readCharFromOffset(ifstream* fileStream, int* offSet, char* data) {
+    fileStream->seekg(*offSet);
+    fileStream->read(reinterpret_cast<char*>(data),SIZE_OF_CHAR);
+    *offSet += SIZE_OF_CHAR;
 }
 
 void LSMTree::writeIntToOffset(ofstream* fileStream, int* offSet, int data) {
@@ -190,33 +262,6 @@ void LSMTree::readIntFromOffset(ifstream* fileStream, int* offSet, int* data) {
     fileStream->seekg(*offSet);
     fileStream->read(reinterpret_cast<char*>(data),SIZE_OF_INT);
     *offSet += SIZE_OF_INT;
-}
-
-vector<int> LSMTree::readMetaDataFromFile() {
-    string fileName = "metaData.bin";
-    char* path = const_cast<char*>(fileName.c_str());
-    if (!(fopen(path, "r"))) {
-        cout << "No previous meta data!\n";
-        return {};
-    } else {
-        ifstream metaDataFile(path, ios::in|ios::binary);
-        int lvlCnt;
-        int offSet = 0;
-        readIntFromOffset(&metaDataFile, &offSet, &lvlCnt);
-        vector<int> parameters;
-        parameters.push_back(lvlCnt);
-        readIntFromOffset(&metaDataFile, &offSet, &initial_run_size);
-        readIntFromOffset(&metaDataFile, &offSet, &num_run_per_level);
-        for (int i = 0; i < lvlCnt; i++) {
-            int lvlSize;
-            readIntFromOffset(&metaDataFile, &offSet, &lvlSize);
-            parameters.push_back(lvlSize);
-            int blockSize;
-            readIntFromOffset(&metaDataFile, &offSet, &blockSize);
-            parameters.push_back(blockSize);
-        }
-        return parameters;
-    }
 }
 
 int LSMTree::getLevelCnt() {

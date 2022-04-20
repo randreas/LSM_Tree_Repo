@@ -12,6 +12,7 @@
 #include "tuple.h"
 
 const int SIZE_OF_INT = sizeof(int);
+const int SIZE_OF_CHAR = sizeof(char);
 
 inline void writeRunToFileWithPath(const string& newFilePath, Run* run) {
     char* path = const_cast<char*>(newFilePath.c_str());
