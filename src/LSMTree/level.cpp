@@ -113,6 +113,8 @@ bool Level::isEmpty() {
 }
 
 FileMeta *Level::getDataMeta(int idx) {
+    cout << "Level::getDataMeta size = "  << dataBlocks.size() << "\n";
+    cout << "Level::getDataMeta idx=" << idx << "\n";
     return dataBlocks[idx];
 }
 
