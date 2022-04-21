@@ -24,7 +24,7 @@ std::vector<int> FencePointer::query(int key)  {
 
 std::vector<int> FencePointer::query(int low, int high) {
     std::vector<int> result;
-    cout << "fp low = " << low << " ||  high = " << high"\n";
+    cout << "fp low = " << low << " ||  high = " << high <<"\n";
     for (int i = cur_num_zones - 1; i >= 0; i--) {
         Zone z = zones[i];
         cout << "z.max = " << z.max << " ||  z.min = " << z.min << "\n";
