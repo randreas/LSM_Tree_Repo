@@ -322,8 +322,12 @@ vector<LSMTuple::Tuple*> LSMTree::query(int low, int high) {
         vector<int> zoneIdxs = curLevel->fp->query(low, high);
         cout << " size of zoneIdxs = " << zoneIdxs.size() << "\n";
         for(int idx : zoneIdxs) {
+            cout << "c indexNum = " << idx << "\n";
+        }
+        for(int idx : zoneIdxs) {
             cout << "indexNum = " << idx << "\n";
             Run* currRun = curLevel->getRunByFileMetaAtIndex(idx);
+            cout << "HERE CT\n";
             vector<LSMTuple::Tuple*> curr_tuples = currRun->getTuples();
             cout << " size of curr_tuples = " << curr_tuples.size() << "\n";
             for(LSMTuple::Tuple* t : curr_tuples) {
