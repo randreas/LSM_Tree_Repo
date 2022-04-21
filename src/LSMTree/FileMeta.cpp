@@ -9,11 +9,14 @@
 #include "Utils.h"
 
 Run *FileMeta::getRun() {
-    //cout << "in getRun of file " << filePath << "\n";
+    cout << "A in getRun of file " << filePath << "\n";
     ifstream inFile(filePath, ios::in|ios::binary);
+    cout << "B in getRun of file " << filePath << "\n";
     Run* run = new Run(MAX_TUPLE_NUM);
+    cout << "C in getRun of file " << filePath << "\n";
     //Read # of tuple from file
     readRunFromData(&inFile, run);
+    cout << "D in getRun of file " << filePath << "\n";
     return run;
 }
 
