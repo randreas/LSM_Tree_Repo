@@ -316,7 +316,7 @@ vector<LSMTuple::Tuple*> LSMTree::query(int low, int high) {
             }
         }
     }
-
+    cout << " num levels= " << levels.size() << " \n";
     for (Level *curLevel: levels) {
         cout << " levels curr key scan \n";
         vector<int> zoneIdxs = curLevel->fp->query(low, high);
