@@ -325,8 +325,10 @@ vector<LSMTuple::Tuple*> LSMTree::query(int low, int high) {
             cout << "indexNum = " << idx << "\n";
             Run* currRun = curLevel->getRunByFileMetaAtIndex(idx);
             vector<LSMTuple::Tuple*> curr_tuples = currRun->getTuples();
+            cout << " size of curr_tuples = " << curr_tuples.size() << "\n";
             for(LSMTuple::Tuple* t : curr_tuples) {
                 int key = t->key;
+                cout << " key = " << key << "\n";
                 if(key <= high && key >= low) {
                     if(set.find(key) != set.end()) {
                         cout << "key already is in the set" << "\n";
