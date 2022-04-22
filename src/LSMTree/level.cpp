@@ -97,6 +97,7 @@ void Level::deepClear() {
         delete fmToDel;
         fmToDel = nullptr;
     }
+    fp->clear();
 }
 
 void Level::clear() {
@@ -106,6 +107,7 @@ void Level::clear() {
         delete fmToDel;
         fmToDel = nullptr;
     }
+    fp->clear();
 }
 
 bool Level::isEmpty() {
