@@ -96,6 +96,7 @@ void Level::deepClear() {
         dataBlocks.pop_back();
         delete fmToDel;
         fmToDel = nullptr;
+        fp->clear();
     }
 }
 
