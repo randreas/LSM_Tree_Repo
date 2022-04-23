@@ -15,20 +15,20 @@ LSMTree::LSMTree(int _initial_run_size, int _num_run_per_level, bool _isTiering)
 void LSMTree::addTuple(LSMTuple::Tuple* tuple) {
     // check if buffer is full
     // full, move run to level 1, clear buffer
-  //  cout << "in LSMTree.addTuple\n";
+    cout << "in LSMTree.addTuple\n";
     buffer->addTuple(tuple);
-  //  cout << "Buffer after insert: \n";
-  //  buffer->printRun();
+    cout << "Buffer after insert: \n";
+    // buffer->printRun();
     if (buffer->isFull()) {
         //FileMeta* bufferFile = buffer->createFileMetaFromRun(0, 0);  // level 0, index 0
         cout << "Buffer is full, need to flush\n";
         Run* push_run = new Run(buffer->MAX_TUPLE_NUM);
         push_run->merge(buffer);
         //push_run->addTuple(tuple);
-    //    cout << "run merged\n";
-    //    push_run->printRun();
+        cout << "run merged\n";
+        // push_run->printRun();
         mergeNMove(0, push_run);
-   //     cout << "finished merge and move\n";
+        cout << "finished merge and move\n";
         //remove(const_cast<char*>(bufferFile->filePath.c_str()));
         buffer->shallowClear();
     }
@@ -95,23 +95,23 @@ void LSMTree::moveToLevelAtIdxRecurse(int idx, Run* newRun) {
                 delete newRun;
                 newRun = nullptr;
             } else {
-              //  cout << "level " << lvl->lvlID << " is full\n";
-              //  Run* mergedResult = lvl->merge();
-              //  cout << "level merged\n";
-              //  cout << "level " << lvl->lvlID << " merged result:\n";
-              //  mergedResult->printRun();
+                cout << "level " << lvl->lvlID << " is full\n";
+                Run* mergedResult = lvl->merge();
+                cout << "level merged\n";
+                cout << "level " << lvl->lvlID << " merged result:\n";
+            //    mergedResult->printRun();
                 //mergedResult->merge(newRun);
                 moveToLevelAtIdxRecurse(idx + 1, mergedResult);
                 moveToLevelAtIdxRecurse(idx, newRun);
             }
         } else {
             // leveling
-            //cout << "leveling in mergeToLevel\n";
+            cout << "leveling in mergeToLevel\n";
             Run* mergedResult = lvl->getDataBlockCnt() == 0 ? new Run(lvl->MAX_TUPLE_NUM_IN_RUN) : lvl->getRunByFileMetaAtIndex(0);
-            //cout << "merged run:\n";
-            //mergedResult->printRun();
-            //cout << "new run:\n";
-            //newRun->printRun();
+            cout << "merged run:\n";
+       //     mergedResult->printRun();
+            cout << "new run:\n";
+            newRun->printRun();
             if (mergedResult->MAX_TUPLE_NUM - mergedResult->getSize() > newRun->getSize()) {
                 cout << "run can merge:\n";
                 mergedResult->merge(newRun);
