@@ -20,7 +20,7 @@ def readDataFile(readFile, writeFile):
 				high = int(a[2]) + 1
 				dRange = range(low,high)
 				#print(dRange);
-				wf.write("to delete [" );
+				wf.write("Deleted: [" );
 				for i in dRange :
 					result.discard(i)
 					wf.write( str(i) + " ");
