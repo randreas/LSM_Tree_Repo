@@ -173,7 +173,7 @@ void executeQueryFile(LSMTree* lsmTree, string filePath, string outputFilePath) 
 
     string line;
     if (fs.is_open()) {
-        // cout << "In executeQueryFile(), file string is open.\n";
+        cout << "In executeQueryFile(), file string is open.\n";
         while (getline(fs, line)) {
             // fs >> line;
             executeCommand(lsmTree, line, outputFilePath);
