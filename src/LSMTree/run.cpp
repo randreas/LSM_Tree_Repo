@@ -32,11 +32,11 @@ void Run::clear() {
 
 //anotherRun is more up-to-date
 void Run::merge(Run *anotherRun) {
-    cout << "In run.merge\n";
-    cout << "This run: \n";
-    printRun();
-    cout << "Run to merge: \n";
-    anotherRun->printRun();
+//    cout << "In run.merge\n";
+//    cout << "This run: \n";
+//    printRun();
+//    cout << "Run to merge: \n";
+//    anotherRun->printRun();
     vector<LSMTuple::Tuple*> newTuples;
     while (!anotherRun->tuples.empty() && !this->tuples.empty()) {
         if (this->tuples.empty() || anotherRun->tuples[0]->key < this->tuples[0]->key) {
@@ -61,13 +61,13 @@ void Run::merge(Run *anotherRun) {
             newTuples.push_back(tuple);
         }
     }
-    cout << "New tuple vector: \n";
-    for (LSMTuple::Tuple* t : newTuples) {
-        t->printTuple();
-    }
-    cout << "Merge done\n";
+    // cout << "New tuple vector: \n";
+    // for (LSMTuple::Tuple* t : newTuples) {
+    //     t->printTuple();
+    // }
+    // cout << "Merge done\n";
     replaceTuplesWithInput(newTuples);
-    cout << "Replace done\n";
+    // cout << "Replace done\n";
 }
 
 void Run::replaceTuplesWithInput(const vector<LSMTuple::Tuple *>& newTuples) {

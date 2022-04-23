@@ -106,12 +106,12 @@ void LSMTree::moveToLevelAtIdxRecurse(int idx, Run* newRun) {
             }
         } else {
             // leveling
-            cout << "leveling in mergeToLevel\n";
+        //    cout << "leveling in mergeToLevel\n";
             Run* mergedResult = lvl->getDataBlockCnt() == 0 ? new Run(lvl->MAX_TUPLE_NUM_IN_RUN) : lvl->getRunByFileMetaAtIndex(0);
-            cout << "merged run:\n";
+        //    cout << "merged run:\n";
        //     mergedResult->printRun();
-            cout << "new run:\n";
-            newRun->printRun();
+        //    cout << "new run:\n";
+        //    newRun->printRun();
             if (mergedResult->MAX_TUPLE_NUM - mergedResult->getSize() > newRun->getSize()) {
                 cout << "run can merge:\n";
                 mergedResult->merge(newRun);
