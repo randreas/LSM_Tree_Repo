@@ -45,7 +45,7 @@ def readDataFile(readFile, writeFile):
 
 def main():
 	print("Inside")
-	readDataFile("test_1000_3.data","res.txt");
+	readDataFile("test_big.data","res.txt");
 	readDataFile("test_10000_3_1000.wl","res2.txt")
 
 main();
