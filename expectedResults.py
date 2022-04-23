@@ -34,7 +34,7 @@ def readDataFile(readFile, writeFile):
 			low = a[1]
 			high = a[2]
 			selectRange = range(int(low),int(high))
-		#	print(selectRange);
+			#print(selectRange);
 			rangeScanResult = result.intersection(selectRange)
 			wf.write("Found rangeScan [" );
 			for i in rangeScanResult :
