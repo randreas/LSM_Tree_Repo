@@ -19,10 +19,12 @@ def readDataFile(readFile, writeFile):
 				low = int(a[1])
 				high = int(a[2]) + 1
 				dRange = range(low,high)
-				print(dRange);
-				for d in dRange:
-					result.discard(d)
-					wf.write("Deleted " + str(d) + "\n")
+				#print(dRange);
+				wf.write("to delete [" );
+				for i in dRange :
+					result.discard(i)
+					wf.write( str(i) + " ");
+				wf.write("]\n"); 
 		elif(a[0] == "Q"):
 			#query
 			if(int(a[1]) in result) :
