@@ -54,7 +54,8 @@ def main(args):
 		sys.exit(0)
 	readDataFile(args[1],args[2]);
 
-main();
+if __name__ == '__main__':
+    main(sys.argv)
 	
 
 
