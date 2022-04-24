@@ -50,8 +50,8 @@ def readDataFile(readFile, writeFile):
 def main(args):
 	print("Inside")
 	if ('-h' in args) or not(len(args) == 3):
-        print('USAGE:\n\t%s <inputFile> <outputFile>' % (args[0]))
-        sys.exit(0)
+		print('USAGE:\n\t%s <inputFile> <outputFile>' % (args[0]))
+		sys.exit(0)
 	readDataFile(args[1],args[2]);
 
 main();
