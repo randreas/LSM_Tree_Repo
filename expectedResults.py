@@ -1,3 +1,5 @@
+import sys
+
 result = set()
 
 def readDataFile(readFile, writeFile):
