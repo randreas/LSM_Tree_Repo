@@ -1,9 +1,10 @@
 import sys
 
 result = set()
-t = 1;
+
 
 def readDataFile(readFile, writeFile):
+	t = 1;
 	f = open(readFile,"r");
 	wf = open(writeFile,"a");
 	
