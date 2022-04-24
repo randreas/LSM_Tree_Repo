@@ -1,12 +1,15 @@
 import sys
 
 result = set()
+t = 1;
 
 def readDataFile(readFile, writeFile):
 	f = open(readFile,"r");
 	wf = open(writeFile,"a");
 	
 	for line in f:
+		print(t);
+		t+=1;
 		a = line.split() 
 		if(len(a) < 1):
 			continue;
