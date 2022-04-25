@@ -21,8 +21,10 @@ LSMTuple::Tuple::Tuple() {
 //Print
 
 void LSMTuple::Tuple::printTuple() {
-    cout << "| Key: " << key << " ";
-    value.printValue();
-    cout << "\n";
+   cout << "| Key: " << key << " ";
+   value.printValue();
+   cout << "\n";
 }
+
+
 

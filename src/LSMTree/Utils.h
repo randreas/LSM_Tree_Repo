@@ -21,7 +21,7 @@ inline void writeRunToFileWithPath(const string& newFilePath, Run* run) {
         fclose(file);
         remove(path);
     } else {
-        cout << "unable to open file, previous file does not exist\n";
+//        cout << "unable to open file, previous file does not exist\n";
     }
 
     ofstream newFile(newFilePath, ios::out|ios::binary);
@@ -49,7 +49,7 @@ inline void writeRunToFileWithPath(const string& newFilePath, Run* run) {
         newFile.write(reinterpret_cast<char*>(&tupleOffSet),SIZE_OF_INT);
     }
     newFile.close();
-    cout << "finished writing to new file\n";
+//    cout << "finished writing to new file\n";
 }
 
 inline void readRunFromData(ifstream* inFile, Run* run) {
@@ -88,7 +88,7 @@ inline void readRunFromData(ifstream* inFile, Run* run) {
 }
 
 inline FileMeta *createFileMetaFromRun(size_t lvlID, size_t newBlockIdx, Run* run) {
-    cout << "in create filemeta from run\n";
+    // cout << "in create filemeta from run\n";
     stringstream ss;
     ss << "level-";
     ss << lvlID;
@@ -101,7 +101,7 @@ inline FileMeta *createFileMetaFromRun(size_t lvlID, size_t newBlockIdx, Run* ru
     newFileMeta->minKey = run->getTuples()[0]->getKey();
     newFileMeta->maxKey = run->getTuples()[run->getSize() - 1]->getKey();
     newFileMeta->size = run->getSize();
-    cout << "created new file meta\n";
+    // cout << "created new file meta\n";
     return newFileMeta;
 }
 
@@ -113,7 +113,7 @@ inline FileMeta* createFileMetaFromExistingFile(size_t lvlID, size_t blockIdx, i
     ss << blockIdx;
     ss << ".bin";
     string filePath = ss.str();
-    cout << "in create filemeta from existing file " << filePath << "\n";
+//    cout << "in create filemeta from existing file " << filePath << "\n";
     auto* newFileMeta = new FileMeta(filePath, max_tuple_num);
     char* path = const_cast<char*>(filePath.c_str());
     ifstream newFile(path, ios::in|ios::binary);
@@ -140,7 +140,7 @@ inline FileMeta* createFileMetaFromExistingFile(size_t lvlID, size_t blockIdx, i
     newFileMeta->minKey = minKey;
     newFileMeta->maxKey = maxKey;
     newFileMeta->size = tupleCnt;
-    cout << "created new file meta from existing file " << filePath << "\n";
+//    cout << "created new file meta from existing file " << filePath << "\n";
     return newFileMeta;
 }
 

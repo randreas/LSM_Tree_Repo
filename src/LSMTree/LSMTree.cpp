@@ -15,20 +15,20 @@ LSMTree::LSMTree(int _initial_run_size, int _num_run_per_level, bool _isTiering)
 void LSMTree::addTuple(LSMTuple::Tuple* tuple) {
     // check if buffer is full
     // full, move run to level 1, clear buffer
-    cout << "in LSMTree.addTuple\n";
+    // cout << "in LSMTree.addTuple\n";
     buffer->addTuple(tuple);
-    cout << "Buffer after insert: \n";
-    buffer->printRun();
+    // cout << "Buffer after insert: \n";
+    // buffer->printRun();
     if (buffer->isFull()) {
         //FileMeta* bufferFile = buffer->createFileMetaFromRun(0, 0);  // level 0, index 0
-        cout << "Buffer is full, need to flush\n";
+        // cout << "Buffer is full, need to flush\n";
         Run* push_run = new Run(buffer->MAX_TUPLE_NUM);
         push_run->merge(buffer);
         //push_run->addTuple(tuple);
-        cout << "run merged\n";
-        push_run->printRun();
+        // cout << "run merged\n";
+        // push_run->printRun();
         mergeNMove(0, push_run);
-        cout << "finished merge and move\n";
+        // cout << "finished merge and move\n";
         //remove(const_cast<char*>(bufferFile->filePath.c_str()));
         buffer->shallowClear();
     }
@@ -38,14 +38,9 @@ LSMTuple::Tuple* LSMTree::query(int key) {
     if (buffer->containsKey(key)) {
         return buffer->query(key);
     }
-    //cout << "query 0\n";
     int ind;
     for (Level *curLevel: levels) {
-        //cout << "query 1\n";
-
-        //Check bloomFilter
         ind = curLevel->containsKey(key);
-        //cout << "query 2\n";
         if (ind >= 0) {
             return curLevel->getRunByFileMetaAtIndex(ind)->query(key);
         }
@@ -57,68 +52,62 @@ LSMTuple::Tuple* LSMTree::query(int key) {
 }
 
 void LSMTree::mergeNMove(int idx, Run* newRun) {
-    cout << "In LSMTree.mergeNMove\n";
+   
     moveToLevelAtIdxRecurse(idx, newRun);
-    cout << "Finished LSMTree.mergeNMove\n";
 }
 
 void LSMTree::moveToLevelAtIdxRecurse(int idx, Run* newRun) {
-    cout << "in move to level " << idx << "\n";
     if (idx == levels.size()) {
-        cout << "here1\n";
         int newRunSize;
         if (idx == 0) {
             if (isTiering) {
                 newRunSize = newRun->MAX_TUPLE_NUM;
             } else {
                 newRunSize = newRun->MAX_TUPLE_NUM * num_run_per_level;
-                cout << "%%%%%%%%%" << newRun->MAX_TUPLE_NUM << " " << num_run_per_level << " " << newRunSize << "\n";
+           //     cout << "%%%%%%%%%" << newRun->MAX_TUPLE_NUM << " " << num_run_per_level << " " << newRunSize << "\n";
             }
         } else {
             newRunSize = (levels[levels.size() - 1]->MAX_TUPLE_NUM_IN_RUN) * num_run_per_level;
         }
 //        int newRunSize = idx == 0 ? newRun->MAX_TUPLE_NUM : (levels[levels.size() - 1]->MAX_TUPLE_NUM_IN_RUN) * num_run_per_level;
-        //cout << newRunSize << "\n";
         int lvlId = levels.size();
-        //cout << lvlId << "\n";
         levels.push_back(new Level(num_run_per_level, newRunSize, lvlId));
         //cout << levels.size() << "\n";
         levels[lvlId]->addRunFileMeta(createFileMetaFromRun(lvlId, 0, newRun));
         //cout << "level of size: " << levels.size() << "\n";
     } else {
-        cout << "here2\n";
         Level *lvl = levels[idx];
         if (isTiering) {
             if (!lvl->isFull(isTiering)) {
-                cout << "level " << lvl->lvlID << " is not full\n";
+                // cout << "level " << lvl->lvlID << " is not full\n";
                 lvl->addRunFileMeta(createFileMetaFromRun(idx, lvl->getCurrentSize(), newRun));
                 delete newRun;
                 newRun = nullptr;
             } else {
-                cout << "level " << lvl->lvlID << " is full\n";
+                // cout << "level " << lvl->lvlID << " is full\n";
                 Run* mergedResult = lvl->merge();
-                cout << "level merged\n";
-                cout << "level " << lvl->lvlID << " merged result:\n";
-                mergedResult->printRun();
+                // cout << "level merged\n";
+                // cout << "level " << lvl->lvlID << " merged result:\n";
+            //    mergedResult->printRun();
                 //mergedResult->merge(newRun);
                 moveToLevelAtIdxRecurse(idx + 1, mergedResult);
                 moveToLevelAtIdxRecurse(idx, newRun);
             }
         } else {
             // leveling
-            cout << "leveling in mergeToLevel\n";
+        //    cout << "leveling in mergeToLevel\n";
             Run* mergedResult = lvl->getDataBlockCnt() == 0 ? new Run(lvl->MAX_TUPLE_NUM_IN_RUN) : lvl->getRunByFileMetaAtIndex(0);
-            cout << "merged run:\n";
-            mergedResult->printRun();
-            cout << "new run:\n";
-            newRun->printRun();
+        //    cout << "merged run:\n";
+       //     mergedResult->printRun();
+        //    cout << "new run:\n";
+        //    newRun->printRun();
             if (mergedResult->MAX_TUPLE_NUM - mergedResult->getSize() > newRun->getSize()) {
-                cout << "run can merge:\n";
+                // cout << "run can merge:\n";
                 mergedResult->merge(newRun);
                 levels[idx]->deepClear();
                 levels[idx]->addRunFileMeta(createFileMetaFromRun(idx, 0, mergedResult));
             } else {
-                cout << "run can not merge:\n";
+                // cout << "run can not merge:\n";
                 mergedResult = lvl->merge();
                 mergedResult->merge(newRun);
                 moveToLevelAtIdxRecurse(idx + 1, mergedResult);
@@ -219,7 +208,7 @@ void LSMTree::writeMetaDataToFile() {
         fclose(file);
         remove(path);
     } else {
-        cout << "unable to open file, previous meta data file does not exist\n";
+     //   cout << "unable to open file, previous meta data file does not exist\n";
     }
     ofstream metaDataFile(path, ios::out|ios::binary);
     int offSet = 0;
@@ -268,13 +257,15 @@ int LSMTree::getLevelCnt() {
     return levels.size();
 }
 
-void LSMTree::deleteKey(int low, int high) {
+vector<LSMTuple::Tuple*> LSMTree::deleteKey(int low, int high) {
     vector<LSMTuple::Tuple*> toBeDeletedList = query(low,high);
 
     for(LSMTuple::Tuple* t : toBeDeletedList) {
-        cout << "Key to be deleted " << t->key << "\n";
+     //   cout << "Key to be deleted " << t->key << "\n";
         addTuple(new LSMTuple::Tuple(t->key, LSMTuple::Value(false)));
     }
+
+    return toBeDeletedList;
 }
 
 void LSMTree::printLSMTree() {
@@ -298,16 +289,14 @@ void LSMTree::printLSMTree() {
 vector<LSMTuple::Tuple*> LSMTree::query(int low, int high) {
     vector<LSMTuple::Tuple*> result;
     unordered_set <int> set;
-    cout << "QUERY RANGE START \n";
+   // cout << "QUERY RANGE START \n";
     for(LSMTuple::Tuple* t : buffer->getTuples()) {
         int key = t-> key;
-        cout << " buffer tuples curr key scan = " << key << "\n";
         if(key <= high && key >= low) {
-            cout << "curr key in range \n";
             if(set.find(key) != set.end()) {
-                cout << "key already is in the set" << "\n";
+            //    cout << "key already is in the set" << "\n";
             } else {
-                cout << "new key found adding into result" << "\n";
+            //    cout << "new key found adding into result" << "\n";
                 set.insert(t->key);
                 if(! t->isDeleteMarker()) {
                     result.push_back(t);
@@ -318,9 +307,9 @@ vector<LSMTuple::Tuple*> LSMTree::query(int low, int high) {
     }
 
     for (Level *curLevel: levels) {
-        cout << " levels curr key scan \n";
+       // cout << " levels curr key scan \n";
         vector<int> zoneIdxs = curLevel->fp->query(low, high);
-        cout << " size of zoneIdxs = " << zoneIdxs.size() << "\n";
+       // cout << " size of zoneIdxs = " << zoneIdxs.size() << "\n";
         for(int idx : zoneIdxs) {
             Run* currRun = curLevel->getRunByFileMetaAtIndex(idx);
             vector<LSMTuple::Tuple*> curr_tuples = currRun->getTuples();
@@ -328,9 +317,9 @@ vector<LSMTuple::Tuple*> LSMTree::query(int low, int high) {
                 int key = t->key;
                 if(key <= high && key >= low) {
                     if(set.find(key) != set.end()) {
-                        cout << "key already is in the set" << "\n";
+                    //    cout << "key already is in the set" << "\n";
                     } else {
-                        cout << "new key found adding into result"<< "\n";
+                  //      cout << "new key found adding into result"<< "\n";
                         set.insert(t->key);
                         if(! t->isDeleteMarker()) {
                             result.push_back(t);

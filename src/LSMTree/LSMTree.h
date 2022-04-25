@@ -50,7 +50,7 @@ public:
 
     int getLevelCnt();
   
-    void deleteKey(int low, int high);
+    vector<LSMTuple::Tuple*> deleteKey(int low, int high);
 
     void printLSMTree();
 

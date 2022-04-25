@@ -12,13 +12,13 @@
 #include "../BloomFilter/BloomFilter.h"
 
 bool Level::isFull(bool isTiering) {
-    cout << "In level.isFull()\n";
-    cout << dataBlocks.size() << "\n";
-    cout << MAX_RUN_NUM << "\n";
+    // cout << "In level.isFull()\n";
+    // cout << dataBlocks.size() << "\n";
+    // cout << MAX_RUN_NUM << "\n";
     if (isTiering) {
         return dataBlocks.size() == MAX_RUN_NUM;
     } else {
-        cout << "dataBlocks[0]->size " << dataBlocks[0]->size << " dataBlocks[0]->MAX_TUPLE_NUM " << dataBlocks[0]->MAX_TUPLE_NUM << "\n";
+  //      cout << "dataBlocks[0]->size " << dataBlocks[0]->size << " dataBlocks[0]->MAX_TUPLE_NUM " << dataBlocks[0]->MAX_TUPLE_NUM << "\n";
         return dataBlocks[0]->size >= dataBlocks[0]->MAX_TUPLE_NUM;
     }
 }
@@ -49,42 +49,37 @@ void Level::addTuple(Tuple *tuple) {
  */
 
 int Level::containsKey(int key) {
-    cout << "containsKey 0\n";
+   
     if (!this->bloomFilter->query(reinterpret_cast<const char *>(&key))) {
         return -1;
     }
-    //cout << "containsKey 1\n";
+    
     std::vector<int> possibleZones = fp->query(key);
     if (possibleZones.size() == 0) {
         return -1;
     }
-    //cout << "containsKey 2\n";
+    
     for (int i : possibleZones) {
         Run* curRun = getRunByFileMetaAtIndex(i);
         if (curRun->containsKey(key)) {
             return i;
         }
     }
-    //cout << "containsKey 3\n";
+    
     return -1;
 }
 
 
 Run *Level::merge() {
-    cout << "in level.merge\n";
     Run* initRun = new Run(MAX_RUN_NUM * MAX_TUPLE_NUM_IN_RUN);
-    cout << "created new run\n";
     for (FileMeta* fm : dataBlocks) {
         initRun->merge(fm->getRun());
-        cout << "MERGED " << fm->getFilePath() << "\n";
-        cout << "Merged result: \n";
-        initRun->printRun();
+        // cout << "MERGED " << fm->getFilePath() << "\n";
+        // cout << "Merged result: \n";
+        //initRun->printRun();
     }
-    cout << "merged\n";
     deepClear();
-    cout << "cleared\n";
     fp->clear();
-    //RA todo recreate bloomfilter
     createBloomFilter();
     return initRun;
 }
@@ -119,13 +114,13 @@ FileMeta *Level::getDataMeta(int idx) {
 }
 
 void Level::addRunFileMeta(FileMeta *fm) {
-    cout << "in level.addRunFileMeta\n";
+ //   cout << "in level.addRunFileMeta\n";
     dataBlocks.push_back(fm);
     fp->addNewZone(fm);
 
     //RA todo recreate bloomfilter
     createBloomFilter();
-    cout << "Added FileMeta " << fm->filePath << "to level "<< lvlID << "\n";
+//    cout << "Added FileMeta " << fm->filePath << "to level "<< lvlID << "\n";
 }
 
 Run *Level::getRunByFileMetaAtIndex(int idx) {
@@ -158,7 +153,6 @@ int Level::getFirstTupleOffsetinBlock() const {
 vector<LSMTuple::Tuple*> Level::GetAllTuples() {
     vector<LSMTuple::Tuple*> result;
     for (auto & dataBlock : dataBlocks) {
-//        DEBUG_LOG(std::string("getting tuples from #") + dataBlock->getFilePath());
         auto tuples = dataBlock->GetAllTuples();
         result.insert(result.end(), tuples.begin(), tuples.end());
     }
@@ -168,30 +162,15 @@ vector<LSMTuple::Tuple*> Level::GetAllTuples() {
 
 ////RA Todo
 void Level::createBloomFilter() {
-    cout << "In create bloom filter\n";
     auto* bf = new BloomFilter(BF_NUM_TUPLES, BF_BITS_PER_ELEMENT);
-// <<<<<<< rangeQuery
-//     vector<Tuple*> tupleList = GetAllTuples();
-//     for(Tuple* t : tupleList) {
-//        if (t == nullptr) {
-//            cout << "tuple is null!\n";
-//        } else {
-//            cout << "tuple key: " << t->key << "\n";
-//        };
-// =======
+
     vector<LSMTuple::Tuple*> tupleList = GetAllTuples();
     for(LSMTuple::Tuple* t : tupleList) {
-// //        if (t == nullptr) {
-// //            cout << "tuple is null!\n";
-// //        } else {
-// //            cout << "tuple key: " << t->key << "\n";
-// //        };
-// >>>>>>> main
+
         int key = t->key;
-        cout << reinterpret_cast<const char *>(&key) << "\n";
+ //       cout << reinterpret_cast<const char *>(&key) << "\n";
         bf->program(reinterpret_cast<const char *>(&key));
     }
-    cout << "finished Bloom Filter creation, programmed all tuples\n";
     bloomFilter = bf;
 }
 
