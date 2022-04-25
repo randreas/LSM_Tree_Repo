@@ -84,15 +84,15 @@ void executeCommand(LSMTree* lsmTree, string command, string outputFilePath) {
         }
         //cout << "gate 1\n";
         if (resultTuple->isDeleteMarker()) {
-            cout << "query result : key: " << key << " not in the lsm tree, not entered or deleted" << "\n";
+     //       cout << "query result : key: " << key << " not in the lsm tree, not entered or deleted" << "\n";
             if (fw.is_open()) {
                 fw << "Found " << key << "\n";
             }
             fw.close();
         } else {
-            cout << "query result : key: " << key << " value: ";
+       //     cout << "query result : key: " << key << " value: ";
             resultTuple->getValue().printValue();
-            cout<< "\n";
+         //   cout<< "\n";
 
             if (fw.is_open()) {
                 fw << "Did not find " << key << "\n";
@@ -127,19 +127,10 @@ void executeCommand(LSMTree* lsmTree, string command, string outputFilePath) {
 
 
     } else if (elements[0] == "D") {
-        // if (elements.size() > 3) {
-        //     cout << "D with incorrect size\n";
-        //     return;
-        // }
-        cout << "D  size = " << elements.size() << "\n";
         if (elements.size() == 2) {
             int key = stoi(elements[1]);
-            // cout << "---------------------------------------\n";
-            // cout << "Delete " << "key: " << key << "\n";
-            // execute
             lsmTree->deleteKey(key);
            
-            // cout << "delete; addtuple finished\n";
 
             if (fw.is_open()) {
                 fw << "Deleted " << key << "\n";

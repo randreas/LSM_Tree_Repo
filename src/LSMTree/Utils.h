@@ -88,7 +88,7 @@ inline void readRunFromData(ifstream* inFile, Run* run) {
 }
 
 inline FileMeta *createFileMetaFromRun(size_t lvlID, size_t newBlockIdx, Run* run) {
-    cout << "in create filemeta from run\n";
+    // cout << "in create filemeta from run\n";
     stringstream ss;
     ss << "level-";
     ss << lvlID;
@@ -101,7 +101,7 @@ inline FileMeta *createFileMetaFromRun(size_t lvlID, size_t newBlockIdx, Run* ru
     newFileMeta->minKey = run->getTuples()[0]->getKey();
     newFileMeta->maxKey = run->getTuples()[run->getSize() - 1]->getKey();
     newFileMeta->size = run->getSize();
-    cout << "created new file meta\n";
+    // cout << "created new file meta\n";
     return newFileMeta;
 }
 
