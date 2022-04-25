@@ -150,7 +150,7 @@ void executeCommand(LSMTree* lsmTree, string command, string outputFilePath) {
             int key = stoi(elements[1]);
             lsmTree->deleteKey(key);
            
-
+            cout << "Deleted " << key << "\n";
             if (fw.is_open()) {
                 fw << "Deleted " << key << "\n";
             }
@@ -171,10 +171,13 @@ void executeCommand(LSMTree* lsmTree, string command, string outputFilePath) {
             std::sort(keyList.begin(), keyList.end());
             if (fw.is_open()) {
                 fw << "Deleted: [";
+                cout << "Deleted: [";
                 for(int key : keyList) {
                     fw << key << " ";
+                    cout << key << " ";
                 }
                 fw << "]\n";
+                cout << "]\n";
             }
             fw.close();
 
