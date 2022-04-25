@@ -307,9 +307,9 @@ vector<LSMTuple::Tuple*> LSMTree::query(int low, int high) {
         if(key <= high && key >= low) {
             cout << "curr key in range \n";
             if(set.find(key) != set.end()) {
-                cout << "key already is in the set" << "\n";
+            //    cout << "key already is in the set" << "\n";
             } else {
-                cout << "new key found adding into result" << "\n";
+            //    cout << "new key found adding into result" << "\n";
                 set.insert(t->key);
                 if(! t->isDeleteMarker()) {
                     result.push_back(t);
@@ -330,9 +330,9 @@ vector<LSMTuple::Tuple*> LSMTree::query(int low, int high) {
                 int key = t->key;
                 if(key <= high && key >= low) {
                     if(set.find(key) != set.end()) {
-                        cout << "key already is in the set" << "\n";
+                    //    cout << "key already is in the set" << "\n";
                     } else {
-                        cout << "new key found adding into result"<< "\n";
+                  //      cout << "new key found adding into result"<< "\n";
                         set.insert(t->key);
                         if(! t->isDeleteMarker()) {
                             result.push_back(t);
