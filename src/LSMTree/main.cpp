@@ -84,7 +84,7 @@ void executeCommand(LSMTree* lsmTree, string command, string outputFilePath) {
         if (resultTuple->isDeleteMarker()) {
             cout << "query result : key: " << key << " not in the lsm tree, not entered or deleted" << "\n";
             if (fw.is_open()) {
-                fw << "Found " << key << "\n";
+                fw << "Did not find " << key << "\n";
             }
             fw.close();
         } else {
@@ -93,7 +93,7 @@ void executeCommand(LSMTree* lsmTree, string command, string outputFilePath) {
             cout<< "\n";
 
             if (fw.is_open()) {
-                fw << "Did not find " << key << "\n";
+                fw << "Found " << key << "\n";
             }
             fw.close();
         }
