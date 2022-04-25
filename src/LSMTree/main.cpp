@@ -134,12 +134,12 @@ void executeCommand(LSMTree* lsmTree, string command, string outputFilePath) {
         cout << "D  size = " << elements.size() << "\n";
         if (elements.size() == 2) {
             int key = stoi(elements[1]);
-            cout << "---------------------------------------\n";
-            cout << "Delete " << "key: " << key << "\n";
+            // cout << "---------------------------------------\n";
+            // cout << "Delete " << "key: " << key << "\n";
             // execute
             lsmTree->deleteKey(key);
            
-            cout << "delete; addtuple finished\n";
+            // cout << "delete; addtuple finished\n";
 
             if (fw.is_open()) {
                 fw << "Deleted " << key << "\n";
@@ -149,7 +149,7 @@ void executeCommand(LSMTree* lsmTree, string command, string outputFilePath) {
         } else if (elements.size() == 3) {
             int low = stoi(elements[1]);
             int high = stoi(elements[2]);
-            cout << "---------------------------------------\n";
+            // cout << "---------------------------------------\n";
            
             // execute
             vector<LSMTuple::Tuple*> toBeDeletedList = lsmTree->deleteKey(low,high);
@@ -162,9 +162,9 @@ void executeCommand(LSMTree* lsmTree, string command, string outputFilePath) {
             }
             fw.close();
 
-            cout << "delete; addtuple finished\n";
+            // cout << "delete; addtuple finished\n";
         } else {
-            cout << "D with incorrect size\n";
+            // cout << "D with incorrect size\n";
             return;
         }
     }
@@ -176,7 +176,7 @@ void executeQueryFile(LSMTree* lsmTree, string filePath, string outputFilePath) 
 
     string line;
     if (fs.is_open()) {
-        cout << "In executeQueryFile(), file string is open.\n";
+        // cout << "In executeQueryFile(), file string is open.\n";
         while (getline(fs, line)) {
             // fs >> line;
             executeCommand(lsmTree, line, outputFilePath);
@@ -186,7 +186,7 @@ void executeQueryFile(LSMTree* lsmTree, string filePath, string outputFilePath) 
         //     cout << line << "\n";
         // }
     } else {
-        cout << "In executeQueryFile(), file string is close.\n";
+        // cout << "In executeQueryFile(), file string is close.\n";
     }
 }
 
