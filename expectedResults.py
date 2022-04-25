@@ -39,7 +39,7 @@ def readDataFile(readFile, writeFile):
 			#range scan
 			low = a[1]
 			high = a[2]
-			selectRange = range(int(low),int(high))
+			selectRange = range(int(low),int(high) + 1)
 			rangeScanResult = list(result.intersection(selectRange))
 			rangeScanResult.sort();
 			if(len(rangeScanResult) > 0 ):
