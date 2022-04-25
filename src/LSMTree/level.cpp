@@ -12,13 +12,13 @@
 #include "../BloomFilter/BloomFilter.h"
 
 bool Level::isFull(bool isTiering) {
-    cout << "In level.isFull()\n";
-    cout << dataBlocks.size() << "\n";
-    cout << MAX_RUN_NUM << "\n";
+    // cout << "In level.isFull()\n";
+    // cout << dataBlocks.size() << "\n";
+    // cout << MAX_RUN_NUM << "\n";
     if (isTiering) {
         return dataBlocks.size() == MAX_RUN_NUM;
     } else {
-        cout << "dataBlocks[0]->size " << dataBlocks[0]->size << " dataBlocks[0]->MAX_TUPLE_NUM " << dataBlocks[0]->MAX_TUPLE_NUM << "\n";
+  //      cout << "dataBlocks[0]->size " << dataBlocks[0]->size << " dataBlocks[0]->MAX_TUPLE_NUM " << dataBlocks[0]->MAX_TUPLE_NUM << "\n";
         return dataBlocks[0]->size >= dataBlocks[0]->MAX_TUPLE_NUM;
     }
 }
@@ -114,13 +114,13 @@ FileMeta *Level::getDataMeta(int idx) {
 }
 
 void Level::addRunFileMeta(FileMeta *fm) {
-    cout << "in level.addRunFileMeta\n";
+ //   cout << "in level.addRunFileMeta\n";
     dataBlocks.push_back(fm);
     fp->addNewZone(fm);
 
     //RA todo recreate bloomfilter
     createBloomFilter();
-    cout << "Added FileMeta " << fm->filePath << "to level "<< lvlID << "\n";
+//    cout << "Added FileMeta " << fm->filePath << "to level "<< lvlID << "\n";
 }
 
 Run *Level::getRunByFileMetaAtIndex(int idx) {
@@ -168,7 +168,7 @@ void Level::createBloomFilter() {
     for(LSMTuple::Tuple* t : tupleList) {
 
         int key = t->key;
-        cout << reinterpret_cast<const char *>(&key) << "\n";
+ //       cout << reinterpret_cast<const char *>(&key) << "\n";
         bf->program(reinterpret_cast<const char *>(&key));
     }
     bloomFilter = bf;
