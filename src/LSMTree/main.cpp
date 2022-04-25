@@ -121,7 +121,7 @@ void executeCommand(LSMTree* lsmTree, string command, string outputFilePath) {
             cout << "Found rangeScan [\n";
             for(LSMTuple::Tuple* t : resultTuples) {
                     keyList.push_back(t->key);
-                    cout << "key: " << t->key << " value: ";
+                    cout << "\t key: " << t->key << " value: ";
                     t->getValue().printValue();
                     cout<< "\n";
 
