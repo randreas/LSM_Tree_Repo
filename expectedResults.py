@@ -21,8 +21,8 @@ def readDataFile(readFile, writeFile):
 			elif(len(a) == 3) :
 				low = int(a[1])
 				high = int(a[2]) + 1
-				dRange = list(range(low,high)).sort()
-
+				dRange = list(range(low,high))
+				dRange.sort()
 				wf.write("Deleted: [" );
 				for i in dRange :
 					if( i in result):
