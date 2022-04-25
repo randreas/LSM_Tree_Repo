@@ -40,7 +40,7 @@ def readDataFile(readFile, writeFile):
 			low = a[1]
 			high = a[2]
 			selectRange = range(int(low),int(high))
-			rangeScanResult = result.intersection(selectRange)
+			rangeScanResult = list(result.intersection(selectRange))
 			rangeScanResult.sort();
 			if(len(rangeScanResult) > 0 ):
 				wf.write("Found rangeScan [" );
