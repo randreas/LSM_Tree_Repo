@@ -26,7 +26,7 @@ def readDataFile(readFile, writeFile):
 				high = int(a[2]) + 1
 				dRange = range(low,high)
 				#wf.write("Deleted size = "  + str(len(dRange)) + "\n");
-				print(dRange);
+			#	print(dRange);
 				wf.write("Deleted size: [" );
 				for i in dRange :
 					result.discard(i)
