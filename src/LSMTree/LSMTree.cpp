@@ -300,7 +300,7 @@ void LSMTree::printLSMTree() {
 vector<LSMTuple::Tuple*> LSMTree::query(int low, int high) {
     vector<LSMTuple::Tuple*> result;
     unordered_set <int> set;
-    cout << "QUERY RANGE START \n";
+   // cout << "QUERY RANGE START \n";
     for(LSMTuple::Tuple* t : buffer->getTuples()) {
         int key = t-> key;
         cout << " buffer tuples curr key scan = " << key << "\n";
@@ -320,9 +320,9 @@ vector<LSMTuple::Tuple*> LSMTree::query(int low, int high) {
     }
 
     for (Level *curLevel: levels) {
-        cout << " levels curr key scan \n";
+       // cout << " levels curr key scan \n";
         vector<int> zoneIdxs = curLevel->fp->query(low, high);
-        cout << " size of zoneIdxs = " << zoneIdxs.size() << "\n";
+       // cout << " size of zoneIdxs = " << zoneIdxs.size() << "\n";
         for(int idx : zoneIdxs) {
             Run* currRun = curLevel->getRunByFileMetaAtIndex(idx);
             vector<LSMTuple::Tuple*> curr_tuples = currRun->getTuples();
