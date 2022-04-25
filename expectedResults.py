@@ -4,13 +4,10 @@ result = set()
 
 
 def readDataFile(readFile, writeFile):
-	t = 1;
 	f = open(readFile,"r");
 	wf = open(writeFile,"a");
 	
 	for line in f:
-		print(t);
-		t+=1;
 		a = line.split() 
 		if(len(a) < 1):
 			continue;
@@ -24,7 +21,8 @@ def readDataFile(readFile, writeFile):
 			elif(len(a) == 3) :
 				low = int(a[1])
 				high = int(a[2]) + 1
-				dRange = range(low,high)
+				dRange = range(low,high).sort()
+
 				wf.write("Deleted: [" );
 				for i in dRange :
 					if( i in result):
