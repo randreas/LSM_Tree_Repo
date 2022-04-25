@@ -106,17 +106,22 @@ void executeCommand(LSMTree* lsmTree, string command, string outputFilePath) {
         int key_low = stoi(elements[1]);
         int key_high = stoi(elements[2]);
       //  cout << "Range query " << "low key: " << key_low << " high key: " << key_high << "\n";
-        vector<LSMTuple::Tuple*> resultTuples = lsmTree->query(key_low, key_high);
 
-        std::sort(resultTuples.begin(), resultTuples.end());
+
+        vector<LSMTuple::Tuple*> resultTuples = lsmTree->query(key_low, key_high);
+        vector<int> keyList;
+        for(LSMTuple::Tuple* t : resultTuples) {
+                keyList.push_back(t->key);
+            }
+        std::sort(keyList.begin(), keyList.end());
+
         if (fw.is_open()) {
-            if(resultTuples.size() > 0) {
+            if(keyList.size() > 0) {
                 fw << "Found rangeScan [";
                 cout << "Found rangeScan [";
-                for (LSMTuple::Tuple* t : resultTuples) {
-                    t->printTuple();
-                    cout << " ";
-                    fw << t->getKey() << " ";
+                for (int key : keyList) {
+                    cout << key <<" ";
+                    fw << key << " ";
                 }
                 fw << "]\n";
                 cout << "]\n";
@@ -146,11 +151,16 @@ void executeCommand(LSMTree* lsmTree, string command, string outputFilePath) {
            
             // execute
             vector<LSMTuple::Tuple*> toBeDeletedList = lsmTree->deleteKey(low,high);
-            std::sort(toBeDeletedList.begin(), toBeDeletedList.end());
+            vector<int> keyList;
+
+            for(LSMTuple::Tuple* t : toBeDeletedList) {
+                keyList.push_back(t->key);
+            }
+            std::sort(keyList.begin(), keyList.end());
             if (fw.is_open()) {
                 fw << "Deleted: [";
-                for(LSMTuple::Tuple* t : toBeDeletedList) {
-                    fw << t->key << " ";
+                for(int key : keyList) {
+                    fw << key << " ";
                 }
                 fw << "]\n";
             }
