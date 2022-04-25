@@ -27,8 +27,9 @@ def readDataFile(readFile, writeFile):
 				dRange = range(low,high)
 				wf.write("Deleted: [" );
 				for i in dRange :
-					result.discard(i)
-					wf.write( str(i) + " ");
+					if( i in result):
+						result.discard(i)
+						wf.write( str(i) + " ");
 				wf.write("]\n"); 
 		elif(a[0] == "Q"):
 			#query
