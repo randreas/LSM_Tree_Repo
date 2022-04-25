@@ -106,6 +106,8 @@ void executeCommand(LSMTree* lsmTree, string command, string outputFilePath) {
         int key_high = stoi(elements[2]);
       //  cout << "Range query " << "low key: " << key_low << " high key: " << key_high << "\n";
         vector<LSMTuple::Tuple*> resultTuples = lsmTree->query(key_low, key_high);
+
+        std::sort(resultTuples.begin(), resultTuples.end());
         if (fw.is_open()) {
             if(resultTuples.size() > 0) {
                 fw << "Found rangeScan [";
