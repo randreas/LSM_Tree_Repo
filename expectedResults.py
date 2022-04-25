@@ -25,13 +25,13 @@ def readDataFile(readFile, writeFile):
 				low = int(a[1])
 				high = int(a[2]) + 1
 				dRange = range(low,high)
-				wf.write("Deleted size = "  + str(len(dRange)) + "\n");
-				#print(dRange);
-				# wf.write("Deleted size: [" );
-				# for i in dRange :
-				# 	result.discard(i)
-				# 	wf.write( str(i) + " ");
-				# wf.write("]\n"); 
+				#wf.write("Deleted size = "  + str(len(dRange)) + "\n");
+				print(dRange);
+				wf.write("Deleted size: [" );
+				for i in dRange :
+					result.discard(i)
+					wf.write( str(i) + " ");
+				wf.write("]\n"); 
 		elif(a[0] == "Q"):
 			#query
 			if(int(a[1]) in result) :
@@ -45,10 +45,10 @@ def readDataFile(readFile, writeFile):
 			selectRange = range(int(low),int(high))
 			#print(selectRange);
 			rangeScanResult = result.intersection(selectRange)
-			wf.write("Found size = "  + str(len(rangeScanResult)) + "\n");
-			# wf.write("Found rangeScan [" );
-			# for i in rangeScanResult :
-			# 	wf.write( str(i) + " ");
+			#wf.write("Found size = "  + str(len(rangeScanResult)) + "\n");
+			wf.write("Found rangeScan [" );
+			for i in rangeScanResult :
+				wf.write( str(i) + " ");
 
 			# wf.write("]\n"); 
 
