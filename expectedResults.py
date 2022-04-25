@@ -53,7 +53,7 @@ def readDataFile(readFile, writeFile):
 
 				wf.write("]\n");
 			else:
-				 wf.write("Did not find rangeScan");
+				 wf.write("Did not find rangeScan [" + low + ", " + high + "]\n");
 
 
 def main(args):
