@@ -112,7 +112,7 @@ void executeCommand(LSMTree* lsmTree, string command, string outputFilePath) {
         vector<int> keyList;
 
 
-        if(resultTuples.size() < 0) {
+        if(resultTuples.size() <= 0) {
             if (fw.is_open()) {
                 fw << "Did not find rangeScan  [" << elements[1] << ", " << elements[2] << "]\n" ; 
                 cout << "Did not find rangeScan  [" << elements[1] << ", " << elements[2] << "]\n" ; 
