@@ -51,13 +51,13 @@ void executeCommand(LSMTree* lsmTree, string command, string outputFilePath) {
         for (string cur_e : vector<string>(elements.begin() + 2, elements.end())) {
             values.push_back(stoi(cur_e));
         }
-        cout << "---------------------------------------\n";
-        cout << "Insert " << "key: " << key << " values: ";
+   //     cout << "---------------------------------------\n";
+     //   cout << "Insert " << "key: " << key << " values: ";
         printIntVector(values);
-        cout << "\n";
+       // cout << "\n";
         // execute
         lsmTree->addTuple(new LSMTuple::Tuple(key, LSMTuple::Value(values)));
-        cout << "Finished adding LSMTree.addTuple with key " << key << "\n";
+    //    cout << "Finished adding LSMTree.addTuple with key " << key << "\n";
         //lsmTree->buffer->printRun();
         //if (lsmTree->buffer == nullptr) {
         //    cout << "buffer is null\n";
@@ -74,8 +74,8 @@ void executeCommand(LSMTree* lsmTree, string command, string outputFilePath) {
             return;
         }
         int key = stoi(elements[1]);
-        cout << "---------------------------------------\n";
-        cout << "Point query key: " << key << "\n";
+        // cout << "---------------------------------------\n";
+        // cout << "Point query key: " << key << "\n";
         // execute
         LSMTuple::Tuple* resultTuple = lsmTree->query(key);
         //cout << "gate 0\n";
