@@ -17,7 +17,7 @@ def readDataFile(readFile, writeFile):
 		elif(a[0] == "D"):
 			if(len(a) == 2) :
 				result.discard(int(a[1]));
-				wf.write("Delete " + a[1] + "\n")
+				wf.write("Deleted " + a[1] + "\n")
 			elif(len(a) == 3) :
 				low = int(a[1])
 				high = int(a[2]) + 1
@@ -41,6 +41,7 @@ def readDataFile(readFile, writeFile):
 			high = a[2]
 			selectRange = range(int(low),int(high))
 			rangeScanResult = result.intersection(selectRange)
+			rangeScanResult.sort();
 			if(len(rangeScanResult) > 0 ):
 				wf.write("Found rangeScan [" );
 				for i in rangeScanResult :
@@ -48,7 +49,7 @@ def readDataFile(readFile, writeFile):
 
 				wf.write("]\n");
 			else:
-				 wf.write("Did not find rangeScan [" + low + ", " + high + "]\n");
+				wf.write("Did not find rangeScan [" + low + ", " + high + "]\n");
 
 
 def main(args):
