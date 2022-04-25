@@ -110,32 +110,36 @@ void executeCommand(LSMTree* lsmTree, string command, string outputFilePath) {
 
         vector<LSMTuple::Tuple*> resultTuples = lsmTree->query(key_low, key_high);
         vector<int> keyList;
-        cout << "Found rangeScan [\n";
-        for(LSMTuple::Tuple* t : resultTuples) {
-                keyList.push_back(t->key);
-                cout << "key: " << t->key << " value: ";
-                t->getValue().printValue();
-                cout<< "\n";
-
-        }
-        cout << "]\n";
-        std::sort(keyList.begin(), keyList.end());
 
 
-
-        if (fw.is_open()) {
-            if(keyList.size() > 0) {
-                fw << "Found rangeScan [";
-                for (int key : keyList) {
-                    fw << key << " ";
-                }
-                fw << "]\n";
-            } else {
+        if(resultTuples.size() < 0) {
+            if (fw.is_open()) {
                 fw << "Did not find rangeScan  [" << elements[1] << ", " << elements[2] << "]\n" ; 
                 cout << "Did not find rangeScan  [" << elements[1] << ", " << elements[2] << "]\n" ; 
             }
-        }
+        } else {
+            cout << "Found rangeScan [\n";
+            for(LSMTuple::Tuple* t : resultTuples) {
+                    keyList.push_back(t->key);
+                    cout << "key: " << t->key << " value: ";
+                    t->getValue().printValue();
+                    cout<< "\n";
 
+            }
+            cout << "]\n";
+            std::sort(keyList.begin(), keyList.end());
+            if (fw.is_open()) {
+                if(keyList.size() > 0) {
+                    fw << "Found rangeScan [";
+                    for (int key : keyList) {
+                        fw << key << " ";
+                    }
+                    fw << "]\n";
+                } 
+            }
+
+        }
+       
         
         fw.close();
 
