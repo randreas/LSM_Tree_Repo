@@ -53,9 +53,9 @@ void executeCommand(LSMTree* lsmTree, string command, string outputFilePath) {
             values.push_back(stoi(cur_e));
         }
        // cout << "---------------------------------------\n";
-       // cout << "Insert " << "key: " << key << " values: ";
-       // printIntVector(values);
-       // cout << "\n";
+        cout << "Insert " << "key: " << key << " values: ";
+        printIntVector(values);
+        cout << "\n";
         // execute
         lsmTree->addTuple(new LSMTuple::Tuple(key, LSMTuple::Value(values)));
     //    cout << "Finished adding LSMTree.addTuple with key " << key << "\n";
@@ -110,9 +110,14 @@ void executeCommand(LSMTree* lsmTree, string command, string outputFilePath) {
 
         vector<LSMTuple::Tuple*> resultTuples = lsmTree->query(key_low, key_high);
         vector<int> keyList;
+        cout << "Found rangeScan [";
         for(LSMTuple::Tuple* t : resultTuples) {
                 keyList.push_back(t->key);
-            }
+                t->printTuple();
+                cout << "\n";
+
+        }
+        cout << "]\n";
         std::sort(keyList.begin(), keyList.end());
 
 
@@ -120,7 +125,7 @@ void executeCommand(LSMTree* lsmTree, string command, string outputFilePath) {
         if (fw.is_open()) {
             if(keyList.size() > 0) {
                 fw << "Found rangeScan [";
-                cout << "Found rangeScan [";
+                
                 for (int key : keyList) {
                     cout << key <<" ";
                     fw << key << " ";
