@@ -37,7 +37,7 @@ def readDataFile(readFile, writeFile):
 			if(int(a[1]) in result) :
 				wf.write("Found " + a[1] + "\n")
 			else:
-				wf.write("Did not Find " + a[1] + "\n")
+				wf.write("Did not find " + a[1] + "\n")
 		elif(a[0] == "S"):
 			#range scan
 			low = a[1]
@@ -46,11 +46,14 @@ def readDataFile(readFile, writeFile):
 			#print(selectRange);
 			rangeScanResult = result.intersection(selectRange)
 			#wf.write("Found size = "  + str(len(rangeScanResult)) + "\n");
-			wf.write("Found rangeScan [" );
-			for i in rangeScanResult :
-				wf.write( str(i) + " ");
+			if(len(rangeScanResult) > 0 ):
+				wf.write("Found rangeScan [" );
+				for i in rangeScanResult :
+					wf.write( str(i) + " ");
 
-			# wf.write("]\n"); 
+				wf.write("]\n");
+			else:
+				 wf.write("Did not find rangeScan");
 
 
 def main(args):
