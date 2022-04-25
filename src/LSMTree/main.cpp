@@ -78,21 +78,19 @@ void executeCommand(LSMTree* lsmTree, string command, string outputFilePath) {
         // cout << "Point query key: " << key << "\n";
         // execute
         LSMTuple::Tuple* resultTuple = lsmTree->query(key);
-        //cout << "gate 0\n";
         if (resultTuple->key != key) {
             throw KeyException();
         }
-        //cout << "gate 1\n";
         if (resultTuple->isDeleteMarker()) {
-     //       cout << "query result : key: " << key << " not in the lsm tree, not entered or deleted" << "\n";
+            cout << "query result : key: " << key << " not in the lsm tree, not entered or deleted" << "\n";
             if (fw.is_open()) {
                 fw << "Found " << key << "\n";
             }
             fw.close();
         } else {
-       //     cout << "query result : key: " << key << " value: ";
+            cout << "query result : key: " << key << " value: ";
             resultTuple->getValue().printValue();
-         //   cout<< "\n";
+            cout<< "\n";
 
             if (fw.is_open()) {
                 fw << "Did not find " << key << "\n";
@@ -108,16 +106,17 @@ void executeCommand(LSMTree* lsmTree, string command, string outputFilePath) {
         int key_high = stoi(elements[2]);
       //  cout << "Range query " << "low key: " << key_low << " high key: " << key_high << "\n";
         vector<LSMTuple::Tuple*> resultTuples = lsmTree->query(key_low, key_high);
-      //  cout << "resultTuples size = " << resultTuples.size() << "\n";
         if (fw.is_open()) {
             if(resultTuples.size() > 0) {
                 fw << "Found rangeScan [";
+                cout << "Found rangeScan [";
                 for (LSMTuple::Tuple* t : resultTuples) {
-            //        t->printTuple();
-             //       cout << "\n";
+                    t->printTuple();
+                    cout << " ";
                     fw << t->getKey() << " ";
                 }
                 fw << "]\n";
+                cout << "]\n";
             }
         }
 
