@@ -146,6 +146,7 @@ void executeCommand(LSMTree* lsmTree, string command, string outputFilePath) {
            
             // execute
             vector<LSMTuple::Tuple*> toBeDeletedList = lsmTree->deleteKey(low,high);
+            std::sort(toBeDeletedList.begin(), toBeDeletedList.end());
             if (fw.is_open()) {
                 fw << "Deleted: [";
                 for(LSMTuple::Tuple* t : toBeDeletedList) {
