@@ -53,7 +53,7 @@ void executeCommand(LSMTree* lsmTree, string command, string outputFilePath) {
         }
    //     cout << "---------------------------------------\n";
      //   cout << "Insert " << "key: " << key << " values: ";
-        printIntVector(values);
+    //    printIntVector(values);
        // cout << "\n";
         // execute
         lsmTree->addTuple(new LSMTuple::Tuple(key, LSMTuple::Value(values)));
@@ -113,8 +113,8 @@ void executeCommand(LSMTree* lsmTree, string command, string outputFilePath) {
             if(resultTuples.size() > 0) {
                 fw << "Found rangeScan [";
                 for (LSMTuple::Tuple* t : resultTuples) {
-                    t->printTuple();
-                    cout << "\n";
+            //        t->printTuple();
+             //       cout << "\n";
                     fw << t->getKey() << " ";
                 }
                 fw << "]\n";
