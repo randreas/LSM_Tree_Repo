@@ -24,6 +24,7 @@ void printIntVector(vector<int> v) {
 }
 
 void executeCommand(LSMTree* lsmTree, string command, string outputFilePath) {
+    cout << "executeCommand:  " << command << "\n";
     stringstream iss(command);
     vector<string> elements;
     string e;
