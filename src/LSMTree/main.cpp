@@ -156,7 +156,7 @@ void executeCommand(LSMTree* lsmTree, string command, string outputFilePath) {
             if (fw.is_open()) {
                 fw << "Deleted: [";
                 for(LSMTuple::Tuple* t : toBeDeletedList) {
-                    fw << "Deleted " << t->key << " ";
+                    fw << t->key << " ";
                 }
                 fw << "]\n";
             }

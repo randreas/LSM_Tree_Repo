@@ -45,7 +45,6 @@ def readDataFile(readFile, writeFile):
 			selectRange = range(int(low),int(high))
 			#print(selectRange);
 			rangeScanResult = result.intersection(selectRange)
-			#wf.write("Found size = "  + str(len(rangeScanResult)) + "\n");
 			if(len(rangeScanResult) > 0 ):
 				wf.write("Found rangeScan [" );
 				for i in rangeScanResult :
