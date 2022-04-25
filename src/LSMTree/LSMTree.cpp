@@ -268,7 +268,7 @@ int LSMTree::getLevelCnt() {
     return levels.size();
 }
 
-void LSMTree::deleteKey(int low, int high) {
+vector<LSMTuple::Tuple*> LSMTree::deleteKey(int low, int high) {
     vector<LSMTuple::Tuple*> toBeDeletedList = query(low,high);
 
     for(LSMTuple::Tuple* t : toBeDeletedList) {

@@ -151,11 +151,13 @@ void executeCommand(LSMTree* lsmTree, string command, string outputFilePath) {
             cout << "---------------------------------------\n";
            
             // execute
-            lsmTree->deleteKey(low,high);
+            vector<LSMTuple::Tuple*> toBeDeletedList = lsmTree->deleteKey(low,high);
             if (fw.is_open()) {
-                for(int i = low; i <= high; i++) {
-                    fw << "Deleted " << i << "\n";
+                fw << "Deleted: [";
+                for(LSMTuple::Tuple* t : toBeDeletedList) {
+                    fw << "Deleted " << t->key << " ";
                 }
+                fw << "]\n";
             }
             fw.close();
 
