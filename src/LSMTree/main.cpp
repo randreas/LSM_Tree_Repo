@@ -9,6 +9,7 @@
 #include <sstream>
 #include <fstream>
 #include <vector>
+#include <algorithm>
 
 #include "./LSMTree.h"
 #include "./tuple.h"
@@ -51,9 +52,9 @@ void executeCommand(LSMTree* lsmTree, string command, string outputFilePath) {
         for (string cur_e : vector<string>(elements.begin() + 2, elements.end())) {
             values.push_back(stoi(cur_e));
         }
-   //     cout << "---------------------------------------\n";
-     //   cout << "Insert " << "key: " << key << " values: ";
-    //    printIntVector(values);
+       // cout << "---------------------------------------\n";
+       // cout << "Insert " << "key: " << key << " values: ";
+       // printIntVector(values);
        // cout << "\n";
         // execute
         lsmTree->addTuple(new LSMTuple::Tuple(key, LSMTuple::Value(values)));
