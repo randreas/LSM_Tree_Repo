@@ -119,7 +119,13 @@ void Level::addRunFileMeta(FileMeta *fm) {
     fp->addNewZone(fm);
 
     //RA todo recreate bloomfilter
-    createBloomFilter();
+    //createBloomFilter();
+    Run* run = fm->getRun();
+    for (LSMTuple::Tuple* tuple : run->getTuples()) {
+        int key = tuple->key;
+        //       cout << reinterpret_cast<const char *>(&key) << "\n";
+        bloomFilter->program(reinterpret_cast<const char *>(&key));
+    }
 //    cout << "Added FileMeta " << fm->filePath << "to level "<< lvlID << "\n";
 }
 
