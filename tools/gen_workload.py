@@ -36,7 +36,7 @@ def main(args):
 
     with open(fname, 'w') as fid:
         writer = csv.writer(fid, delimiter=' ')
-        writer.writerow([num_ops])
+        #writer.writerow([num_ops])
         for _ in range(num_ops):
             writer.writerow(get_op(dims, key_max))
 

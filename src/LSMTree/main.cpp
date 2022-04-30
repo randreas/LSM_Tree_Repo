@@ -223,8 +223,8 @@ void commandLineHelp() {
 
 int main(int argc, char *argv[])
 {
-    if (argc >  3) {
-        cout << "USAGE: ./main or ./main <data file path> <outputFilePath>\n";
+    if (argc < 2 || argc >  3) {
+        cout << "USAGE: ./main  <outputFilePath> or ./main <outputFilePath> <data file path> \n";
         return 1;
     }
 
@@ -234,8 +234,9 @@ int main(int argc, char *argv[])
     bool isTiering = false;
 
     // constant, hyper parameter
-    char* inputFilePath = argv[1];
-    char* outputFilePath = argv[2];
+    char* outputFilePath = argv[1];
+    
+    
 
     // create levels for this tree
     LSMTree* lsmTree = new LSMTree(initial_run_size, num_run_per_level, isTiering);
@@ -247,7 +248,8 @@ int main(int argc, char *argv[])
         cout << "Leveling Tree\n";
     }
 
-    if (argc > 1) {
+    if (argc > 2) {
+        char* inputFilePath = argv[2];
         // read and execute data file
         cout << "buffer: \n";
         lsmTree->buffer->printRun();
