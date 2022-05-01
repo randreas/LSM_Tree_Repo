@@ -260,6 +260,7 @@ int main(int argc, char *argv[])
 
     commandLineHelp();
     string command = "tmp";
+    // start taking command line input
     while (command != "exit") {
         cout << "[command input]>>> ";
         getline (cin, command);

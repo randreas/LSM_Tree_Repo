@@ -32,12 +32,8 @@ void Run::clear() {
 
 //anotherRun is more up-to-date
 void Run::merge(Run *anotherRun) {
-//    cout << "In run.merge\n";
-//    cout << "This run: \n";
-//    printRun();
-//    cout << "Run to merge: \n";
-//    anotherRun->printRun();
     vector<LSMTuple::Tuple*> newTuples;
+    // going through all tuples in both run, stop when one of them is empty
     while (!anotherRun->tuples.empty() && !this->tuples.empty()) {
         if (this->tuples.empty() || anotherRun->tuples[0]->key < this->tuples[0]->key) {
             newTuples.push_back(anotherRun->tuples[0]);
@@ -46,12 +42,14 @@ void Run::merge(Run *anotherRun) {
             newTuples.push_back(this->tuples[0]);
             this->tuples.erase(this->tuples.begin());
         } else if (this->tuples[0]->key == anotherRun->tuples[0]->key) {
+            // is same key, delete one value
             delete this->tuples[0];
             this->tuples.erase(this->tuples.begin());
             newTuples.push_back(anotherRun->tuples[0]);
             anotherRun->tuples.erase(anotherRun->tuples.begin());
         }
     }
+    // when one run is empty while the other run isn't, push all the tuples of the not empty run into the new run
     if (!anotherRun->tuples.empty()) {
         for (LSMTuple::Tuple* tuple : anotherRun->tuples) {
             newTuples.push_back(tuple);
@@ -61,34 +59,22 @@ void Run::merge(Run *anotherRun) {
             newTuples.push_back(tuple);
         }
     }
-    // cout << "New tuple vector: \n";
-    // for (LSMTuple::Tuple* t : newTuples) {
-    //     t->printTuple();
-    // }
-    // cout << "Merge done\n";
     replaceTuplesWithInput(newTuples);
-    // cout << "Replace done\n";
 }
 
 void Run::replaceTuplesWithInput(const vector<LSMTuple::Tuple *>& newTuples) {
-    //this->tuples = std::move(newTuples);
-    //cout << "In replace: \n";
-    /*
-    for (Tuple* tuple : this->tuples) {
-        delete tuple;
-    }
-     */
     clear();
-    //cout << "Cleared\n";
     for (LSMTuple::Tuple* tuple : newTuples) {
         this->tuples.push_back(tuple);
     }
 }
 
+// add a tuple to the run
 void Run::addTuple(LSMTuple::Tuple *newTuple) {
     if (!isFull()) {
         auto it = tuples.begin();
         int pos = 0;
+        // check if the run already contains the key, if so, replace it
         while (it != tuples.end() && (*it)->key <= newTuple->key) {
             if ((*it)->key == newTuple->key) {
                 tuples.erase(tuples.begin()+pos);
@@ -103,6 +89,7 @@ void Run::addTuple(LSMTuple::Tuple *newTuple) {
     }
 }
 
+// going through tuples to see if there is a match in the key
 bool Run::containsKey(int key) {
     for (LSMTuple::Tuple* tuple : tuples) {
         if (tuple->key == key) {
@@ -112,6 +99,7 @@ bool Run::containsKey(int key) {
     return false;
 }
 
+// return the tuple that the key match
 LSMTuple::Tuple* Run::query(int key) {
     for (LSMTuple::Tuple* tuple : tuples) {
         if (tuple->key == key) {
@@ -121,6 +109,7 @@ LSMTuple::Tuple* Run::query(int key) {
     throw RunFException();
 }
 
+// print the status of the run
 void Run::printRun() {
     cout << "--------------\n";
     cout << "| Run: \n";

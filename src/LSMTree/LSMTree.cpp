@@ -15,21 +15,11 @@ LSMTree::LSMTree(int _initial_run_size, int _num_run_per_level, bool _isTiering)
 void LSMTree::addTuple(LSMTuple::Tuple* tuple) {
     // check if buffer is full
     // full, move run to level 1, clear buffer
-    // cout << "in LSMTree.addTuple\n";
     buffer->addTuple(tuple);
-    // cout << "Buffer after insert: \n";
-    // buffer->printRun();
     if (buffer->isFull()) {
-        //FileMeta* bufferFile = buffer->createFileMetaFromRun(0, 0);  // level 0, index 0
-        // cout << "Buffer is full, need to flush\n";
         Run* push_run = new Run(buffer->MAX_TUPLE_NUM);
         push_run->merge(buffer);
-        //push_run->addTuple(tuple);
-        // cout << "run merged\n";
-        // push_run->printRun();
         mergeNMove(0, push_run);
-        // cout << "finished merge and move\n";
-        //remove(const_cast<char*>(bufferFile->filePath.c_str()));
         buffer->shallowClear();
     }
 }
@@ -39,6 +29,7 @@ LSMTuple::Tuple* LSMTree::query(int key) {
         return buffer->query(key);
     }
     int ind;
+    // query through all levels to see if it contains keys
     for (Level *curLevel: levels) {
         ind = curLevel->containsKey(key);
         if (ind >= 0) {
@@ -57,6 +48,7 @@ void LSMTree::mergeNMove(int idx, Run* newRun) {
 }
 
 void LSMTree::moveToLevelAtIdxRecurse(int idx, Run* newRun) {
+    // if it is moving into a new level
     if (idx == levels.size()) {
         int newRunSize;
         if (idx == 0) {
@@ -64,50 +56,35 @@ void LSMTree::moveToLevelAtIdxRecurse(int idx, Run* newRun) {
                 newRunSize = newRun->MAX_TUPLE_NUM;
             } else {
                 newRunSize = newRun->MAX_TUPLE_NUM * num_run_per_level;
-           //     cout << "%%%%%%%%%" << newRun->MAX_TUPLE_NUM << " " << num_run_per_level << " " << newRunSize << "\n";
             }
         } else {
             newRunSize = (levels[levels.size() - 1]->MAX_TUPLE_NUM_IN_RUN) * num_run_per_level;
         }
-//        int newRunSize = idx == 0 ? newRun->MAX_TUPLE_NUM : (levels[levels.size() - 1]->MAX_TUPLE_NUM_IN_RUN) * num_run_per_level;
         int lvlId = levels.size();
         levels.push_back(new Level(num_run_per_level, newRunSize, lvlId));
-        //cout << levels.size() << "\n";
         levels[lvlId]->addRunFileMeta(createFileMetaFromRun(lvlId, 0, newRun));
-        //cout << "level of size: " << levels.size() << "\n";
     } else {
+        // if moving into an existing level
         Level *lvl = levels[idx];
         if (isTiering) {
             if (!lvl->isFull(isTiering)) {
-                // cout << "level " << lvl->lvlID << " is not full\n";
                 lvl->addRunFileMeta(createFileMetaFromRun(idx, lvl->getCurrentSize(), newRun));
                 delete newRun;
                 newRun = nullptr;
             } else {
-                // cout << "level " << lvl->lvlID << " is full\n";
                 Run* mergedResult = lvl->merge();
-                // cout << "level merged\n";
-                // cout << "level " << lvl->lvlID << " merged result:\n";
-            //    mergedResult->printRun();
-                //mergedResult->merge(newRun);
+                //->merge(newRun);
                 moveToLevelAtIdxRecurse(idx + 1, mergedResult);
                 moveToLevelAtIdxRecurse(idx, newRun);
             }
         } else {
             // leveling
-        //    cout << "leveling in mergeToLevel\n";
             Run* mergedResult = lvl->getDataBlockCnt() == 0 ? new Run(lvl->MAX_TUPLE_NUM_IN_RUN) : lvl->getRunByFileMetaAtIndex(0);
-        //    cout << "merged run:\n";
-       //     mergedResult->printRun();
-        //    cout << "new run:\n";
-        //    newRun->printRun();
             if (mergedResult->MAX_TUPLE_NUM - mergedResult->getSize() > newRun->getSize()) {
-                // cout << "run can merge:\n";
                 mergedResult->merge(newRun);
                 levels[idx]->deepClear();
                 levels[idx]->addRunFileMeta(createFileMetaFromRun(idx, 0, mergedResult));
             } else {
-                // cout << "run can not merge:\n";
                 mergedResult = lvl->merge();
                 mergedResult->merge(newRun);
                 moveToLevelAtIdxRecurse(idx + 1, mergedResult);
@@ -171,6 +148,7 @@ void LSMTree::close() {
     levels.clear();
 }
 
+// read file meta from th binary file
 vector<int> LSMTree::readMetaDataFromFile() {
     string fileName = "metaData.bin";
     char* path = const_cast<char*>(fileName.c_str());
