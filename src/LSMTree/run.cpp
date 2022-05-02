@@ -99,14 +99,31 @@ bool Run::containsKey(int key) {
     return false;
 }
 
+LSMTuple::Tuple* Run::binarySearch(int key, int l, int r) {
+    if (r >= l) {
+        int mid = l + (r - l) / 2;
+
+        if (tuples[mid]->key == key)
+            return tuples[mid];
+
+        if (tuples[mid]->key > key)
+            return binarySearch(key, l, mid - 1);
+
+        return binarySearch(key, mid + 1, r);
+    }
+
+    throw RunFException();
+}
+
 // return the tuple that the key match
 LSMTuple::Tuple* Run::query(int key) {
-    for (LSMTuple::Tuple* tuple : tuples) {
-        if (tuple->key == key) {
-            return tuple;
-        }
-    }
-    throw RunFException();
+    return binarySearch(key, 0, tuples.size() - 1);
+//    for (LSMTuple::Tuple* tuple : tuples) {
+//        if (tuple->key == key) {
+//            return tuple;
+//        }
+//    }
+//    throw RunFException();
 }
 
 // print the status of the run

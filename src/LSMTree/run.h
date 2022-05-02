@@ -44,6 +44,8 @@ public:
 
     LSMTuple::Tuple* query(int key);
 
+    LSMTuple::Tuple* binarySearch(int key, int l, int r);
+
     void printRun();
 
     vector<LSMTuple::Tuple*> getTuples();
