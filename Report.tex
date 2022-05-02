@@ -13,7 +13,7 @@
 \usepackage{color}
 
 \begin{document}
-    \title{CS561 : Performance Comparison between LSM-Trees and B+-Trees}
+    \title{CS561 : Implementation of LSM-Tree}
 
     \author{Richard Andreas}
     \affiliation{%
@@ -29,7 +29,7 @@
     }
 
     \begin{abstract}
-        In this paper, we explore the the design space of key-value stores that utilize the Log-Structured merge-tree (LSM-Tree) structure. More specifically, we have implemented a base version of the LSM-Tree that have been explored in previous work in order to get a better understanding of the basic knowledge of it. We decided to compare between performance of our design to another data structure (B+-tree), to see which data structure performs better based on different workloads and operations. Instrutions to compilationare and running are in the README.md of the repository of this project: \href{https://github.com/randreas/LSM_Tree_Repo}{\color{blue}{LSM Tree}}.
+        In this paper, we explore the the design space of key-value stores that utilize the Log-Structured merge-tree (LSM-Tree) structure. More specifically, we have implemented a base version of the LSM-Tree that have been explored in previous work in order to get a better understanding of the basic knowledge of it. Instructions to compile and run the project are in the README.md of the repository of this project: \href{https://github.com/randreas/LSM_Tree_Repo}{\color{blue}{LSM Tree}}.
     \end{abstract}
 
     \maketitle
@@ -45,11 +45,9 @@
     Facebook, LevelDB and BigTable at Google, bLSM and cLSM at Yahoo!, Cassandra
     and HBase at Apache.
 
-    In addition to LSM Trees, B+ trees is another common data structure for key-value entries. A B+-tree is an index data structure that stores data pointers only in leaf nodes, and only pivot pivot pointers in the internal nodes. Additiaonlly, the leaf nodes are also linked to provide ordered access to the records,
 
     \subsection{Problem Statement}
-
-    When choosing which data structure to use for indexing and searching, we typically would choose between these 2 data structures as they are widely known and have superior performance compared to the rest. However, this brings us to the next question, how do we pick between these two. In our paper, we will experiment on both data structures with various workloads and compare their performance in 4 operations: insert, delete, point scan, range scan. We expect to discover a pattern on the performance differences between the two indexes, and answer the question.
+     In our paper, we will experiment on both Leveling and Tiering merging strategies with various workloads and compare their performance in 4 operations: insert, delete, point scan, range scan. We expect to discover a pattern on the performance differences between the two strategies, and answer the question.
 
 
 % =============================================================================
@@ -72,97 +70,113 @@
         \centering
         \includegraphics[width=0.5\textwidth]{MergingStrategies.PNG}
         \caption{LSM Tree merge policies}
-        \label{Fig.main2}
+        \label{Fig.main}
     \end{figure}
 % =============================================================================
     \section{Architecture}
 % =============================================================================
+    \subsection{Components}
     In this section, we will analyze the main components of our LSM-Tree Architecture.
-    \subsection{Tuple}
-    Tuples are the units of data stored in a LSM-tree. In our implementation, a tuple consists of a key, a value, and an identifier of the type of the operation.
+    \subsubsection{Tuple}
+    Tuples are the units of data stored in a LSM-tree. In our implementation, a tuple consists of a key, a value that can contain multiple integers, and a tombstone indicator.
+    \subsubsection{FileMeta}
+    FileMeta corresponds to a block of data in a level. It is on persistent storage, in the case of this project, a local file. Filemata store the metadata of the block, including the path to the file, the size, the upper bound and the lower bounding of this file. When LSM Tree compact several blocks into one single block, the corresponding Filemetas are combined into a new Filemeta, and the new Filemeta contains all the metadata about the new block. The new Filemeta is then added to the next level.
 
-    \subsection{Run}
-    A run is the form of a block of data in a level of LSM tree in the LSM tree when it is actual been read into memory. It contains the actual data.
+    \subsubsection{Levels}
+    Levels are the core in LSM trees as they contain actual data index. Our implementation of levels contain "FileMeta" objects, each of the FileMeta objects contain information necessary to access the correct data file on disk. Upon query, the LSM tree deserializes the data file with the information in the corresponding FileMeta, instantiates an Run object accordingly, and either return the result of query or modify the file. Run objects are destructed when query finishes.
+    \subsubsection{Run}
+    A run is the form of a materialized block of data in memory in a level of LSM tree. It contains the tuples sorted by key. Our level compaction operation involves reading all Filemeta of a level, create a run out of each of them, merge the runs into a big run, and create new data file and Filemeta accordingly.
+    \subsubsection{Buffer}
+    Operation log entries of the LSM tree goes directly into the buffer. Buffer in this project is an instance of Run. It has a fixed size, the same size as the blocks on the first level of the tree and it is the first data to look into when query. When the buffer if full, it is flushed into level 1, should level 1 be saturated, the compaction process of this LSM tree begins.
+    \subsubsection{Bloom Filters}
+    Bloom Filters are an essential component of the LSM-Tree that improves performance. The concept of a bloom filter is suggested as the main mechanism to avoid unnecessary level accesses. Queries first check the bloom filter, if the result is positive, then it checks the level, otherwise check a lower level or return not found if at bottom level. The main drawback is the possibility of giving a false positive result. When a level is compacted, it clears the corresponding bloom filter.
+    \subsubsection{Fence Pointers}
+    Fence Pointers are the limits of the virtual blocks of data. By implementing fence pointers, we are do not have to access every single data entry during scanning or point searching. We implement fence pointers in the form of zonemaps. By checking the min/max values in each fence pointer, and apply binary search in a data block with overlapping range, this reduces the time it takes for searching as we ignore blocks of data that do not meet the requirements.
+    
+    \subsection{Data File Organization}
+    (This is preliminary implementation, may migrate into SSTable by final presentation).
+    
+    
+    All data blocks besides buffer in our implementation are stored in binary files. Each block is stored in a file, and different blocks from different levels are differentiated by their filenames. For example, block 0 of level 1 will be named $level$-$0$-$block$-$0$.$bin$. Each file is organized as follows: 
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.45\textwidth]{data_file.png}
+        \caption{Data File Organization}
+        \label{Fig.main1}
+    \end{figure}
+    The first SIZE$\_$OF$\_$INT bytes store the number of tuples in the file, 2 * SIZE$\_$OF$\_$INT * SIZE$\_$LIMIT number of bytes are reserved to store the start and end offset of each tuple, where SIZE$\_$LIMIT is the maximum number of tuples that can be stored in the data block, which is a parameter defined when the LSM tree is created. Each tuple start at its start offset storing its key with SIZE$\_$OF$\_$INT number of bytes, followed by its values. 
+    
+    When a tuple is to be added to the data block, which only happens in compaction of a leveling LSM tree, the tuple is appended directly to the end of the file, and only offsets are modified. 
+    
+    \subsection{Supported Operations/Features}
+    The following are the operations our implementation supports, and some features it provides.
+    \subsubsection{Insertion}
+    Tuples inserted to LSM Tree goes directly into the buffer. When the buffer is full, it is flushed to the first level and persisted in a file described in the previous section, and appends a corresponding FileMeta object in the level. If a level is full, this triggers compaction.
+    \subsubsection{Delete}
+    Deletion is essentially a special type of insertion. A tuple with a special marker is inserted to the buffer, that indicates this tuple is a tombstone. Upon compaction, if the tombstone meets with a tuple with the same key, whichever is more up-to-date will live.
+    \subsubsection{Range Delete}
+    For range delete, we first do a range query to get all keys in the range that exists in the tree, then do deletion for each of them. (May eliminate the query process and do deletion of every key in range).
+    \subsubsection{Point Query}
+    For point query, we first do a binary search in the buffer, if the key isn't found, then we query the levels top-to-bottom. For each level, we first query the bloom filter, if it returns a positive, then go over the fence pointers to locate possible data blocks, then do a binary search on each data block for the result.
+    \subsubsection{Range Query}
+    The approach we take for range query is much like point query. When there is an overlapping data block, we do a linear scan to get tuples. A set of seen keys is maintained during the process to eliminate duplicates. 
+    \subsubsection{Persistence}
+    Our implementation supports persistence. When the LSM Tree is closed, it persists the data in the buffer in $buffer$.$bin$ in the same format as any other data block. It also stores the metadata in $metadata$.$bin$ so that when the LSM tree restarts, it can be reconstructed correctly. The metadata persisted includes: number of levels, buffer capability, size ratio between consecutive levels, the number of data blocks that currently resides in each level, and 1 byte for compaction policy. When the LSM tree restarts, it first read $metadata$.$bin$ for the coefficients, then reestablish buffer with $buffer$.$bin$, and finally levels and FileMeta.
+    
+    \subsubsection{Leveling/Tiering}
+    User can choose compaction policy between leveling and tiering at the moment a LSM tree is first created. Once created the policy cannot be changed, because the metadata will be persisted, and the policy needs to stay consistent.
+    
 
-    \subsection{Buffer}
-    Operation log entries of the LSM tree goes directly into the buffer. Buffer in this project is an instance of Run. It has a fixed size, the same size as the blocks on the first level of the tree and it is the first data to look into when query. When the buffer if full, it is swapped into level 1 and the compaction process of this LSM tree begins.
+    \section{Testing}
+    In order to correctness of our program, we have coded a simple program in python using hashsets on the same datasets and workload and outputs the same text file with operations as our project. By comparing both results, we ensure the correctness of the four operations in our prototype.
 
-    \subsection{Bloom Filters}
-    Bloom Filters are an essential component of the LSM-Tree. The concept of a bloom filter is suggested as the main mechanism to avoid unnecessary level accesses. Queries first check the bloom filter, if the result is positive, then it checks the level, otherwise check a lower level or return not found if at bottom level. The main drawback is the possibility of giving a false positive result.
-
-    \subsection{Fence Pointers}
-    Fence Pointers are the limits of the virtual blocks of data. By implementing fence pointers, we are do not have to access every single data entry during scanning or point searching. We implement fence pointers in the form of zonemaps. By checking the min/max values in each fence pointer, this reduces the time it takes for searching as we ignore blocks of data that do not meet the requirements.
-
-    \subsection{Levels}
-    Levels are the core in LSM trees as they contain actual data entries. Our implementation of levels contain "FileMeta" objects, each of the FileMeta objects contain information necessary to access the correct data file on disk. Upon query, the LSM tree deserializes the data file with the information in the corresponding FileMeta, instantiates an Run object accordingly, and either return the result of query or modify the file. Run objects are destructed when query finishes.
-
-    \subsection{FileMeta}
-    FileMeta corresponds to a block of data in a level. It is on persistent storage, in the case of this project, a local file. Filedata store the metadata of the block, including the path to the file, the upper bound and the lower bounding of this file. When LSM compact severl blocks into one single block, the corresponding filemeta are combined into a new file meta as well and the new filemeta contain all the metadata about the new block.
-
-    \subsection{Testing}
-    We tested the correctness of our implementation using a dataset created by ourselves. Will test more intensively in the future.
-
+    In addition to correctness, we have tested our prototype with various sizes of data sets and workloads using both tiering and leveling merging strategies to compare the speed between both strategies on the same input files.
+    
+    \subsection{Experimentation Setup}
+    
+    We used the Microsoft Azure Virtual Machine to conduct our experiments. The configurations are as follows: Linux (Ubuntu 20.04) Operating System with Size: Standard B2s (2 vcpus, 4 GiB memory)
+    
     \subsection{Benchmark Explanations}
 
     We used the data.wl and workload.wl files to test the correctness of our program. The data set covers the operation supported for now, and makes sure that the number of entries in the LSM tree is big enough to overflow the buffer, in order to trigger merge and tiering mechanism.
 
 
 % =============================================================================
-    \section{Results}
+    \subsection{Results}
 % =============================================================================
-    Will be updated after further benchmarking.
+    Following are some graphs that provide some insights regarding the performance of our implementation. 
 
-    \begin{figure}[ht]
-        \includegraphics[width=3cm]{example-image-a}
-        \caption{Example figure here}
-        \label{fig:filler}
-    \end{figure}
-
-    \begin{table}[H]
-        \caption{An example table}
-        \label{tab:ex}
+    \begin{figure}[H]
         \centering
-
-        \begin{tabular}{c |c c c c c}
-            \hline\hline
-            & Col A & Col B \\
-            \hline
-            Row A & val 1 & val a \\
-            Row B & val 2 & val b \\
-            Row C & val 3 & val c \\
-            \hline
-        \end{tabular}
-    \end{table}
-
-    You can also reference your old figures (Figure \ref{fig:filler}) and tables
-    (Table \ref{tab:ex})
-
-% =============================================================================
-    \section{Current Progress So Far}
-% =============================================================================
-
-    We have finished coding the basic features of the LSM-Tree: Fence Pointers, Leveling, Buffers, Bloom Filters and basic operations such as Insert and point query. Our prototype works with a basic workload and is able to run smoothly.
+        \includegraphics[width=0.45\textwidth]{LatencyInsert.PNG}
+        \caption{Comparison between Tiering and Leveling for Insert}
+        \label{Fig.main3}
+    \end{figure}
+    
+    From our experiments, we can see that the time taken for data to be inserted using Tiering merge strategy is much faster than using the Leveling strategy as seen in Figure \ref{Fig.main3}. This solidifies the statement that Tiering as a merging strategy is more optimized towards write-heavy data compared to that of using Leveling.
+    
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.45\textwidth]{LatencyQuery.PNG}
+        \caption{Comparison between Tiering and Leveling for Read Heavy Workloads}
+        \label{Fig.main4}
+    \end{figure}
+    
+    Another experiment to compare tiering and leveling strategies on how they perform on read heavy workloads. In Figure \ref{Fig.main4}, we can see that the time taken for data to be inserted using Tiering merge strategy is much faster than using the Leveling strategy. This solidifies the statement that leveling as a merging strategy is more optimized towards read-heavy worloads compared to that of using tiering.
 
 % =============================================================================
     \section{Future work to be done}
 % =============================================================================
 
-    We will change the low level disk file format from current easy-but-slow .txt file storing strings to binary files that are both temporal and spatial efficient.
-
-    We will finish up the remaining the operations: Delete and Range Scan.
-
-    We will start working on is testing the prototype with a bigger workload and various levels of unsorted-ness to measure the performance of our implementation.
-
-
-    We will use a provided implementation of a B+ tree, and run the same the tests that we have run on the LSM tree, to ensure fair testing between both data structures.
-
-    Setting up a Virtual Machine will be part of this process and we can run the experiments on it.
+   The current implementation takes hours to process 1GB of data. We will need to do optimizations
 
 % =============================================================================
     \section{Conclusion}
 % =============================================================================
-
-    We will have a conclusion after future benchmarking.
+    
+    LSM-Trees have become increasingly popular in modern NoSQL systems due to their advantages such as superior write performance, high space utilization and immutability of on-disk data and tunability. These factors have enabled LSM-trees to be widely adopted and deployed to serve a variety of workloads.
+    
+    In this paper, we have developed a prototype version of the LSM-Tree and have added some optimizations to improve the vanilla implementation. We hope that by implementing a LSM-tree from scratch, this will allow students to understand how it works, not just in theory but in practice as well.
 
 % reference
         {
