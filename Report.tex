@@ -1,7 +1,6 @@
 \documentclass[sigconf]{acmart}
 % ===== Don't touch this :) ======
 \settopmatter{printacmref=false} % Removes citation information below abstract
-\renewcommand\footnotetextcopyrightpermission[1]{} % removes footnote with conference information in first column
 \renewcommand\footnotetextauthorsaddresses[1]{}
 \pagestyle{plain} % removes running headers
 \graphicspath{ {./images/} }
@@ -100,13 +99,11 @@
     All data blocks besides buffer in our implementation are stored in binary files. Each block is stored in a file, and different blocks from different levels are differentiated by their filenames. For example, block 0 of level 1 will be named $level$-$0$-$block$-$0$.$bin$. Each file is organized as follows: 
     \begin{figure}[H]
         \centering
-        \includegraphics[width=0.45\textwidth]{data_file.png}
+        \includegraphics[width=0.45\textwidth]{file.png}
         \caption{Data File Organization}
         \label{Fig.main1}
     \end{figure}
-    The first SIZE$\_$OF$\_$INT bytes store the number of tuples in the file, 2 * SIZE$\_$OF$\_$INT * SIZE$\_$LIMIT number of bytes are reserved to store the start and end offset of each tuple, where SIZE$\_$LIMIT is the maximum number of tuples that can be stored in the data block, which is a parameter defined when the LSM tree is created. Each tuple start at its start offset storing its key with SIZE$\_$OF$\_$INT number of bytes, followed by its values. 
-    
-    When a tuple is to be added to the data block, which only happens in compaction of a leveling LSM tree, the tuple is appended directly to the end of the file, and only offsets are modified. 
+    The first SIZE$\_$OF$\_$INT bytes store the number of tuples in the file, SIZE$\_$OF$\_$INT * (SIZE$\_$LIMIT + 1) number of bytes are reserved to store the start and end offset of each tuple, where SIZE$\_$LIMIT is the maximum number of tuples that can be stored in the data block, which is a parameter defined when the LSM tree is created. Each tuple start at its start offset storing its key with SIZE$\_$OF$\_$INT number of bytes, followed by its values. 
     
     \subsection{Supported Operations/Features}
     The following are the operations our implementation supports, and some features it provides.
@@ -162,13 +159,15 @@
         \label{Fig.main4}
     \end{figure}
     
-    Another experiment to compare tiering and leveling strategies on how they perform on read heavy workloads. In Figure \ref{Fig.main4}, we can see that the time taken for data to be inserted using Tiering merge strategy is much faster than using the Leveling strategy. This solidifies the statement that leveling as a merging strategy is more optimized towards read-heavy worloads compared to that of using tiering.
+    Another experiment to compare tiering and leveling strategies on how they perform on read heavy workloads. In Figure \ref{Fig.main4}, we can see that the time taken for data to be inserted using Tiering merge strategy is much faster than using the Leveling strategy. Even though the measurements for 10,000 operations seem to be very similar, as the number of operations increases, you can see the difference between leveling and tiering strategies increase exponentially. This solidifies the statement that leveling as a merging strategy is more optimized towards read-heavy workloads compared to that of using tiering.
 
 % =============================================================================
     \section{Future work to be done}
 % =============================================================================
 
-   The current implementation takes hours to process 1GB of data. We will need to do optimizations
+   Due to the time constraints of the semester, we still have several optimizations that we can implement in order to improve the speeds of our vanilla implementation of the LSM Tree. By replacing vectors data structures with C++ implementation of minHeap, this will improve the latency performance of the rangeScan and rangeDelete operations. 
+   
+   In addition to optimizations, it would be interesting and knowledgeable for us to compare our implementation with industry level Databases with LSM Tree implementations such as RocksDB. By comparing both, we understand that there has been much more optimizations and features in Industry level Database architectures and we can try to implement some of those in our prototype to further improve our prototype.
 
 % =============================================================================
     \section{Conclusion}
