@@ -8,9 +8,20 @@ cd build/src/LSMTree
 
 Then, we are able to test it. For intsnce:
 ```
-./main 3 3 ../../../data.wl ../../../empty.wl
+./main <output file directory>
+
+or 
+
+./main <output file directory> <input file pah>
+
 ```
 
+
+In order to run the correctness python script, navigate to the home directory and run the following command 
+```
+python3 expectedResults.py <input file path> <output file path>
+
+```
 # CS 561: Data Systems Architecture - TemplateDB
 
 
