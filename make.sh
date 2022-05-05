@@ -1,7 +1,6 @@
 #! /bin/bash
 
 
-rm output*
 rm ./build -rf
 mkdir build
 cd build

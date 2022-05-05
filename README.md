@@ -17,11 +17,23 @@ or
 ```
 
 
-In order to run the correctness python script, navigate to the home directory and run the following command 
+In order to run the correctness python script, navigate to the home directory and run the following command in the home directory
 ```
 python3 expectedResults.py <input file path> <output file path>
 
 ```
+
+Example:
+```
+ python3 expectedResults.py demo_test.data expected_demo_res.txt
+```
+
+After both the C++ and python scripts are done running, you can compare the difference between both result file using
+```
+diff <file1> <file2>
+```
+There should not be any difference if you are using the same data input files to test.
+
 # CS 561: Data Systems Architecture - TemplateDB
 
 
